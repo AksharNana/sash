@@ -630,7 +630,8 @@ xargs -I thing rm somefile.txt thing
     assert len(res.traces) == 1
     assert len(res.traces[0].latest_state.assertions) == 2
     expected_warning = reporter.UnsatisfiedPrecondition(None, "rm somefile.txt thing", 0)
-    assert_expected_report(report, [expected_warning])
+    expected_error2 = reporter.DangerousWordSplit("thing", 0)
+    assert_expected_report(report, [expected_warning, expected_error2])
 
 def test_grep_no_pattern(tmp_path):
     """Test that `grep` with no pattern is reported as an unexpected stdin issue."""
