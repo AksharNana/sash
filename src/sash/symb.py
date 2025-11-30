@@ -1119,7 +1119,12 @@ def interp_node(traces: Traces,
             res = []
             for t, redir_args in expand(traces, node.arg, config):
                 t_precond = t.extend(t.latest_state.add_assertion(And.from_field_iter(redir_args, lambda f: IsRead(f)), source_str=node.pretty(), source_line=context_line))
-                t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, lambda f: IsFile(f))))
+                match node.redir_type:
+                    case "To" | "Clobber" | "Append":
+                        # NOTE: asserting `IsFile` here asserts that the file is *unread*
+                        t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, lambda f: IsFile(f))))
+                    case _:
+                        t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, lambda f: IsRead(f))))
                 res.append(t_postcond)
                 match redir_args:
                     case [Field(SymStr([something]), WordCount(1, 1))]:
