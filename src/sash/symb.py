@@ -1118,13 +1118,21 @@ def interp_node(traces: Traces,
         case AST.FileRedirNode():
             res = []
             for t, redir_args in expand(traces, node.arg, config):
-                t_precond = t.extend(t.latest_state.add_assertion(And.from_field_iter(redir_args, lambda f: IsRead(f)), source_str=node.pretty(), source_line=context_line))
-                match node.redir_type:
-                    case "To" | "Clobber" | "Append":
-                        # NOTE: asserting `IsFile` here asserts that the file is *unread*
-                        t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, lambda f: IsFile(f))))
-                    case _:
-                        t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, lambda f: IsRead(f))))
+                t_precond = t
+                if node.redir_type in ["To", "Clobber"]: # >, >|
+                    # The targets of the redirection must be read
+                    t_precond = t.extend(t.latest_state.add_assertion(And.from_field_iter(redir_args, IsRead), source_str=node.pretty(), source_line=context_line))
+
+                if node.redir_type in ["To", "Clobber", "Append", "FromTo"]: # >, >|, >>, <>
+                    # The targets of the redirection are definitely files (remember: we always assume success)
+                    # NOTE: asserting IsFile also implicitly asserts that the file is *unread*
+                    t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsFile)))
+                elif node.redir_type in ["From"]: # <
+                    # The targets of the redirection were read from
+                    t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsRead)))
+                else:
+                    assert False, f"Unexpected redirection type: {node.redir_type}"
+
                 res.append(t_postcond)
                 match redir_args:
                     case [Field(SymStr([something]), WordCount(1, 1))]:
@@ -1136,7 +1144,6 @@ def interp_node(traces: Traces,
                     case _:
                         logging.warning("Found a redir to multiple words: %s - Ignoring.", trim_string_for_logging(str(redir_args)))
                         pass
-            # TODO: Also handle the effects of redirection on the FS
             return res
 
         case AST.RedirNode():
