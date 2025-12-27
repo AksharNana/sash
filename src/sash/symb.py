@@ -1122,16 +1122,24 @@ def interp_node(traces: Traces,
             for t, redir_args in expand(traces, node.arg, config):
                 t_precond = t
                 if node.redir_type in ["To", "Clobber"]: # >, >|
-                    # The targets of the redirection must be read
-                    t_precond = t.extend(t.latest_state.add_assertion(And.from_field_iter(redir_args, IsRead), source_str=node.pretty(), source_line=context_line))
-
-                if node.redir_type in ["To", "Clobber", "Append", "FromTo"]: # >, >|, >>, <>
-                    # The targets of the redirection are definitely files (remember: we always assume success)
-                    # NOTE: asserting IsFile also implicitly asserts that the file is *unread*
+                    t_precond = t.extend(t.latest_state.add_assertion(And.from_field_iter(redir_args, lambda op: IsRead(op) | IsDeleted(op)), source_str=node.pretty(), source_line=context_line))
                     t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsFile)))
-                elif node.redir_type in ["From"]: # <
+
+                elif node.redir_type == "Append": # >>
+                    # NOTE: asserting IsFile also implicitly asserts that the file is *unread*
+                    t_precond = t.extend(t.latest_state.add_assertion(And.from_field_iter(redir_args, lambda op: ~IsDir(op)), source_str=node.pretty(), source_line=context_line))
+                    t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsFile)))
+
+                elif node.redir_type == "From": # <
                     # The targets of the redirection were read from
+                    t_precond = t.extend(t.latest_state.add_assertion(And.from_field_iter(redir_args, IsFile), source_str=node.pretty(), source_line=context_line))
                     t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsRead)))
+
+                elif node.redir_type == "FromTo":
+                    # Conservatively assume the file is opened for reading
+                    t_precond = t.extend(t.latest_state.add_assertion(And.from_field_iter(redir_args, lambda op: ~IsDir(op)), source_str=node.pretty(), source_line=context_line))
+                    t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsRead)))
+
                 else:
                     assert False, f"Unexpected redirection type: {node.redir_type}"
 
