@@ -34,7 +34,7 @@ def make_env_constraints_z3(s, env_constraints):
     default_env_constraints = {
         name: field_content_to_z3(shellvar.as_field().content)
         for name, shellvar in s.env.items()
-        if name in {"HOME", "PWD", "OLDPWD", "PATH", "PWD_INIT"}
+        if name in {"HOME", "USER", "PWD", "OLDPWD", "PATH", "PWD_INIT"}
     }
     parts = [z3var(name) == z3expr for name, z3expr in (env_constraints | default_env_constraints).items()]
     return z3.And(*parts)

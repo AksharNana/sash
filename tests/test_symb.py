@@ -19,6 +19,13 @@ def test_unbound_variable(tmp_path):
     expected_error = reporter.UnboundID(foo_var.pretty(), 0)
     assert_expected_report(report, [expected_error])
 
+def test_duplicate_unbound_variable_reports_keep_earliest_occurrence(tmp_path):
+    script = write_script(tmp_path, "echo $FOO\necho $FOO\n")
+    report = reset_and_run_main(script)
+    unbound_reports = [issue for issue in report.issues if isinstance(issue, reporter.UnboundID)]
+    assert len(unbound_reports) == 1
+    assert unbound_reports[0].line == 1
+
 def test_bound_variable_no_error(tmp_path):
     # Assigning a variable before use should not produce any errors
     script = write_script(
@@ -38,9 +45,27 @@ def test_bound_variable_no_error(tmp_path):
     report = reset_and_run_main(script)
     assert_expected_report(report, [])
 
+    # export
+    script = write_script(
+        tmp_path,
+        "export FOO=hello\n"
+        "echo $FOO\n"
+    )
+    report = reset_and_run_main(script)
+    assert_expected_report(report, [])
+
 def test_special_vars_no_unbound_error(tmp_path):
     # Using a parameter variable should not produce an unbound error
-    script = write_script(tmp_path, 'echo $1 $5 "$@" "$*" $# $HOME $PWD\n')
+    script = write_script(tmp_path, 'echo $1 $5 "$@" $# $HOME $PWD $USER ${*}\n')
+    report = reset_and_run_main(script)
+    assert_expected_report(report, [])
+
+def test_boundness_check_no_error(tmp_path):
+    # Using a parameter variable should not produce an unbound error
+    script = write_script(tmp_path,
+                          'if [ -z "$UNBOUND" ] || [ "$UNBOUND2" ]; then\n'
+                          'echo not bound\n'
+                          'fi\n')
     report = reset_and_run_main(script)
     assert_expected_report(report, [])
 
@@ -55,6 +80,31 @@ def test_unbound_variable_cmdsubst(tmp_path):
     report = reset_and_run_main(script)
     expected_error = reporter.UnboundID(foo_var.pretty(), 0)
     assert_expected_report(report, [expected_error])
+
+def test_unbound_variable_multipath(tmp_path):
+    script = write_script(tmp_path,
+                          "if xyz; then\n"
+                          "echo $FOO\n"
+                          "else"
+                          "echo $FOO bar\n"
+                          "fi\n"
+                          )
+    report = reset_and_run_main(script)
+    expected_error = reporter.UnboundID(foo_var.pretty(), 0)
+    assert_expected_report(report, [expected_error])
+    assert [i.line for i in report.issues] == [2]
+
+def test_no_unbound_variable_uncalled_fn(tmp_path):
+    script = write_script(tmp_path,
+                          "FOO=hi\n"
+                          "uncalled(){\n"
+                          "echo $FOO bar\n"
+                          "}\n"
+                          "echo end\n"
+                          )
+    report = reset_and_run_main(script)
+    assert_expected_report(report, [])
+
 
 def test_unbound_from_local_assignment_does_not_bind_later_use(tmp_path):
     script = write_script(

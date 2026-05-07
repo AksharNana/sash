@@ -2854,6 +2854,7 @@ def starting_state(fs_model: FSModel | None = None, config: InterpConfig | None 
     make_ast = lambda var: AST.VArgChar("Normal", False, var, [])
     starter_env = {
         "HOME": ShellVar(PreSplitWord.from_field(arbitrary_field(make_ast("HOME"), ArbitraryType.ENVIRONMENT, root, min_words=1))),
+        "USER": ShellVar(PreSplitWord.from_field(arbitrary_field(make_ast("USER"), ArbitraryType.ENVIRONMENT, root, min_words=1))),
         "PWD": ShellVar(PreSplitWord.from_field(arbitrary_field(make_ast("PWD"), ArbitraryType.ENVIRONMENT, root, min_words=1))),
         "OLDPWD": ShellVar(PreSplitWord.from_field(arbitrary_field(make_ast("OLDPWD"), ArbitraryType.ENVIRONMENT, root, min_words=1))),
         "PATH": ShellVar(PreSplitWord.from_field(arbitrary_field(make_ast("PATH"), ArbitraryType.ENVIRONMENT, root, min_words=1)))

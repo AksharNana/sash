@@ -37,6 +37,28 @@ class Issue(ABC):
         qualification = f"IF {self.constraint} then " if self.constraint else ""
         return f"L{self.line}:{self.code}: {qualification}{self.message}"
 
+    def __eq__(self, other: object) -> bool:
+        return (
+            isinstance(other, Issue)
+            and self.code == other.code
+            and self.message == other.message
+            and self.severity == other.severity
+            and self.line == other.line
+        )
+
+    def is_earlier_report_than(self, other) -> bool:
+        assert self.line is not None and other.line is not None, "Cannot compare issues with unknown line numbers"
+        return (
+            isinstance(other, Issue)
+            and self.code == other.code
+            and self.message == other.message
+            and self.severity == other.severity
+            and self.line < other.line
+        )
+
+    def __hash__(self) -> int:
+        return hash((self.code, self.message, self.severity, self.line))
+
     def to_dict(self) -> dict:
         return {
             "line": self.line,
@@ -382,6 +404,13 @@ class Reporter:
 
             # All other conditions are just as general as each other; do nothing
             return
+
+        if isinstance(issue, (UnboundID, UnboundIDSetU)):
+            if any(o.is_earlier_report_than(issue) for o in cls._issues):
+                return
+            later_reports = [o for o in cls._issues if issue.is_earlier_report_than(o)]
+            for later_report in later_reports:
+                del cls._issues[later_report]
 
         cls._issues[issue] = new_cons
         DebugLogger.log_issue(issue, current_config.current_pass)
