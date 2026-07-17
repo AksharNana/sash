@@ -357,7 +357,7 @@ class Trace:
             DebugLogger.log_trace_extension(prior_state, new_state)
             return replace(self, states=self.states[:-1] + (new_state,))
         else:
-            return self
+            return replace(self, states=self.states[:-1] + (last_state.set_last_exit_code(SymStr(("1",)), Confidence.SPECULATIVE),))
 
 Traces = list[Trace]
 
