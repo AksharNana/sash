@@ -55,6 +55,9 @@ def parse_shell_script(script_path: str) -> list[WrappedAst]:
 
 
 def detect_script_parser(script_path: str) -> str:
+    # NOTE: shfmt integration is buggy right now, so use libdash no matter what
+    return "libdash"
+
     shebang_line = read_shebang_line(script_path)
     if shebang_line is None:
         return "libdash" # Default to libdash if no shebang line is present
