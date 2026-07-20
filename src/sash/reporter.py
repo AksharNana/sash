@@ -178,24 +178,6 @@ class DeadCode(Issue):
 
 
 @dataclass(frozen=True)
-class EmptyVar(Issue):
-    code = "empty_var"
-    severity = Severity.WARNING
-
-    def __init__(self, varname: str, line: int | None):
-        super().__init__(f"Variable '{varname}' might be empty", line)
-
-
-@dataclass(frozen=True)
-class IgnoredCommandResult(Issue):
-    code = "ignored_cmd_result"
-    severity = Severity.WARNING
-
-    def __init__(self, command: str, line: int | None):
-        super().__init__(f"The output of command '{command}' is ignored.", line)
-
-
-@dataclass(frozen=True)
 class NotACommand(Issue):
     code = "not_a_command"
     severity = Severity.ERROR
