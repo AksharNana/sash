@@ -1,0 +1,295 @@
+{
+  "timestamp": "2026-07-20T21:01:48.032431+00:00",
+  "description": "GPT 5.6 Sol; All high-profile benchmarks; Error codes not given in prompt; No timeout",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*hp-",
+  "args": {
+    "fixed": false,
+    "skip_buggy": false,
+    "variants": false,
+    "variants_only": false
+  },
+  "stats": {
+    "num_analyses": 6,
+    "num_successful": 6,
+    "num_crashed": 0,
+    "num_timed_out": 0,
+    "expected_bugs": 10,
+    "detected_bugs": 0,
+    "undetected_bugs": 10,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 0,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 25473,
+    "tokens_out": 30550,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 150.36026516603306
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/hp-backup_manager/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L179:const_cond"
+        ],
+        "detected": [],
+        "undetected": [
+          "L179:const_cond"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 144.21483183302917,
+      "tokens_in": 8873,
+      "tokens_out": 7274,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L46:UNSAFE_REGEX_MATCH: Archive basename is used as an unanchored grep regex, so another entry may be mistaken for this archive.",
+        "L48:UNSAFE_SED_EXPRESSION: Unescaped basename and checksum values can corrupt or invalidate the sed expression.",
+        "L110:UNMATCHED_GLOB: With no matching DAR slices, the literal pattern is passed to commit_archive.",
+        "L128:INCOMPLETE_ERROR_CLEANUP: A failed partial archive is left in place, causing later backups to skip it as existing.",
+        "L178:STATUS_CLOBBERED: The status tested is from the file_to_create assignment, so compressed-command failures are always treated as success.",
+        "L202:STATUS_CLOBBERED: In the encrypted branch, the file_to_create assignment overwrites the pipeline status before it is tested.",
+        "L629:ERROR_MISCLASSIFICATION: Tar is labeled generic, so tar exit status 1 is treated as a fatal error instead of a warning.",
+        "L662:PIPELINE_STATUS: Without pipefail, failure of the archive command is ignored when gpg succeeds.",
+        "L716:TEMPFILE_LEAK: A logfile is created and then replaced by another mktemp result without removing the first file.",
+        "L730:ERROR_MISCLASSIFICATION: Remote tar execution never sets BM__CURRENT_COMMAND to tar, so tar warning status 1 is handled as fatal.",
+        "L822:EVAL_INJECTION: Configuration-controlled target text is executed through eval, allowing arbitrary shell command execution.",
+        "L897:REGEX_INJECTION: PostgreSQL credential values are interpolated unescaped into an extended regular expression.",
+        "L901:INVALID_PGPASS_FORMAT: The appended entry has four fields instead of host:port:database:user:password.",
+        "L905:INVALID_PGPASS_FORMAT: The newly created .pgpass entry omits the required database field.",
+        "L905:INSECURE_SECRET_CREATION: The password file is written before chmod restricts its permissions.",
+        "L905:INCOMPLETE_CLEANUP: A newly created .pgpass file is not marked for later removal.",
+        "L1023:INDEX_DESYNCHRONIZATION: Continuing without incrementing index makes subsequent pipe names use the wrong parallel-array entries."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/hp-bumblebee/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L351:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L351:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 139.40465258294716,
+      "tokens_in": 7231,
+      "tokens_out": 6255,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L60:PRIVILEGE_CHECK: Setting ROOT_UID to 1000 lets an unprivileged openSUSE user pass while rejecting sudo execution as UID 0.",
+        "L80:MISSING_FALLBACK: Unrecognized distributions leave DISTRO and BASHRC unset, but installation continues.",
+        "L261:CONTROL_FLOW: An invalid openSUSE card-family choice claims it will retry but exits the case and continues installation.",
+        "L266:MISNESTED_CASE: The DEBIAN branch is inside the openSUSE card-selection case, so Debian package installation is never selected by DISTRO.",
+        "L301:WRONG_FILE_TEST: The enable-card installation condition tests the source instead of /usr/local/bin/bumblebee-enablecard, preventing a valid source from being copied.",
+        "L311:WRONG_FILE_TEST: The disable-card installation condition tests the source instead of /usr/local/bin/bumblebee-disablecard, preventing a valid source from being copied.",
+        "L349:DESTRUCTIVE_PATH_TYPO: A stray space makes rm -rf delete the entire /usr directory.",
+        "L376:STALE_EXIT_STATUS: On 64-bit Debian, this checks the last ln command rather than the preceding dpkg installation result.",
+        "L402:STALE_EXIT_STATUS: On 64-bit Fedora, this checks sed's status rather than the preceding yum installation result.",
+        "L450:WRONG_ARCHITECTURE_FILE: The 32-bit Ubuntu/openSUSE branch installs the 64-bit optirun wrapper.",
+        "L468:WRONG_ARCHITECTURE_FILE: The 32-bit Debian branch installs the 64-bit optirun wrapper.",
+        "L484:INCONSISTENT_CONDITION: The test searches for nvidia-current although the branch appends nvidia, causing incorrect skips or duplicate entries."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/hp-squid/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L130:word_split_del_sys_file",
+          "L143:word_split_del_sys_file",
+          "L130:word_split",
+          "L143:word_split"
+        ],
+        "detected": [],
+        "undetected": [
+          "L130:word_split_del_sys_file",
+          "L143:word_split_del_sys_file",
+          "L143:word_split",
+          "L130:word_split"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 84.842286375002,
+      "tokens_in": 1489,
+      "tokens_out": 3772,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L42:UNINITIALIZED_VARIABLE: SQUID remains unset when /usr/sbin/squid is absent.",
+        "L54:UNQUOTED_VARIABLE: An unset or whitespace-containing NETWORKING value breaks the test expression.",
+        "L59:UNQUOTED_VARIABLE: SQUID_CONF is unquoted in the file test, allowing word splitting and globbing.",
+        "L64:UNINITIALIZED_VARIABLE: SQUID_PIDFILE_DIR has no default assignment, so the directory test and setup are invalid.",
+        "L130:DANGEROUS_RM: An unset SQUID_PIDFILE_DIR makes the removal target /*.",
+        "L143:DANGEROUS_RM: An unset SQUID_PIDFILE_DIR makes the restart cleanup target /*."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/hp-steam/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L359:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L359:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 149.04537516704295,
+      "tokens_in": 5201,
+      "tokens_out": 6713,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L17:PATH_RESOLUTION: Invoking the script by a bare PATH name makes ${0%/*} resolve to the filename rather than its directory.",
+        "L19:UNQUOTED_EXPANSION: Unquoted $STEAMEXE can undergo word splitting and pathname expansion in the test.",
+        "L27:EXEC_FAILURE_HANDLING: A failed exec normally terminates this non-interactive shell, so the intended diagnostic and exit code are not reached.",
+        "L28:INCORRECT_REDIRECTION: The failure diagnostic is redirected to stdout with >&1 instead of stderr.",
+        "L47:LICENSE_BYPASS: Hard-coding answer=accepted bypasses displaying or obtaining acceptance of the license agreement.",
+        "L139:OVERBROAD_MATCH: Searching for \"$2=\" without anchoring can select unrelated tokens or multiple lines and produce an invalid version.",
+        "L194:UMASK_NOT_APPLIED: The current umask is saved but no restrictive umask is set or subsequently restored.",
+        "L366:INCORRECT_TRAP_RESET: trap '' INT continues ignoring SIGINT instead of restoring its default handling.",
+        "L411:UNVALIDATED_PID: Unquoted, unvalidated PID-file contents can become multiple arguments or options to kill.",
+        "L434:UNDEFINED_FUNCTION: warn_outofdate is invoked but is never defined.",
+        "L439:UNQUOTED_EXPANSION: Unquoted $STEAMSCRIPT is split or glob-expanded when passed to dirname.",
+        "L441:UNQUOTED_EXPANSION: The unquoted steamdeps.txt pathname breaks when $STEAMROOT contains whitespace or glob characters.",
+        "L504:WRONG_PATH: Failed debug-runtime extraction removes a relative $STEAM_RUNTIME_DEBUG path instead of the path under $STEAM_RUNTIME_DEBUG_DIR.",
+        "L560:DISCARDED_RESULT: check_shared_libraries computes MISSING_LIBRARIES, but the result is never checked or used.",
+        "L591:PIPELINE_STATUS: STATUS receives tee's status rather than valgrind's status, losing failures and restart exit codes.",
+        "L593:UNINITIALIZED_PLATFORM: On non-Linux systems PLATFORM is unset, yet the script still constructs and launches a binary path from it.",
+        "L617:RELATIVE_PATH_AFTER_CD: Re-executing a relative $0 after changing directory can resolve to the wrong path.",
+        "L618:LOST_EXIT_STATUS: Without exit \"$STATUS\" after the final conditional, non-restart child exit statuses are replaced by a successful script exit."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/hp-itunes/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L5:word_split"
+        ],
+        "detected": [],
+        "undetected": [
+          "L5:word_split"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 8.75627020909451,
+      "tokens_in": 188,
+      "tokens_out": 368,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:UNQUOTED_EXPANSION: $2 is unquoted, so word splitting or pathname expansion can corrupt the test path",
+        "L4:WRONG_FILE_CHECK: condition checks Arc.app even though the code intends to detect and delete iTunes.app",
+        "L5:UNQUOTED_EXPANSION: $2 is unquoted, so word splitting or pathname expansion can alter the rm operands"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/hp-n/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L144:del_sys_file",
+          "L144:word_split"
+        ],
+        "detected": [],
+        "undetected": [
+          "L144:del_sys_file",
+          "L144:word_split"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 140.58647454204038,
+      "tokens_in": 2491,
+      "tokens_out": 6168,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L14:FORMAT_STRING_INJECTION: Message arguments are interpolated into the printf format string.",
+        "L22:FORMAT_STRING_INJECTION: Error message arguments are interpolated into the printf format string.",
+        "L38:NON_POSIX_COMMAND: which is not specified by POSIX; use command -v.",
+        "L41:NON_POSIX_COMMAND: which is not specified by POSIX; use command -v.",
+        "L101:NON_POSIX_COMMAND: which is not specified by POSIX; use command -v.",
+        "L101:NON_POSIX_REDIRECTION: The &> redirection operator is not POSIX syntax.",
+        "L114:UNMATCHED_GLOB: An empty versions directory leaves the literal * to be processed as a version.",
+        "L115:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L116:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L118:FORMAT_STRING_INJECTION: Version and config data are embedded in the printf format string.",
+        "L120:FORMAT_STRING_INJECTION: Version and config data are embedded in the printf format string.",
+        "L130:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L131:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L131:ARGUMENT_FLATTENING: Assigning $@ to one scalar loses the original config argument boundaries.",
+        "L138:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L146:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L147:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L150:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L151:INVALID_NUMERIC_TEST: A nonnumeric or empty minor version makes test -ge fail with a syntax error.",
+        "L162:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L163:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L164:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L164:ARGUMENT_FLATTENING: Assigning $@ to one scalar loses the original config argument boundaries.",
+        "L169:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L170:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L171:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L178:UNQUOTED_EXPANSION: The custom URL is subject to field splitting, globbing, and option injection.",
+        "L199:UNRELIABLE_SELF_INVOCATION: Calling n through PATH may execute a different program or fail when this script is not installed.",
+        "L200:SYMLINK_COLLISION: ln -s fails after the first installation because the current symlink already exists.",
+        "L208:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L209:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L227:MISSING_ARGUMENT_CHECK: Unquoted $1 makes test -z evaluate incorrectly when no argument is supplied.",
+        "L228:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L230:STALE_LOOP_VALUE: Every loop iteration removes the first version because version is never updated after shift.",
+        "L240:MISSING_ARGUMENT_CHECK: Unquoted $1 makes test -z evaluate incorrectly when no argument is supplied.",
+        "L241:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L242:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L244:FORMAT_STRING_INJECTION: The generated path is incorrectly used as the printf format string.",
+        "L256:MISSING_ARGUMENT_CHECK: Unquoted $1 makes test -z evaluate incorrectly when no argument is supplied.",
+        "L257:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L258:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L263:ARGUMENT_SPLITTING: Unquoted $bin and $@ lose argument boundaries and allow pathname expansion.",
+        "L275:MISSING_ARGUMENT_CHECK: Unquoted $1 makes test -z evaluate incorrectly when no argument is supplied.",
+        "L276:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L277:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L282:ARGUMENT_SPLITTING: Unquoted executable paths and $@ lose argument boundaries and allow pathname expansion.",
+        "L305:INVALID_ERE_ESCAPE: \\d is not a portable POSIX extended regular expression for a digit.",
+        "L316:NON_POSIX_BUILTIN: local is not specified by POSIX sh.",
+        "L347:ARGUMENT_SPLITTING: Unquoted $@ corrupts arguments before forwarding them to execute_with_version.",
+        "L348:ARGUMENT_SPLITTING: Unquoted $@ corrupts arguments before forwarding them to execute_with_npm_version.",
+        "L349:DROPPED_ARGUMENTS: Only $2 is passed, so rm cannot remove all versions supplied by the user.",
+        "L350:DROPPED_ARGUMENTS: Configuration arguments following latest are ignored.",
+        "L350:UNRELIABLE_SELF_INVOCATION: Calling n through PATH may execute a different program or fail.",
+        "L351:DROPPED_ARGUMENTS: Configuration arguments following stable are ignored.",
+        "L351:UNRELIABLE_SELF_INVOCATION: Calling n through PATH may execute a different program or fail.",
+        "L353:ARGUMENT_SPLITTING: Unquoted $@ corrupts custom-install arguments during forwarding.",
+        "L354:ARGUMENT_SPLITTING: Unquoted $@ corrupts install arguments during forwarding."
+      ]
+    }
+  ]
+}
