@@ -193,7 +193,7 @@ class UnexpectedStdin(Issue):
     severity = Severity.ERROR
 
     def __init__(self, command: str, line: int | None):
-        super().__init__(f"Command '{command}' expects input from stdin if the first argument is empty", line)
+        super().__init__(f"Command '{command}' expects input from stdin only for some execution paths", line)
 
 
 @dataclass(frozen=True)
