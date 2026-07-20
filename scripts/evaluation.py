@@ -1551,17 +1551,6 @@ def write_llm_report(
             "raw_llm_output": job.raw_llm_output,
         }
         if job.mapper_entries is not None:
-            entry["mapper_entries"] = [
-                {
-                    "llm_code": e.llm_code,
-                    "llm_line": e.llm_line,
-                    "llm_description": e.llm_description,
-                    "gt_id": e.gt_id,
-                    "gt_code": e.gt_code,
-                    "gt_line": e.gt_line,
-                }
-                for e in job.mapper_entries
-            ]
             entry["mapper_json"] = job.mapper_json
             entry["mapper_tokens_in"] = job.mapper_tokens_in
             entry["mapper_tokens_out"] = job.mapper_tokens_out

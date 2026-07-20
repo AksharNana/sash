@@ -279,16 +279,18 @@ def parse_mapper_response(text: str) -> tuple[list[MapperEntry], dict]:
 
 
 def build_ground_truth_section(ground_truth: dict) -> str:
-    descriptions = sash.reporter.Issue.all_descriptions()
+    issue_descriptions = sash.reporter.Issue.all_descriptions()
     lines = []
     for bug_id in sorted(ground_truth.get("bugs", {}).keys()):
         bug_info = ground_truth["bugs"][bug_id]
         code = bug_info.get("code", "unknown")
-        desc = descriptions.get(code, bug_info.get("description", ""))
+        specific_desc = bug_info.get("description", "")
+        category = issue_descriptions.get(code, specific_desc)
         bug_lines = bug_info.get("lines", bug_info.get("regression_lines", []))
-        lines.append(
-            f"  {bug_id}: {code}: \"{desc}\" (expected lines: {bug_lines})"
-        )
+        lines.append(f"  {bug_id}: {code}")
+        lines.append(f"    description: \"{specific_desc}\"")
+        lines.append(f"    category: \"{category}\"")
+        lines.append(f"    expected lines: {bug_lines}")
     return "\n".join(lines) if lines else "  (none)"
 
 
@@ -306,27 +308,33 @@ def build_issues_section(issues: list[ParsedIssue]) -> str:
 
 _MAPPER_PROMPT = """\
 <instructions>
-You are a mapping tool for static analysis results. Your task is to align
-issues found by an analysis tool with known ground truth bugs.
+You are a mapping tool. Your task is to match each issue found by an
+analysis tool to a known ground truth bug, or null if no match exists.
 
-Given:
-1. A shell script (for context)
-2. Known ground truth bugs with their IDs, codes, descriptions, and expected line numbers
-3. Issues found by the analysis tool
+You are given:
+1. A shell script for context
+2. Ground truth bugs: each has an ID, a code, a description of what the
+   specific bug does in this script, a general category, and expected lines
+3. Found issues: each has a code, a line, and a description of the
+   specific problem the analysis tool identified
 
-Map each found issue to the ground truth bug ID it corresponds to, or null if
-there is no matching ground truth bug.
-
-Rules:
-- Match based on what the bug IS, not the specific code name used by the tool.
-  Different tools may use different code names for the same underlying bug.
-- Line numbers may be off by one. A finding at line 5 clearly matching a ground
-  truth bug expected at line 4 or 6 should still be mapped.
-- If a ground truth bug has line -1, it can be mapped to a finding at ANY line.
-- If multiple findings could match the same ground truth bug, map each finding
-  independently (the evaluation system handles deduplication).
-- If a finding clearly does not correspond to any ground truth bug, set gt_id to null.
-- DO NOT judge whether a finding is valid or not. Only provide the alignment.
+How to map:
+- First read the found issue's description and look at that line in the
+  script to understand what the actual bug is.
+- Then compare it to each ground truth bug's description to find the one
+  that describes the SAME underlying problem. Descriptions may use
+  different wording — match on the bug's nature, not exact phrasing.
+- The "category" field is just background context. Two bugs that share
+  a category are NOT necessarily the same bug unless their descriptions
+  and script locations also match.
+- Once you identify the matching ground truth bug, record its ID and the
+  expected line that is closest to the found issue's line.
+- If no ground truth bug describes the same problem, set gt_id to null.
+- Line numbers only matter for proximity: a match at line 178 for a
+  bug expected at line 179 is valid. Do NOT map two issues to the same
+  bug ID unless they genuinely refer to the same underlying defect.
+- If a ground truth bug has expected line -1, it can match any line.
+- DO NOT judge validity — only provide alignments.
 
 Respond with a single JSON object containing a "mappings" array:
 
@@ -335,7 +343,7 @@ Respond with a single JSON object containing a "mappings" array:
     {{
       "llm_code": "system_file_deletion",
       "llm_line": 5,
-      "llm_description": "May delete /etc/passwd",
+      "llm_description": "May delete /etc/passwd because PATH is empty",
       "gt_id": "bug01",
       "gt_code": "del_sys_file",
       "gt_line": 5
