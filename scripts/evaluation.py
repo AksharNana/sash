@@ -1545,6 +1545,7 @@ def write_llm_report(
             "timed_out": job.timed_out,
             "detected_all": (job.additional_info or {}).get("detected_all", False),
             "bugs": _compute_job_bugs(job),
+            "time_sec": job.report.time if job.report else None,
             "tokens_in": job.tokens_in,
             "tokens_out": job.tokens_out,
             "cost": job.cost,
