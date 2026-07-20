@@ -60,11 +60,17 @@ class Issue(ABC):
         """Return the set of all possible issue codes."""
         return {subclass.code for subclass in cls.__subclasses__()}
 
+    @classmethod
+    def all_descriptions(cls) -> dict[str, str]:
+        """Return a mapping of all issue codes to their human-readable descriptions."""
+        return {subclass.code: getattr(subclass, "description", "") for subclass in cls.__subclasses__()}
+
 
 @dataclass(frozen=True)
 class ParseError(Issue):
     code = "parse"
     severity = Severity.ERROR
+    description: ClassVar[str] = "The script contains a syntax or parse error"
 
     def __init__(self, msg: str) -> None:
         super().__init__(f"Parse error: {msg}", None)
@@ -74,6 +80,7 @@ class ParseError(Issue):
 class UnboundID(Issue):
     code = "unbound"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A variable is used before it is defined in the script"
 
     # Do not include the line when hashing in order to prevent duplicate errors about the same variable
     line: int | None = field(compare=False, hash=False)
@@ -87,6 +94,7 @@ class UnboundID(Issue):
 class UnboundIDSetU(Issue):
     code = "unbound_setu"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A variable is used before it is defined in the script, and set -u is in effect"
 
     # Do not include the line when hashing in order to prevent duplicate errors about the same variable
     line: int | None = field(compare=False, hash=False)
@@ -99,6 +107,7 @@ class UnboundIDSetU(Issue):
 class UndefinedFunction(Issue):
     code = "function_use_before_def"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A function is called before it is defined"
 
     def __init__(self, name: str, line: int | None):
         super().__init__(f"Function '{name}' is used before its definition", line)
@@ -108,6 +117,7 @@ class UndefinedFunction(Issue):
 class InfiniteLoop(Issue):
     code = "infinite_loop"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A loop condition never changes, causing an infinite loop"
 
     def __init__(self, loop: AST.ForNode | AST.WhileNode, line: int | None):
         super().__init__(f"Condition for the following loop never changes, causing an infinite loop:\n{loop.pretty()}", line)
@@ -117,6 +127,7 @@ class InfiniteLoop(Issue):
 class ConstantCondition(Issue):
     code = "const_cond"
     severity = Severity.WARNING
+    description: ClassVar[str] = "A condition is always true or always false"
 
     def __init__(self, cond: AST.Command, line: int | None):
         super().__init__(f"Condition is always true or false:\n{cond.pretty()}", line)
@@ -126,6 +137,7 @@ class ConstantCondition(Issue):
 class LoopRunsOnce(Issue):
     code = "loop_once"
     severity = Severity.WARNING
+    description: ClassVar[str] = "A loop runs only once"
 
     def __init__(self, loop: AST.ForNode | AST.WhileNode, line: int | None):
         super().__init__(f"Loop runs only once:\n{loop.pretty()}", line)
@@ -135,6 +147,7 @@ class LoopRunsOnce(Issue):
 class DeleteSystemFile(Issue):
     code = "del_sys_file"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A possible execution path in the script leads to the deletion of a system file"
 
     def __init__(self, filename: str, line: int | None):
         super().__init__(f"May delete system file '{filename}'", line)
@@ -144,6 +157,7 @@ class DeleteSystemFile(Issue):
 class WordSplitCouldDeleteSystemFile(Issue):
     code = "word_split_del_sys_file"
     severity = Severity.ERROR
+    description: ClassVar[str] = "Word splitting (or empty variable) could lead to the deletion of a system file"
 
     def __init__(self, filename: str, line: int | None):
         super().__init__(f"Word splitting or empty variable could lead to deletion of system file {filename}", line)
@@ -153,6 +167,7 @@ class WordSplitCouldDeleteSystemFile(Issue):
 class DangerousWordSplit(Issue):
     code = "word_split"
     severity = Severity.WARNING
+    description: ClassVar[str] = "Word splitting could lead to unexpected arguments to dangerous commands"
 
     def __init__(self, source: AST.CommandNode, line: int | None):
         # TODO: Figure out why source is a tuple sometimes and fix it
@@ -163,6 +178,7 @@ class DangerousWordSplit(Issue):
 class RedirectToFunction(Issue):
     code = "redir_func"
     severity = Severity.WARNING
+    description: ClassVar[str] = "Script redirects output to a defined function name"
 
     def __init__(self, function_name: str, line: int | None):
         super().__init__(f"Redirecting output to '{function_name}', which is a function, actually writes to a file with that name", line)
@@ -172,6 +188,7 @@ class RedirectToFunction(Issue):
 class DeadCode(Issue):
     code = "dead_code"
     severity = Severity.WARNING
+    description: ClassVar[str] = "Unreachable code that will never execute"
 
     def __init__(self, code: AST.AstNode, line: int | None):
         super().__init__(f"Unreachable code:\n{code.pretty()}", line)
@@ -181,6 +198,7 @@ class DeadCode(Issue):
 class NotACommand(Issue):
     code = "not_a_command"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A name is invoked as a command but it cannot be one"
 
     def __init__(self, name: str, line: int | None):
         super().__init__(f"'{name}' is invoked as a command, but it cannot be one", line)
@@ -191,6 +209,7 @@ class NotACommand(Issue):
 class UnexpectedStdin(Issue):
     code = "unexpected_stdin"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A command expects input from stdin only for some execution paths"
 
     def __init__(self, command: str, line: int | None):
         super().__init__(f"Command '{command}' expects input from stdin only for some execution paths", line)
@@ -200,6 +219,7 @@ class UnexpectedStdin(Issue):
 class CommandCanOnlyFail(Issue):
     code = "command_can_only_fail"
     severity = Severity.WARNING
+    description: ClassVar[str] = "A command can only fail"
 
     def __init__(self, command: str, line: int | None):
         super().__init__(f"Command '{command}' can only fail", line)
@@ -209,6 +229,7 @@ class CommandCanOnlyFail(Issue):
 class CapturingEmptyOutput(Issue):
     code = "capturing_empty_output"
     severity = Severity.WARNING
+    description: ClassVar[str] = "Command substitution captures output of a command that does not produce any"
 
     def __init__(self, command: str, line: int | None):
         super().__init__(f"Substitution captures output of '{command}', which doesn't produce any", line)
@@ -218,6 +239,7 @@ class CapturingEmptyOutput(Issue):
 class ExpectedPathState(Issue):
     code = "cmd_expected_path_state"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A command expects paths in a certain state, but one or more paths might be different"
 
     def __init__(self, command: str, state: str, paths: Iterable[Field], line: int | None):
         super().__init__(f"Command '{command}' expects paths that are {state}, but one or more of the following paths might not be: {', '.join(p.pretty() for p in paths).rstrip()}", line)
@@ -227,6 +249,7 @@ class ExpectedPathState(Issue):
 class DataLoss(Issue):
     code = "data_loss"
     severity = Severity.ERROR
+    description: ClassVar[str] = "A command deletes paths that have not been read, potentially causing data loss"
 
     def __init__(self, command: str, paths: Iterable[Field], line: int | None):
         super().__init__(f"Command '{command}' deletes the following paths, one of which has not been read, potentially causing loss of data: {', '.join(p.pretty() for p in paths).rstrip()}", line)
@@ -236,6 +259,7 @@ class DataLoss(Issue):
 class DeleteUserDirectory(Issue):
     code = "del_user_dir"
     severity = Severity.WARNING
+    description: ClassVar[str] = "An execution path can lead to the deletion of a user directory"
 
     def __init__(self, directory: str, line: int | None):
         super().__init__(f"Deletes user directory '{directory}'", line)
@@ -245,6 +269,7 @@ class DeleteUserDirectory(Issue):
 class InconsistentIFS(Issue):
     code = "inconsistent_ifs"
     severity = Severity.WARNING
+    description: ClassVar[str] = "IFS differs across execution paths"
 
     def __init__(self, ifs_values: list[str], line: int | None):
         super().__init__(f"IFS differs across traces: {', '.join(repr(value) for value in ifs_values).rstrip()}", line)
