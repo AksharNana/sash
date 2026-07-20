@@ -24,7 +24,7 @@ git pull origin master
 # 3. Verificar .env
 if [ ! -f .env ]; then
     echo "Arquivo .env não encontrado. Criando a partir de .env.example (EDITE DEPOIS!)"
-    cp .env .env # bug here: .env does not exist
+    cp .env .env
 fi
 
 # 4. Subir containers

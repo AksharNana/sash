@@ -38,8 +38,8 @@ function apply_git_config {
 
 	for configKey in "${!configMap[@]}"
 	do
-		git config --list | grep -q "$configKey" # bug here: fails when grep does not matc anything due to set -e
-		if [ $? -ne 0 ]; then # due to set -e, this can never be false
+		git config --list | grep -q "$configKey"
+		if [ $? -ne 0 ]; then
 			configValue="${configMap[$configKey]}"
 			git config --global "$configKey" "$configValue"
 		fi

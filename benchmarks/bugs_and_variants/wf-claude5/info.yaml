@@ -13,7 +13,7 @@ ground_truths:
   - path: original.sh
     kind: original
     bugs:
-      bug00: { lines: [5] }
+      bug00: { lines: [4] }
 
   - path: posix.sh
     kind: buggy

@@ -176,7 +176,7 @@ function __exec_meta_command()
                     file_to_create="$file_to_create.$ext"
                 fi
 
-                if [[ $? -gt 0 ]]; then # bug here: intent was to check the exit status of the first command in the pipeline on line 173; right now even if it fails the log is deleted
+                if [[ $? -gt 0 ]]; then
                     warning "Unable to exec \$command; check \$logfile"
                     rm -f $file_to_create
                 else

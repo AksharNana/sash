@@ -1,13 +1,13 @@
 download_repos() {
   user_name="$1"
-  temp_dir=$(mktemp -q /tmp/repo_archive.XXXXXX) # missing -d
+  temp_dir=$(mktemp -q /tmp/repo_archive.XXXXXX)
   if [ $? -ne 0 ]; then
       echo "$0: Can't create a temp file!"
       exit 1
   fi
 
   echo "Using the following temp dir: $temp_dir"
-  cd "$temp_dir" && # cd into file
+  cd "$temp_dir" &&
   virtualenv env &&
   source env/bin/activate &&
   pip install ghcloneall &&

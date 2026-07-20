@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://stackoverflow.com/questions/49605847/file-copying-in-while-loop-is-executing-for-one-time-only
+
 current_time=$(date "+%Y.%m.%d-%H.%M.%S")
 tail -n 0 -F hive-server2.log | \
 while read LINE
@@ -9,6 +9,6 @@ then
   AuditTypeID=14
   QueryResult="$(grep -oEi 'DROP TABLE [a-zA-Z][a-zA-Z0-9_]*' hive-server2.log | sed -n \$p)"
 echo -e "$QueryResult" >/dev/null < op.txt
-cp op.txt op/op.txt.$current_time # current_time does not change within the loop
+cp op.txt op/op.txt.$current_time
 fi
 done
