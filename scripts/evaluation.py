@@ -44,7 +44,7 @@ def build_cli():
     # LLM mode
     llm_group = parser.add_argument_group('LLM mode options')
     llm_group.add_argument('--llm', nargs='?', const="openai:gpt-5.4-nano", default=None, metavar='PROVIDER:MODEL', help='Enable LLM mode; uses openai:gpt-5.4-nano if no model given')
-    llm_group.add_argument('--llm-prompt', type=Path, default=None, metavar='FILE', help='Prompt template file with {script} and {codes} placeholders (default: scripts/eval_llm_prompt.md)')
+    llm_group.add_argument('--llm-prompt', type=Path, default=None, metavar='FILE', help='Prompt template file with {script} and {codes} placeholders (default: scripts/prompt_with_codes.md)')
     llm_group.add_argument('--llm-base-url', type=str, default=None, metavar='URL', help='Custom API base URL')
     llm_group.add_argument('--llm-api-key', type=str, default=None, metavar='KEY', help='API key (falls back to OPENAI_API_KEY env var or .env file)')
     llm_group.add_argument('--llm-temperature', type=float, default=-1.0, metavar='FLOAT', help='Sampling temperature (default: model default)')
