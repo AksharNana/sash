@@ -1,5 +1,9 @@
 #! /usr/bin/env -S uv run
 from collections.abc import Callable
+import csv as csv_module
+from datetime import datetime, timezone
+import json as json_module
+import os
 import sys
 import yaml
 import subprocess
@@ -8,12 +12,15 @@ import jsonschema
 import multiprocessing
 import traceback
 import re
+import time
 import report
 
 from dataclasses import dataclass, field
 import sash.main
 from sash.main import build_cli as build_sash_cli
 import sash.reporter
+import sash.formatters
+import llm
 
 
 def build_cli():
@@ -33,6 +40,20 @@ def build_cli():
     parser.add_argument('-N', '--no-color', action='store_true', help='Disable colored output to stderr (default: false)')
     parser.add_argument('-j', '--jobs', type=int, default=1, help='Number of parallel jobs (default: 1, as introducing multiple threads can slow execution down and lead to different results for smaller timeouts; be aware)')
     parser.add_argument('-V', '--verbose', action='store_true', help='Enable printing of error reports or exceptions that occur, and raw output when ground truth is missing (default: false)')
+
+    # LLM mode
+    llm_group = parser.add_argument_group('LLM mode options')
+    llm_group.add_argument('--llm', nargs='?', const="openai:gpt-5.6-sol", default=None, metavar='PROVIDER:MODEL', help='Enable LLM mode; uses openai:gpt-5.6-sol if no model given')
+    llm_group.add_argument('--llm-prompt', type=Path, default=None, metavar='FILE', help='Prompt template file with {script} and {codes} placeholders (default: scripts/eval_llm_prompt.md)')
+    llm_group.add_argument('--llm-base-url', type=str, default=None, metavar='URL', help='Custom API base URL')
+    llm_group.add_argument('--llm-api-key', type=str, default=None, metavar='KEY', help='API key (falls back to OPENAI_API_KEY env var or .env file)')
+    llm_group.add_argument('--llm-temperature', type=float, default=0.0, metavar='FLOAT', help='Sampling temperature (default: 0)')
+    llm_group.add_argument('--llm-max-tokens', type=int, default=None, metavar='INT', help='Max output tokens')
+    llm_group.add_argument('--llm-timeout', type=float, default=0.0, metavar='SEC', help='Per-call API timeout in seconds (default: 0 = unlimited)')
+    llm_group.add_argument('--llm-mapper', nargs='?', const="openai:gpt-5.4-mini", default=None, metavar='PROVIDER:MODEL', help='Enable mapper LLM; uses openai:gpt-5.4-mini if no model given')
+    llm_group.add_argument('--description', type=str, default=None, metavar='STR', help='Human-readable label for this experiment run')
+    llm_group.add_argument('--jsonl-output', type=Path, default=None, metavar='FILE', help='Append-only JSONL experiment log file (default: results/llm_stats.jsonl)')
+
     return parser
     # fmt: on
 
@@ -49,6 +70,16 @@ def main(
     verbose: bool,
     no_color: bool,
     num_jobs: int,
+    llm_spec: str | None = None,
+    llm_prompt: Path | None = None,
+    llm_base_url: str | None = None,
+    llm_api_key: str | None = None,
+    llm_temperature: float = 0.0,
+    llm_max_tokens: int | None = None,
+    llm_timeout: float | None = None,
+    llm_mapper_spec: str | None = None,
+    description: str | None = None,
+    jsonl_output: Path | None = None,
 ):
     if no_color:
         disable_color()
@@ -97,6 +128,110 @@ def main(
         f"Running {len(jobs)} analyses (on {stats.benchmarks - stats.skipped} benchmarks) using {num_jobs} processes"
     )
 
+    if llm_spec is not None:
+        if llm_prompt is None:
+            eprint("Error: --llm-prompt is required in LLM mode")
+            exit(1)
+        if not llm_prompt.exists():
+            eprint(f"Error: prompt template file not found: {llm_prompt}")
+            exit(1)
+
+        prompt_template = llm_prompt.read_text(encoding="utf-8")
+        codes_catalog = llm.build_codes_catalog()
+        valid_codes = sash.reporter.Issue.all_codes()
+
+        start_time = time.perf_counter()
+
+        with multiprocessing.Pool(
+            processes=num_jobs,
+            initializer=_llm_worker_init,
+            initargs=(
+                llm_spec,
+                llm_api_key,
+                llm_base_url,
+                llm_temperature,
+                llm_max_tokens,
+                llm_timeout,
+                llm_mapper_spec,
+                prompt_template,
+                codes_catalog,
+                list(valid_codes),
+            ),
+        ) as pool:
+            finished = pool.starmap(
+                run_llm_job,
+                [(job, verbose) for job in jobs],
+            )
+
+        duration_sec = time.perf_counter() - start_time
+
+        eprint(f"\n{BOLD}Printing per-analysis results{RESET}")
+        for job in finished:
+            process_finished_job(stats, job)
+            if job is not finished[-1]:
+                eprint()
+
+        for job in finished:
+            stats.total_tokens_in += job.tokens_in
+            stats.total_tokens_out += job.tokens_out
+            if job.cost is not None:
+                stats.total_cost += job.cost
+            stats.total_mapper_tokens_in += job.mapper_tokens_in
+            stats.total_mapper_tokens_out += job.mapper_tokens_out
+            if job.mapper_cost is not None:
+                stats.total_mapper_cost += job.mapper_cost
+
+        eprint(f"\n{BOLD}Printing aggregate results{RESET}")
+        eprint("Total benchmarks: ", stats.benchmarks)
+        eprint("  Skipped: ", stats.skipped)
+        eprint("Total analyses ran: ", stats.analyses)
+        eprint("  Successful: ", stats.successful)
+        eprint("  Failed: ", stats.crashed)
+        eprint("  Timed out: ", stats.timed_out)
+        eprint("Total time: ", f"{duration_sec:.2f}s")
+        eprint("Total known bugs: ", stats.buggy_expected_bugs)
+        eprint("  Out of these were detected: ", stats.buggy_detected_bugs)
+        eprint("  Out of these were not detected: ", stats.buggy_undetected_bugs)
+        eprint("Total unknown bugs detected: ", stats.buggy_unexpected_bugs)
+        eprint("Total tokens in: ", stats.total_tokens_in)
+        eprint("Total tokens out: ", stats.total_tokens_out)
+        if stats.total_mapper_tokens_in > 0:
+            eprint("Mapping tokens in: ", stats.total_mapper_tokens_in)
+            eprint("Mapping tokens out: ", stats.total_mapper_tokens_out)
+
+        if csv_file is not None:
+            export_llm_csv(file=csv_file, jobs=finished)
+
+        if html_file is not None:
+            eprint_warn(
+                Path("."),
+                "HTML report not yet supported for LLM mode; skipping",
+            )
+
+        if jsonl_output is not None:
+            write_jsonl_log(
+                jsonl_file=jsonl_output,
+                description=description,
+                model=llm_spec,
+                mapper_model=llm_mapper_spec,
+                temperature=llm_temperature,
+                benchmark_filter=bench_filter.pattern,
+                stats=stats,
+                jobs=finished,
+                duration_sec=duration_sec,
+                args={
+                    "fixed": run_fixed,
+                    "skip_buggy": not run_buggy,
+                    "variants": run_variants,
+                    "variants_only": run_only_variants,
+                },
+            )
+
+        if stats.crashed > 0:
+            exit(1)
+        return
+
+    # Non-LLM mode (original Sash path)
     global SASH_KWARGS
     with multiprocessing.Pool(
         processes=num_jobs,
@@ -193,6 +328,14 @@ class FinishedJob(Job):
     exn_traceback: str | None = None
     report: sash.reporter.Report | None = None
     additional_info: dict = field(default_factory=dict)
+    tokens_in: int = 0
+    tokens_out: int = 0
+    cost: float | None = None
+    raw_llm_output: str | None = None
+    mapper_entries: list | None = None
+    mapper_tokens_in: int = 0
+    mapper_tokens_out: int = 0
+    mapper_cost: float | None = None
 
 
 @dataclass
@@ -221,6 +364,14 @@ class EvalStats:
     # Total number of bugs that we had no expectation about but were detected across fixed benchmarks
     fixed_rest_bugs: int = 0
 
+    # LLM-specific stats
+    total_tokens_in: int = 0
+    total_tokens_out: int = 0
+    total_cost: float = 0.0
+    total_mapper_tokens_in: int = 0
+    total_mapper_tokens_out: int = 0
+    total_mapper_cost: float = 0.0
+
     @property
     def successful(self) -> int:
         return self.analyses - self.crashed
@@ -247,9 +398,9 @@ def process_finished_job(stats: EvalStats, job: FinishedJob):
         all_reports = [ReportEntry(i.code, i.line, None) for i in job.report.issues]  # type: ignore
 
         all_gt = [
-            ReportEntry(bug_info["code"], l, bug_info.get("shellcheck"))
+            ReportEntry(bug_info["code"], ln, bug_info.get("shellcheck"))
             for bug_info in job.ground_truth["bugs"].values()
-            for l in bug_info.get("lines", [])
+            for ln in bug_info.get("lines", [])
         ]
 
         all_expected_detected = []  # (1)
@@ -315,9 +466,9 @@ def process_finished_job(stats: EvalStats, job: FinishedJob):
         all_reports = [ReportEntry(i.code, i.line, None) for i in job.report.issues]  # type: ignore
 
         all_gt = [
-            ReportEntry(bug_info["code"], l, bug_info.get("shellcheck"))
+            ReportEntry(bug_info["code"], ln, bug_info.get("shellcheck"))
             for bug_info in job.ground_truth["bugs"].values()
-            for l in bug_info.get("regression_lines", [])
+            for ln in bug_info.get("regression_lines", [])
         ]
 
         all_unexpected_detected = []  # (1)
@@ -392,7 +543,16 @@ def process_finished_job(stats: EvalStats, job: FinishedJob):
         )
 
     # Evaluate job results
-    if job.ground_truth["kind"] in ["buggy", "buggy_variant"]:
+    if job.mapper_entries is not None:
+        if job.ground_truth["kind"] in ["buggy", "buggy_variant"]:
+            process_buggy_with_mapper(stats, job)
+        elif job.ground_truth["kind"] in ["fixed", "fixed_variant"]:
+            process_fixed_with_mapper(stats, job)
+        else:
+            raise AssertionError(
+                f"Should not have executed file of kind '{job.ground_truth['kind']}'"
+            )
+    elif job.ground_truth["kind"] in ["buggy", "buggy_variant"]:
         process_buggy_job(job)
     elif job.ground_truth["kind"] in ["fixed", "fixed_variant"]:
         process_fixed_job(job)
@@ -400,6 +560,131 @@ def process_finished_job(stats: EvalStats, job: FinishedJob):
         raise AssertionError(
             f"Should not have executed file of kind '{job.ground_truth['kind']}'"
         )
+
+
+def process_buggy_with_mapper(stats: EvalStats, job: FinishedJob):
+    where = job.benchmark.relative_to(ROOT_DIR)
+
+    all_gt_ids = set(job.ground_truth["bugs"].keys())
+    matched_gt_ids: set[str] = set()
+    unexpected_entries: list[llm.MapperEntry] = []
+
+    assert job.mapper_entries is not None
+    for entry in job.mapper_entries:
+        if entry.gt_id is not None and entry.gt_id in all_gt_ids:
+            matched_gt_ids.add(entry.gt_id)
+        else:
+            unexpected_entries.append(entry)
+
+    all_gt = [
+        ReportEntry(bug_info["code"], ln, bug_info.get("shellcheck"))
+        for bug_id, bug_info in job.ground_truth["bugs"].items()
+        for ln in bug_info.get("lines", [])
+    ]
+
+    stats.buggy_expected_bugs += len(all_gt)
+    stats.buggy_detected_bugs += len(matched_gt_ids)
+    stats.buggy_unexpected_bugs += len(unexpected_entries)
+
+    undetected = all_gt_ids - matched_gt_ids
+
+    if not undetected:
+        eprint_succ(
+            where,
+            f"All expected bugs detected ({len(matched_gt_ids)} out of {len(all_gt_ids)} bug IDs)",
+        )
+    else:
+        eprint_fail(
+            where,
+            f"{len(matched_gt_ids)} out of {len(all_gt_ids)} expected bugs detected",
+        )
+        for bug_id in sorted(undetected):
+            code = job.ground_truth["bugs"][bug_id].get("code", "unknown")
+            eprint_fail(where, f"Bug '{bug_id}' ({code}) was not detected")
+
+    if unexpected_entries:
+        eprint_info(
+            where,
+            f"{len(unexpected_entries)} additional bugs detected (unmapped)",
+        )
+
+    job.additional_info = {
+        "expected": all_gt,
+        "actual": [
+            ReportEntry(
+                e.llm_code,
+                e.llm_line,
+                None,
+            )
+            for e in job.mapper_entries
+            if e.gt_id is not None
+        ],
+        "detected_all": len(undetected) == 0,
+        "kind": job.ground_truth["kind"],
+    }
+
+
+def process_fixed_with_mapper(stats: EvalStats, job: FinishedJob):
+    where = job.benchmark.relative_to(ROOT_DIR)
+
+    all_gt_ids = set(job.ground_truth["bugs"].keys())
+    all_gt = [
+        ReportEntry(bug_info["code"], ln, bug_info.get("shellcheck"))
+        for bug_id, bug_info in job.ground_truth["bugs"].items()
+        for ln in bug_info.get("regression_lines", [])
+    ]
+
+    matched_gt_ids: set[str] = set()
+    no_expectation_entries: list[llm.MapperEntry] = []
+
+    assert job.mapper_entries is not None
+    for entry in job.mapper_entries:
+        if entry.gt_id is not None and entry.gt_id in all_gt_ids:
+            matched_gt_ids.add(entry.gt_id)
+        else:
+            no_expectation_entries.append(entry)
+
+    stats.fixed_expected_missing_bugs += len(all_gt)
+    stats.fixed_regression_bugs += len(matched_gt_ids)
+    stats.fixed_rest_bugs += len(no_expectation_entries)
+
+    if not matched_gt_ids:
+        eprint_succ(
+            where,
+            f"No regression bugs detected (0 out of {len(all_gt_ids)} expected missing bugs)",
+        )
+    else:
+        eprint_fail(
+            where,
+            f"{len(matched_gt_ids)} out of {len(all_gt_ids)} expected missing bugs were detected (regression)",
+        )
+        for entry in job.mapper_entries:
+            if entry.gt_id is not None:
+                eprint_fail(
+                    where,
+                    f"Bug '{entry.gt_id}' ({entry.gt_code}) was detected but expected to be missing",
+                )
+
+    if no_expectation_entries:
+        eprint_warn(
+            where,
+            f"{len(no_expectation_entries)} additional bugs detected (no ground truth expectation)",
+        )
+
+    job.additional_info = {
+        "expected": all_gt,
+        "actual": [
+            ReportEntry(
+                e.llm_code,
+                e.llm_line,
+                None,
+            )
+            for e in job.mapper_entries
+            if e.gt_id is not None
+        ],
+        "detected_all": len(matched_gt_ids) == 0,
+        "kind": job.ground_truth["kind"],
+    }
 
 
 def run_job(
@@ -431,6 +716,137 @@ def run_job(
     except (AssertionError, BaseException) as e:
         if isinstance(e, KeyboardInterrupt):
             raise e  # Re-raise keyboard interrupts
+
+        exn_traceback = traceback.format_exc() if verbose else None
+
+        finished = FinishedJob(
+            benchmark=job.benchmark,
+            ground_truth=job.ground_truth,
+            timed_out=False,
+            crashed=True,
+            exn_traceback=exn_traceback,
+            report=None,
+        )
+
+    return finished
+
+
+# LLM mode globals (set per worker in multiprocessing pool initializer)
+LLM_PROVIDER: llm.LLMProvider | None = None
+LLM_PROMPT_TEMPLATE: str = ""
+LLM_CODES_CATALOG: str = ""
+LLM_MAPPER_PROVIDER: llm.LLMProvider | None = None
+LLM_VALID_CODES: set[str] = set()
+
+
+def _llm_worker_init(
+    provider_spec: str,
+    api_key: str | None,
+    base_url: str | None,
+    temperature: float,
+    max_tokens: int | None,
+    timeout: float | None,
+    mapper_spec: str | None,
+    prompt_template: str,
+    codes_catalog: str,
+    valid_codes: list[str],
+):
+    global LLM_PROVIDER, LLM_PROMPT_TEMPLATE, LLM_CODES_CATALOG, LLM_MAPPER_PROVIDER, LLM_VALID_CODES
+    LLM_PROVIDER = llm.create_provider(
+        provider_spec,
+        api_key=api_key,
+        base_url=base_url,
+        temperature=temperature,
+        max_tokens=max_tokens,
+        timeout=timeout,
+    )
+    if mapper_spec:
+        LLM_MAPPER_PROVIDER = llm.create_provider(
+            mapper_spec,
+            api_key=api_key,
+            base_url=base_url,
+            temperature=0.0,
+            max_tokens=max_tokens,
+            timeout=timeout,
+        )
+    else:
+        LLM_MAPPER_PROVIDER = None
+    LLM_PROMPT_TEMPLATE = prompt_template
+    LLM_CODES_CATALOG = codes_catalog
+    LLM_VALID_CODES = set(valid_codes)
+
+
+def run_llm_job(job: Job, verbose: bool) -> FinishedJob:
+    where = job.benchmark.relative_to(ROOT_DIR)
+    eprint_info(where, "Running LLM analysis")
+    finished: FinishedJob
+
+    try:
+        script_content = job.benchmark.read_text(encoding="utf-8")
+
+        prompt = llm.render_prompt(
+            LLM_PROMPT_TEMPLATE, script_content, LLM_CODES_CATALOG
+        )
+
+        assert LLM_PROVIDER is not None
+        response = LLM_PROVIDER.generate(prompt)
+
+        issues = llm.parse_analysis_response(response.text, LLM_VALID_CODES)
+
+        mapper_entries = None
+        mapper_tokens_in = 0
+        mapper_tokens_out = 0
+        mapper_cost = None
+
+        if LLM_MAPPER_PROVIDER is not None:
+            mapper_prompt = llm.build_mapper_prompt(
+                script_content, job.ground_truth, issues
+            )
+            mapper_response = LLM_MAPPER_PROVIDER.generate(mapper_prompt)
+            mapper_entries = llm.parse_mapper_response(mapper_response.text)
+            mapper_tokens_in = mapper_response.tokens_in
+            mapper_tokens_out = mapper_response.tokens_out
+            mapper_cost = mapper_response.cost_usd
+
+        report_issues = [
+            llm.make_issue(
+                issue.code,
+                issue.line,
+                issue.description or issue.code,
+            )
+            for issue in issues
+        ]
+
+        report = sash.reporter.Report(
+            filename=job.benchmark.as_posix(),
+            issues=report_issues,
+            time=response.time_sec,
+            solver_time=0.0,
+            timed_out=False,
+            ast_nodes_total=0,
+            ast_nodes_interpreted=0,
+            ast_coverage_pct=0.0,
+        )
+
+        finished = FinishedJob(
+            benchmark=job.benchmark,
+            ground_truth=job.ground_truth,
+            timed_out=False,
+            crashed=False,
+            report=report,
+            tokens_in=response.tokens_in,
+            tokens_out=response.tokens_out,
+            cost=response.cost_usd,
+            raw_llm_output=response.text,
+            mapper_entries=mapper_entries,
+            mapper_tokens_in=mapper_tokens_in,
+            mapper_tokens_out=mapper_tokens_out,
+            mapper_cost=mapper_cost,
+        )
+
+    except (AssertionError, BaseException) as e:
+        if isinstance(e, KeyboardInterrupt):
+            raise e
 
         exn_traceback = traceback.format_exc() if verbose else None
 
@@ -589,6 +1005,30 @@ def git_toplevel() -> Path:
             ["git", "rev-parse", "--show-toplevel"], encoding="utf-8"
         ).strip()
     )
+
+
+def load_env_file():
+    env_file = ROOT_DIR / ".env"
+    if not env_file.exists():
+        return
+    with env_file.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key = key.strip()
+            value = value.strip()
+            if "#" in value:
+                value = value.split("#", 1)[0].strip()
+            if value.startswith('"') and value.endswith('"'):
+                value = value[1:-1]
+            elif value.startswith("'") and value.endswith("'"):
+                value = value[1:-1]
+            if key and key not in os.environ:
+                os.environ[key] = value
 
 
 def eprint_succ(where: Path, msg: str):
@@ -751,6 +1191,128 @@ def generate_html_report(
         total_solver_time=total_solver_time,
     )
 
+
+def export_llm_csv(file: Path, jobs: list[FinishedJob]):
+    fieldnames = [
+        "benchmark",
+        "kind",
+        "crashed",
+        "timed_out",
+        "detected_all",
+        "expected_results",
+        "actual_results",
+        "llm_time",
+        "tokens_in",
+        "tokens_out",
+        "cost",
+        "mapper_tokens_in",
+        "mapper_tokens_out",
+        "mapper_cost",
+        "raw_llm_output",
+        "mapper_output",
+    ]
+    with file.open("w", newline="", encoding="utf-8") as csvfile:
+        writer = csv_module.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for job in jobs:
+            if job.additional_info and "expected" in job.additional_info:
+                expected = [
+                    f"L{e.line}:{e.sash_code}"
+                    for e in job.additional_info["expected"]
+                ]
+                actual = [
+                    f"L{e.line}:{e.sash_code}"
+                    for e in job.additional_info["actual"]
+                ]
+                detected_all = job.additional_info.get("detected_all", False)
+                kind = job.additional_info.get("kind", "unknown")
+            else:
+                expected = []
+                actual = []
+                detected_all = False
+                kind = "unknown"
+
+            mapper_output = None
+            if job.mapper_entries is not None:
+                mapper_output = json_module.dumps(
+                    [
+                        {
+                            "llm_code": e.llm_code,
+                            "llm_line": e.llm_line,
+                            "llm_description": e.llm_description,
+                            "gt_id": e.gt_id,
+                            "gt_code": e.gt_code,
+                            "gt_line": e.gt_line,
+                        }
+                        for e in job.mapper_entries
+                    ]
+                )
+
+            writer.writerow(
+                {
+                    "benchmark": job.benchmark.as_posix(),
+                    "kind": kind,
+                    "crashed": job.crashed,
+                    "timed_out": job.timed_out,
+                    "detected_all": detected_all,
+                    "expected_results": ";".join(expected) if expected else "",
+                    "actual_results": ";".join(actual) if actual else "",
+                    "llm_time": job.report.time if job.report else "",
+                    "tokens_in": job.tokens_in,
+                    "tokens_out": job.tokens_out,
+                    "cost": job.cost if job.cost is not None else "",
+                    "mapper_tokens_in": job.mapper_tokens_in,
+                    "mapper_tokens_out": job.mapper_tokens_out,
+                    "mapper_cost": job.mapper_cost if job.mapper_cost is not None else "",
+                    "raw_llm_output": job.raw_llm_output or "",
+                    "mapper_output": mapper_output or "",
+                }
+            )
+
+
+def write_jsonl_log(
+    jsonl_file: Path,
+    description: str | None,
+    model: str,
+    mapper_model: str | None,
+    temperature: float,
+    benchmark_filter: str,
+    stats: EvalStats,
+    jobs: list[FinishedJob],
+    duration_sec: float,
+    args: dict,
+):
+    jsonl_file.parent.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "description": description,
+        "model": model,
+        "mapper_model": mapper_model,
+        "temperature": temperature,
+        "benchmark_filter": benchmark_filter,
+        "num_analyses": stats.analyses,
+        "num_successful": stats.successful,
+        "num_crashed": stats.crashed,
+        "num_timed_out": stats.timed_out,
+        "expected_bugs": stats.buggy_expected_bugs,
+        "detected_bugs": stats.buggy_detected_bugs,
+        "undetected_bugs": stats.buggy_undetected_bugs,
+        "unexpected_bugs": stats.buggy_unexpected_bugs,
+        "fixed_expected_missing": stats.fixed_expected_missing_bugs,
+        "fixed_regressions": stats.fixed_regression_bugs,
+        "fixed_rest": stats.fixed_rest_bugs,
+        "tokens_in": stats.total_tokens_in,
+        "tokens_out": stats.total_tokens_out,
+        "mapping_tokens_in": stats.total_mapper_tokens_in,
+        "mapping_tokens_out": stats.total_mapper_tokens_out,
+        "cost_usd": stats.total_cost if stats.total_cost > 0 else None,
+        "mapping_cost_usd": stats.total_mapper_cost if stats.total_mapper_cost > 0 else None,
+        "duration_sec": duration_sec,
+        "args": args,
+    }
+    with jsonl_file.open("a", encoding="utf-8") as f:
+        f.write(json_module.dumps(entry, default=str) + "\n")
+
     eprint(f"HTML report generated: {filename}")
 
 
@@ -864,6 +1426,18 @@ UNDERLINE = "\033[4m"
 if __name__ == "__main__":
     args = build_cli().parse_args()
 
+    load_env_file()
+
+    llm_prompt = args.llm_prompt
+    if llm_prompt is None and args.llm is not None:
+        llm_prompt = ROOT_DIR / "scripts" / "eval_llm_prompt.md"
+
+    jsonl_output = args.jsonl_output
+    if jsonl_output is None and args.llm is not None:
+        jsonl_output = ROOT_DIR / "results" / "llm_stats.jsonl"
+
+    llm_timeout = args.llm_timeout if args.llm_timeout > 0 else None
+
     SASH_KWARGS = {
         "timeout": args.timeout,
         "exec_timeout_pct": args.exec_timeout_pct,
@@ -889,4 +1463,14 @@ if __name__ == "__main__":
         verbose=args.verbose,
         no_color=args.no_color,
         num_jobs=max(args.jobs, 0),
+        llm_spec=args.llm,
+        llm_prompt=llm_prompt,
+        llm_base_url=args.llm_base_url,
+        llm_api_key=args.llm_api_key,
+        llm_temperature=args.llm_temperature,
+        llm_max_tokens=args.llm_max_tokens,
+        llm_timeout=llm_timeout,
+        llm_mapper_spec=args.llm_mapper,
+        description=args.description,
+        jsonl_output=jsonl_output,
     )
