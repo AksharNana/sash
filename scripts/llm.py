@@ -49,6 +49,8 @@ class OpenAIProvider(LLMProvider):
             kwargs["temperature"] = self._temperature
         if self._max_tokens is not None:
             kwargs["max_tokens"] = self._max_tokens
+        if "5.6" in self._model:
+            kwargs["prompt_cache_options"] = {"mode": "explicit"}
         response = self._client.chat.completions.create(**kwargs)
         elapsed = time.perf_counter() - start
 
