@@ -41,12 +41,15 @@ class OpenAIProvider(LLMProvider):
 
     def generate(self, prompt: str) -> LLMResponse:
         start = time.perf_counter()
-        response = self._client.chat.completions.create(
-            model=self._model,
-            messages=[{"role": "user", "content": prompt}],
-            temperature=self._temperature,
-            max_tokens=self._max_tokens,
-        )
+        kwargs: dict = {
+            "model": self._model,
+            "messages": [{"role": "user", "content": prompt}],
+        }
+        if self._temperature >= 0:
+            kwargs["temperature"] = self._temperature
+        if self._max_tokens is not None:
+            kwargs["max_tokens"] = self._max_tokens
+        response = self._client.chat.completions.create(**kwargs)
         elapsed = time.perf_counter() - start
 
         choice = response.choices[0]
@@ -87,12 +90,14 @@ class AnthropicProvider(LLMProvider):
 
     def generate(self, prompt: str) -> LLMResponse:
         start = time.perf_counter()
-        response = self._client.messages.create(
-            model=self._model,
-            max_tokens=self._max_tokens,
-            temperature=self._temperature,
-            messages=[{"role": "user", "content": prompt}],
-        )
+        kwargs: dict = {
+            "model": self._model,
+            "max_tokens": self._max_tokens,
+            "messages": [{"role": "user", "content": prompt}],
+        }
+        if self._temperature >= 0:
+            kwargs["temperature"] = self._temperature
+        response = self._client.messages.create(**kwargs)
         elapsed = time.perf_counter() - start
 
         text = ""
@@ -240,7 +245,7 @@ class MapperEntry:
     gt_line: int | None
 
 
-def parse_mapper_response(text: str) -> list[MapperEntry]:
+def parse_mapper_response(text: str) -> tuple[list[MapperEntry], dict]:
     json_match = re.search(r"\{[\s\S]*\"mappings\"[\s\S]*\}", text)
     if not json_match:
         raise ValueError("Could not find JSON object with 'mappings' in mapper response")
@@ -270,7 +275,7 @@ def parse_mapper_response(text: str) -> list[MapperEntry]:
             )
         )
 
-    return entries
+    return entries, data
 
 
 def build_ground_truth_section(ground_truth: dict) -> str:
@@ -372,6 +377,8 @@ def build_mapper_prompt(
 
 
 def make_issue(code: str, line: int | None, message: str) -> sash.reporter.Issue:
+    """Create a minimal Issue subclass instance with the given code.
+    Used only in the main process, not for pickle transport."""
     issue_cls = type(
         f"_LLM_{code}",
         (sash.reporter.Issue,),

@@ -43,11 +43,11 @@ def build_cli():
 
     # LLM mode
     llm_group = parser.add_argument_group('LLM mode options')
-    llm_group.add_argument('--llm', nargs='?', const="openai:gpt-5.6-sol", default=None, metavar='PROVIDER:MODEL', help='Enable LLM mode; uses openai:gpt-5.6-sol if no model given')
+    llm_group.add_argument('--llm', nargs='?', const="openai:gpt-5.4-nano", default=None, metavar='PROVIDER:MODEL', help='Enable LLM mode; uses openai:gpt-5.4-nano if no model given')
     llm_group.add_argument('--llm-prompt', type=Path, default=None, metavar='FILE', help='Prompt template file with {script} and {codes} placeholders (default: scripts/eval_llm_prompt.md)')
     llm_group.add_argument('--llm-base-url', type=str, default=None, metavar='URL', help='Custom API base URL')
     llm_group.add_argument('--llm-api-key', type=str, default=None, metavar='KEY', help='API key (falls back to OPENAI_API_KEY env var or .env file)')
-    llm_group.add_argument('--llm-temperature', type=float, default=0.0, metavar='FLOAT', help='Sampling temperature (default: 0)')
+    llm_group.add_argument('--llm-temperature', type=float, default=-1.0, metavar='FLOAT', help='Sampling temperature (default: model default)')
     llm_group.add_argument('--llm-max-tokens', type=int, default=None, metavar='INT', help='Max output tokens')
     llm_group.add_argument('--llm-timeout', type=float, default=0.0, metavar='SEC', help='Per-call API timeout in seconds (default: 0 = unlimited)')
     llm_group.add_argument('--llm-mapper', nargs='?', const="openai:gpt-5.4-mini", default=None, metavar='PROVIDER:MODEL', help='Enable mapper LLM; uses openai:gpt-5.4-mini if no model given')
@@ -74,7 +74,7 @@ def main(
     llm_prompt: Path | None = None,
     llm_base_url: str | None = None,
     llm_api_key: str | None = None,
-    llm_temperature: float = 0.0,
+    llm_temperature: float = -1.0,
     llm_max_tokens: int | None = None,
     llm_timeout: float | None = None,
     llm_mapper_spec: str | None = None,
@@ -103,7 +103,7 @@ def main(
     eprint(f"\n{BOLD}Preparing analyses{RESET}")
     stats = EvalStats()
     jobs: list[Job] = []
-    for bench_dir in sorted(benchmarks_dir.iterdir()):
+    for bench_dir in benchmarks_dir.iterdir():
         if bench_dir.is_dir() and bench_filter.match(bench_dir.relative_to(benchmarks_dir).as_posix()):
             jobs.extend(
                 prepare_jobs(
@@ -158,11 +158,13 @@ def main(
                 codes_catalog,
                 list(valid_codes),
             ),
-        ) as pool:
-            finished = pool.starmap(
+            ) as pool:
+            results = pool.starmap(
                 run_llm_job,
                 [(job, verbose) for job in jobs],
             )
+
+        finished = [_build_finished_job(r) for r in results]
 
         duration_sec = time.perf_counter() - start_time
 
@@ -227,6 +229,23 @@ def main(
                     "variants_only": run_only_variants,
                 },
             )
+
+        write_llm_report(
+            description=description,
+            model=llm_spec,
+            mapper_model=llm_mapper_spec,
+            temperature=llm_temperature,
+            benchmark_filter=bench_filter.pattern,
+            stats=stats,
+            jobs=finished,
+            duration_sec=duration_sec,
+            args={
+                "fixed": run_fixed,
+                "skip_buggy": not run_buggy,
+                "variants": run_variants,
+                "variants_only": run_only_variants,
+            },
+        )
 
         if stats.crashed > 0:
             exit(1)
@@ -337,6 +356,7 @@ class FinishedJob(Job):
     mapper_tokens_in: int = 0
     mapper_tokens_out: int = 0
     mapper_cost: float | None = None
+    mapper_json: dict | None = None
 
 
 @dataclass
@@ -766,7 +786,7 @@ def _llm_worker_init(
             mapper_spec,
             api_key=api_key,
             base_url=base_url,
-            temperature=0.0,
+            temperature=-1.0,
             max_tokens=max_tokens,
             timeout=timeout,
         )
@@ -777,10 +797,9 @@ def _llm_worker_init(
     LLM_VALID_CODES = set(valid_codes)
 
 
-def run_llm_job(job: Job, verbose: bool) -> FinishedJob:
+def run_llm_job(job: Job, verbose: bool) -> dict:
     where = job.benchmark.relative_to(ROOT_DIR)
     eprint_info(where, "Running LLM analysis")
-    finished: FinishedJob
 
     try:
         script_content = job.benchmark.read_text(encoding="utf-8")
@@ -804,46 +823,50 @@ def run_llm_job(job: Job, verbose: bool) -> FinishedJob:
                 script_content, job.ground_truth, issues
             )
             mapper_response = LLM_MAPPER_PROVIDER.generate(mapper_prompt)
-            mapper_entries = llm.parse_mapper_response(mapper_response.text)
+            mapper_entries, mapper_json = llm.parse_mapper_response(mapper_response.text)
             mapper_tokens_in = mapper_response.tokens_in
             mapper_tokens_out = mapper_response.tokens_out
             mapper_cost = mapper_response.cost_usd
 
-        report_issues = [
-            llm.make_issue(
-                issue.code,
-                issue.line,
-                issue.description or issue.code,
-            )
-            for issue in issues
-        ]
-
-        report = sash.reporter.Report(
-            filename=job.benchmark.as_posix(),
-            issues=report_issues,
-            time=response.time_sec,
-            solver_time=0.0,
-            timed_out=False,
-            ast_nodes_total=0,
-            ast_nodes_interpreted=0,
-            ast_coverage_pct=0.0,
-        )
-
-        finished = FinishedJob(
-            benchmark=job.benchmark,
-            ground_truth=job.ground_truth,
-            timed_out=False,
-            crashed=False,
-            report=report,
-            tokens_in=response.tokens_in,
-            tokens_out=response.tokens_out,
-            cost=response.cost_usd,
-            raw_llm_output=response.text,
-            mapper_entries=mapper_entries,
-            mapper_tokens_in=mapper_tokens_in,
-            mapper_tokens_out=mapper_tokens_out,
-            mapper_cost=mapper_cost,
-        )
+        return {
+            "benchmark": str(job.benchmark),
+            "ground_truth": job.ground_truth,
+            "timed_out": False,
+            "crashed": False,
+            "exn_traceback": None,
+            "issues": [
+                {
+                    "code": issue.code,
+                    "line": issue.line,
+                    "description": issue.description or issue.code,
+                }
+                for issue in issues
+            ],
+            "time": response.time_sec,
+            "tokens_in": response.tokens_in,
+            "tokens_out": response.tokens_out,
+            "cost": response.cost_usd,
+            "raw_llm_output": response.text,
+            "mapper_entries": (
+                [
+                    {
+                        "llm_code": e.llm_code,
+                        "llm_line": e.llm_line,
+                        "llm_description": e.llm_description,
+                        "gt_id": e.gt_id,
+                        "gt_code": e.gt_code,
+                        "gt_line": e.gt_line,
+                    }
+                    for e in mapper_entries
+                ]
+                if mapper_entries is not None
+                else None
+            ),
+            "mapper_json": mapper_json if mapper_entries is not None else None,
+            "mapper_tokens_in": mapper_tokens_in,
+            "mapper_tokens_out": mapper_tokens_out,
+            "mapper_cost": mapper_cost,
+        }
 
     except (AssertionError, BaseException) as e:
         if isinstance(e, KeyboardInterrupt):
@@ -851,16 +874,77 @@ def run_llm_job(job: Job, verbose: bool) -> FinishedJob:
 
         exn_traceback = traceback.format_exc() if verbose else None
 
-        finished = FinishedJob(
-            benchmark=job.benchmark,
-            ground_truth=job.ground_truth,
-            timed_out=False,
-            crashed=True,
-            exn_traceback=exn_traceback,
-            report=None,
+        return {
+            "benchmark": str(job.benchmark),
+            "ground_truth": job.ground_truth,
+            "timed_out": False,
+            "crashed": True,
+            "exn_traceback": exn_traceback,
+            "issues": [],
+            "time": 0.0,
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "cost": None,
+            "raw_llm_output": None,
+            "mapper_entries": None,
+            "mapper_json": None,
+            "mapper_tokens_in": 0,
+            "mapper_tokens_out": 0,
+            "mapper_cost": None,
+        }
+
+
+def _build_finished_job(result: dict) -> FinishedJob:
+    issues = result["issues"]
+    mapper_entries = result["mapper_entries"]
+
+    report = None
+    if not result["crashed"]:
+        report_issues = [
+            llm.make_issue(i["code"], i["line"], i["description"]) for i in issues
+        ]
+        report = sash.reporter.Report(
+            filename=result["benchmark"],
+            issues=report_issues,
+            time=result["time"],
+            solver_time=0.0,
+            timed_out=result["timed_out"],
+            ast_nodes_total=0,
+            ast_nodes_interpreted=0,
+            ast_coverage_pct=0.0,
         )
 
-    return finished
+    parsed_mapper_entries = None
+    if mapper_entries is not None:
+        parsed_mapper_entries = [
+            llm.MapperEntry(
+                llm_code=e["llm_code"],
+                llm_line=e["llm_line"],
+                llm_description=e["llm_description"],
+                gt_id=e["gt_id"],
+                gt_code=e["gt_code"],
+                gt_line=e["gt_line"],
+            )
+            for e in mapper_entries
+        ]
+
+    return FinishedJob(
+        benchmark=Path(result["benchmark"]),
+        ground_truth=result["ground_truth"],
+        timed_out=result["timed_out"],
+        crashed=result["crashed"],
+        exn_traceback=result["exn_traceback"],
+        report=report,
+        tokens_in=result["tokens_in"],
+        tokens_out=result["tokens_out"],
+        cost=result["cost"],
+        raw_llm_output=result.get("raw_llm_output"),
+        mapper_entries=parsed_mapper_entries,
+        mapper_tokens_in=result["mapper_tokens_in"],
+        mapper_tokens_out=result["mapper_tokens_out"],
+        mapper_cost=result["mapper_cost"],
+        mapper_json=result.get("mapper_json"),
+    )
 
 
 def prepare_jobs(
@@ -1291,7 +1375,7 @@ def write_jsonl_log(
         "description": description,
         "model": model,
         "mapper_model": mapper_model,
-        "temperature": temperature,
+        "temperature": temperature if temperature >= 0 else None,
         "benchmark_filter": benchmark_filter,
         "num_analyses": stats.analyses,
         "num_successful": stats.successful,
@@ -1412,6 +1496,111 @@ INFO_SCHEMA = {
     },
     "additionalProperties": False,
 }
+
+
+def write_llm_report(
+    description: str | None,
+    model: str,
+    mapper_model: str | None,
+    temperature: float,
+    benchmark_filter: str,
+    stats: EvalStats,
+    jobs: list[FinishedJob],
+    duration_sec: float,
+    args: dict,
+):
+    timestamp = datetime.now(timezone.utc)
+    report_dir = ROOT_DIR / "results" / "llm"
+    report_dir.mkdir(parents=True, exist_ok=True)
+    report_file = report_dir / f"{timestamp.strftime('%Y-%m-%dT%H%M%S')}.json"
+
+    def _compute_job_bugs(job: FinishedJob):
+        info = job.additional_info or {}
+        expected = [f"L{e.line}:{e.sash_code}" for e in info.get("expected", [])]
+        actual = [f"L{e.line}:{e.sash_code}" for e in info.get("actual", [])]
+        expected_set = set(expected)
+        actual_set = set(actual)
+        kind = info.get("kind", "unknown")
+
+        if kind.startswith("fixed"):
+            return {
+                "expected_missing": expected,
+                "regressions": list(actual_set & expected_set),
+                "no_expectation": list(actual_set - expected_set),
+            }
+        else:
+            return {
+                "expected": expected,
+                "detected": list(actual_set & expected_set),
+                "undetected": list(expected_set - actual_set),
+                "unexpected": list(actual_set - expected_set),
+            }
+
+    jobs_data = []
+    for job in jobs:
+        entry = {
+            "benchmark": job.benchmark.as_posix(),
+            "kind": (job.additional_info or {}).get("kind", "unknown"),
+            "crashed": job.crashed,
+            "timed_out": job.timed_out,
+            "detected_all": (job.additional_info or {}).get("detected_all", False),
+            "bugs": _compute_job_bugs(job),
+            "tokens_in": job.tokens_in,
+            "tokens_out": job.tokens_out,
+            "cost": job.cost,
+            "raw_llm_output": job.raw_llm_output,
+        }
+        if job.mapper_entries is not None:
+            entry["mapper_entries"] = [
+                {
+                    "llm_code": e.llm_code,
+                    "llm_line": e.llm_line,
+                    "llm_description": e.llm_description,
+                    "gt_id": e.gt_id,
+                    "gt_code": e.gt_code,
+                    "gt_line": e.gt_line,
+                }
+                for e in job.mapper_entries
+            ]
+            entry["mapper_json"] = job.mapper_json
+            entry["mapper_tokens_in"] = job.mapper_tokens_in
+            entry["mapper_tokens_out"] = job.mapper_tokens_out
+            entry["mapper_cost"] = job.mapper_cost
+        jobs_data.append(entry)
+
+    report = {
+        "timestamp": timestamp.isoformat(),
+        "description": description,
+        "model": model,
+        "mapper_model": mapper_model,
+        "temperature": temperature if temperature >= 0 else None,
+        "benchmark_filter": benchmark_filter,
+        "args": args,
+        "stats": {
+            "num_analyses": stats.analyses,
+            "num_successful": stats.successful,
+            "num_crashed": stats.crashed,
+            "num_timed_out": stats.timed_out,
+            "expected_bugs": stats.buggy_expected_bugs,
+            "detected_bugs": stats.buggy_detected_bugs,
+            "undetected_bugs": stats.buggy_undetected_bugs,
+            "unexpected_bugs": stats.buggy_unexpected_bugs,
+            "fixed_expected_missing": stats.fixed_expected_missing_bugs,
+            "fixed_regressions": stats.fixed_regression_bugs,
+            "fixed_rest": stats.fixed_rest_bugs,
+            "tokens_in": stats.total_tokens_in,
+            "tokens_out": stats.total_tokens_out,
+            "mapping_tokens_in": stats.total_mapper_tokens_in,
+            "mapping_tokens_out": stats.total_mapper_tokens_out,
+            "cost_usd": stats.total_cost if stats.total_cost > 0 else None,
+            "mapping_cost_usd": stats.total_mapper_cost if stats.total_mapper_cost > 0 else None,
+            "duration_sec": duration_sec,
+        },
+        "jobs": jobs_data,
+    }
+
+    report_file.write_text(json_module.dumps(report, indent=2, default=str), encoding="utf-8")
+    eprint(f"LLM report written to: {report_file}")
 
 
 # ANSI color codes
