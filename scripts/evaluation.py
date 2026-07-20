@@ -115,6 +115,7 @@ def main(
                     eval_variants=run_variants,
                     eval_only_variants=run_only_variants,
                     verbose=verbose,
+                    use_original=llm_spec is not None,
                 )
             )
     eprint("Done!")
@@ -544,7 +545,7 @@ def process_finished_job(stats: EvalStats, job: FinishedJob):
 
     # Evaluate job results
     if job.mapper_entries is not None:
-        if job.ground_truth["kind"] in ["buggy", "buggy_variant"]:
+        if job.ground_truth["kind"] in ["buggy", "buggy_variant", "original"]:
             process_buggy_with_mapper(stats, job)
         elif job.ground_truth["kind"] in ["fixed", "fixed_variant"]:
             process_fixed_with_mapper(stats, job)
@@ -552,7 +553,7 @@ def process_finished_job(stats: EvalStats, job: FinishedJob):
             raise AssertionError(
                 f"Should not have executed file of kind '{job.ground_truth['kind']}'"
             )
-    elif job.ground_truth["kind"] in ["buggy", "buggy_variant"]:
+    elif job.ground_truth["kind"] in ["buggy", "buggy_variant", "original"]:
         process_buggy_job(job)
     elif job.ground_truth["kind"] in ["fixed", "fixed_variant"]:
         process_fixed_job(job)
@@ -871,6 +872,7 @@ def prepare_jobs(
     eval_variants,
     eval_only_variants: bool,
     verbose: bool = False,
+    use_original: bool = False,
 ) -> list[Job]:
     all_codes = sash.reporter.Issue.all_codes()
     where = benchmark_dir.relative_to(ROOT_DIR)
@@ -914,6 +916,7 @@ def prepare_jobs(
         bugs[bug_id] = bug_info
 
     eval_kinds = []
+    buggy_kind = "original" if use_original else "buggy"
     if eval_only_variants:
         if eval_buggy:
             eval_kinds.append("buggy_variant")
@@ -921,7 +924,7 @@ def prepare_jobs(
             eval_kinds.append("fixed_variant")
     else:
         if eval_buggy:
-            eval_kinds.append("buggy")
+            eval_kinds.append(buggy_kind)
         if eval_fixed:
             eval_kinds.append("fixed")
         if eval_variants and eval_buggy:
