@@ -1549,7 +1549,7 @@ def write_llm_report(
             "tokens_in": job.tokens_in,
             "tokens_out": job.tokens_out,
             "cost": job.cost,
-            "raw_llm_output": job.raw_llm_output,
+            "raw_llm_output_lines": job.raw_llm_output.splitlines() if job.raw_llm_output else [],
         }
         if job.mapper_entries is not None:
             entry["mapper_json"] = job.mapper_json
