@@ -230,7 +230,7 @@ def main(
                 },
             )
 
-        write_llm_report(
+        report_path = write_llm_report(
             description=description,
             model=llm_spec,
             mapper_model=llm_mapper_spec,
@@ -246,6 +246,11 @@ def main(
                 "variants_only": run_only_variants,
             },
         )
+
+        eprint()
+        eprint(f"{BOLD}{RED}WARNING: The results above are likely inaccurate.{RESET}")
+        eprint(f"{BOLD}{RED}LLM output must be manually inspected against the ground truth.{RESET}")
+        eprint(f"{BOLD}See the full report: {report_path}{RESET}")
 
         if stats.crashed > 0:
             exit(1)
@@ -1590,7 +1595,7 @@ def write_llm_report(
     }
 
     report_file.write_text(json_module.dumps(report, indent=2, default=str), encoding="utf-8")
-    eprint(f"LLM report written to: {report_file}")
+    return report_file
 
 
 # ANSI color codes
