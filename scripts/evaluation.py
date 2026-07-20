@@ -1454,9 +1454,13 @@ if __name__ == "__main__":
         "disable_solver_optimizations": args.disable_solver_optimizations,
     }
 
+    only_pattern = args.only
+    if not only_pattern.startswith("/"):
+        only_pattern = ".*" + only_pattern
+
     main(
         benchmarks_dir=args.benchmarks,
-        bench_filter=re.compile(args.only),
+        bench_filter=re.compile(only_pattern),
         run_buggy=not args.skip_buggy or args.all,
         run_fixed=args.fixed or args.all,
         run_variants=args.variants or args.all,
