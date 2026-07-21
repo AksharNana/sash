@@ -44,13 +44,14 @@ def build_cli():
     # LLM mode
     llm_group = parser.add_argument_group('LLM mode options')
     llm_group.add_argument('--llm', nargs='?', const="openai:gpt-5.4-nano", default=None, metavar='PROVIDER:MODEL', help='Enable LLM mode; uses openai:gpt-5.4-nano if no model given')
-    llm_group.add_argument('--llm-prompt', type=Path, default=None, metavar='FILE', help='Prompt template file with {script} and {codes} placeholders (default: scripts/prompt_with_codes.md)')
+    llm_group.add_argument('--llm-prompt', type=Path, default=None, metavar='FILE', help='Prompt template file with {script} and {codes} placeholders (default: scripts/eval_llm_prompt.md)')
     llm_group.add_argument('--llm-base-url', type=str, default=None, metavar='URL', help='Custom API base URL')
     llm_group.add_argument('--llm-api-key', type=str, default=None, metavar='KEY', help='API key (falls back to OPENAI_API_KEY env var or .env file)')
     llm_group.add_argument('--llm-temperature', type=float, default=-1.0, metavar='FLOAT', help='Sampling temperature (default: model default)')
     llm_group.add_argument('--llm-max-tokens', type=int, default=None, metavar='INT', help='Max output tokens')
     llm_group.add_argument('--llm-timeout', type=float, default=0.0, metavar='SEC', help='Per-call API timeout in seconds (default: 0 = unlimited)')
     llm_group.add_argument('--llm-mapper', nargs='?', const="openai:gpt-5.4-mini", default=None, metavar='PROVIDER:MODEL', help='Enable mapper LLM; uses openai:gpt-5.4-mini if no model given')
+    llm_group.add_argument('--llm-batch', nargs='?', const=True, default=None, metavar='FILE', help='Submit prompts as an OpenAI batch and await completion; if FILE is given, process the batch results JSONL offline')
     llm_group.add_argument('--description', type=str, default=None, metavar='STR', help='Human-readable label for this experiment run')
     llm_group.add_argument('--jsonl-output', type=Path, default=None, metavar='FILE', help='Append-only JSONL experiment log file (default: results/llm_stats.jsonl)')
 
@@ -78,6 +79,7 @@ def main(
     llm_max_tokens: int | None = None,
     llm_timeout: float | None = None,
     llm_mapper_spec: str | None = None,
+    llm_batch: str | bool | None = None,
     description: str | None = None,
     jsonl_output: Path | None = None,
 ):
@@ -140,33 +142,87 @@ def main(
         prompt_template = llm_prompt.read_text(encoding="utf-8")
         codes_catalog = llm.build_codes_catalog()
         valid_codes = sash.reporter.Issue.all_codes()
+        run_ts = datetime.now(timezone.utc)
 
-        start_time = time.perf_counter()
+        if llm_batch is not None:
+            if llm_mapper_spec is not None:
+                eprint_warn(Path("."), "Mapper is not supported in batch mode; skipping")
 
-        with multiprocessing.Pool(
-            processes=num_jobs,
-            initializer=_llm_worker_init,
-            initargs=(
-                llm_spec,
-                llm_api_key,
-                llm_base_url,
-                llm_temperature,
-                llm_max_tokens,
-                llm_timeout,
-                llm_mapper_spec,
-                prompt_template,
-                codes_catalog,
-                list(valid_codes),
-            ),
-            ) as pool:
-            results = pool.starmap(
-                run_llm_job,
-                [(job, verbose) for job in jobs],
+            model = llm_spec.split(":", 1)[1]
+            batch_lines, jobs_map = _render_batch_lines(
+                jobs, model, prompt_template, codes_catalog,
+                llm_temperature, llm_max_tokens,
             )
 
-        finished = [_build_finished_job(r) for r in results]
+            batch_dir = ROOT_DIR / "results" / "llm" / "batches"
+            batch_dir.mkdir(parents=True, exist_ok=True)
+            ts_str = run_ts.strftime("%Y%m%dT%H%M%S")
+            request_path = batch_dir / f"batch_{ts_str}.jsonl"
 
-        duration_sec = time.perf_counter() - start_time
+            with request_path.open("w", encoding="utf-8") as f:
+                for line in batch_lines:
+                    f.write(json_module.dumps(line, ensure_ascii=False) + "\n")
+
+            if isinstance(llm_batch, str):
+                eprint(f"Reading batch results from: {llm_batch}")
+                response_text = Path(llm_batch).read_text(encoding="utf-8")
+            else:
+                provider = llm.create_provider(
+                    llm_spec,
+                    api_key=llm_api_key,
+                    base_url=llm_base_url,
+                    temperature=llm_temperature,
+                    max_tokens=llm_max_tokens,
+                    timeout=llm_timeout,
+                )
+                batch_id = provider.submit_batch(batch_lines, str(request_path))
+                eprint(f"Batch submitted: id={batch_id}")
+                batch = provider.poll_batch(batch_id)
+                if batch.status != "completed":
+                    eprint(f"Batch failed: status={batch.status}")
+                    if hasattr(batch, "errors") and batch.errors:
+                        for err in batch.errors.data:
+                            eprint(f"  {err.code}: {err.message}")
+                    exit(1)
+                response_text = provider.download_batch_results(batch_id)
+                response_path = batch_dir / f"batch_{ts_str}-response.jsonl"
+                response_path.write_text(response_text, encoding="utf-8")
+                eprint(f"Batch results saved to: {response_path}")
+
+            response_lines = _parse_batch_response_lines(response_text)
+            start_time = time.perf_counter()
+            finished = _build_finished_jobs_from_batch(
+                response_lines, jobs_map, valid_codes, verbose,
+            )
+            duration_sec = time.perf_counter() - start_time
+
+        else:
+            start_time = time.perf_counter()
+
+            with multiprocessing.Pool(
+                processes=num_jobs,
+                initializer=_llm_worker_init,
+                initargs=(
+                    llm_spec,
+                    llm_api_key,
+                    llm_base_url,
+                    llm_temperature,
+                    llm_max_tokens,
+                    llm_timeout,
+                    llm_mapper_spec,
+                    prompt_template,
+                    codes_catalog,
+                    list(valid_codes),
+                ),
+            ) as pool:
+                results = pool.starmap(
+                    run_llm_job,
+                    [(job, verbose) for job in jobs],
+                )
+
+            finished = [_build_finished_job(r) for r in results]
+
+            duration_sec = time.perf_counter() - start_time
 
         eprint(f"\n{BOLD}Printing per-analysis results{RESET}")
         for job in finished:
@@ -231,6 +287,7 @@ def main(
             )
 
         report_path = write_llm_report(
+            timestamp=run_ts,
             description=description,
             model=llm_spec,
             mapper_model=llm_mapper_spec,
@@ -1503,7 +1560,144 @@ INFO_SCHEMA = {
 }
 
 
+def _render_batch_lines(
+    jobs: list[Job],
+    model: str,
+    prompt_template: str,
+    codes_catalog: str,
+    temperature: float,
+    max_tokens: int | None,
+) -> tuple[list[dict], dict[str, Job]]:
+    batch_lines = []
+    jobs_map: dict[str, Job] = {}
+    for job in jobs:
+        script_content = job.benchmark.read_text(encoding="utf-8")
+        prompt = llm.render_prompt(prompt_template, script_content, codes_catalog)
+        custom_id = str(job.benchmark.relative_to(ROOT_DIR))
+        jobs_map[custom_id] = job
+        batch_lines.append(
+            llm.build_batch_line(
+                custom_id=custom_id,
+                model=model,
+                prompt=prompt,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
+        )
+    return batch_lines, jobs_map
+
+
+def _parse_batch_response_lines(response_text: str) -> list[dict]:
+    lines = []
+    for raw_line in response_text.strip().splitlines():
+        if not raw_line.strip():
+            continue
+        lines.append(json_module.loads(raw_line))
+    return lines
+
+
+def _build_finished_jobs_from_batch(
+    response_lines: list[dict],
+    jobs_map: dict[str, Job],
+    valid_codes: set[str],
+    verbose: bool,
+) -> list[FinishedJob]:
+    finished: list[FinishedJob] = []
+    matched_ids: set[str] = set()
+
+    for line in response_lines:
+        custom_id = line.get("custom_id", "")
+        job = jobs_map.get(custom_id)
+        if job is None:
+            eprint_warn(Path("."), f"Batch response has no matching job for custom_id='{custom_id}'")
+            continue
+
+        matched_ids.add(custom_id)
+        error = line.get("error")
+        response = line.get("response")
+
+        if error or (response and response.get("status_code", 200) >= 400):
+            finished.append(
+                FinishedJob(
+                    benchmark=job.benchmark,
+                    ground_truth=job.ground_truth,
+                    timed_out=False,
+                    crashed=True,
+                    exn_traceback=str(error) if error else f"status={response.get('status_code')}",
+                    report=None,
+                )
+            )
+            continue
+
+        body = response.get("body", {}) if response else {}
+        usage = body.get("usage", {})
+        choices = body.get("choices", [])
+        text = choices[0].get("message", {}).get("content", "") if choices else ""
+
+        issues = llm.parse_analysis_response(text, valid_codes)
+
+        if not text and not issues:
+            finished.append(
+                FinishedJob(
+                    benchmark=job.benchmark,
+                    ground_truth=job.ground_truth,
+                    timed_out=False,
+                    crashed=True,
+                    exn_traceback="Empty or unparseable batch response",
+                    report=None,
+                )
+            )
+            continue
+
+        result = {
+            "benchmark": str(job.benchmark),
+            "ground_truth": job.ground_truth,
+            "timed_out": False,
+            "crashed": False,
+            "exn_traceback": None,
+            "issues": [
+                {
+                    "code": issue.code,
+                    "line": issue.line,
+                    "description": issue.description or issue.code,
+                }
+                for issue in issues
+            ],
+            "time": 0.0,
+            "tokens_in": usage.get("prompt_tokens", 0),
+            "tokens_out": usage.get("completion_tokens", 0),
+            "cost": None,
+            "raw_llm_output": text,
+            "mapper_entries": None,
+            "mapper_json": None,
+            "mapper_tokens_in": 0,
+            "mapper_tokens_out": 0,
+            "mapper_cost": None,
+        }
+        finished.append(_build_finished_job(result))
+
+    for custom_id, job in jobs_map.items():
+        if custom_id not in matched_ids:
+            eprint_warn(
+                job.benchmark.relative_to(ROOT_DIR),
+                f"No batch response found for benchmark",
+            )
+            finished.append(
+                FinishedJob(
+                    benchmark=job.benchmark,
+                    ground_truth=job.ground_truth,
+                    timed_out=False,
+                    crashed=True,
+                    exn_traceback="No batch response found",
+                    report=None,
+                )
+            )
+
+    return finished
+
+
 def write_llm_report(
+    timestamp: datetime,
     description: str | None,
     model: str,
     mapper_model: str | None,
@@ -1514,7 +1708,6 @@ def write_llm_report(
     duration_sec: float,
     args: dict,
 ):
-    timestamp = datetime.now(timezone.utc)
     report_dir = ROOT_DIR / "results" / "llm"
     report_dir.mkdir(parents=True, exist_ok=True)
     report_file = report_dir / f"{timestamp.strftime('%Y-%m-%dT%H%M%S')}.json"
@@ -1623,6 +1816,10 @@ if __name__ == "__main__":
     if jsonl_output is None and args.llm is not None:
         jsonl_output = ROOT_DIR / "results" / "llm_stats.jsonl"
 
+    llm_batch = args.llm_batch
+    if isinstance(llm_batch, str):
+        llm_batch = str(Path(llm_batch).resolve())
+
     llm_timeout = args.llm_timeout if args.llm_timeout > 0 else None
 
     SASH_KWARGS = {
@@ -1662,6 +1859,7 @@ if __name__ == "__main__":
         llm_max_tokens=args.llm_max_tokens,
         llm_timeout=llm_timeout,
         llm_mapper_spec=args.llm_mapper,
+        llm_batch=llm_batch,
         description=args.description,
         jsonl_output=jsonl_output,
     )

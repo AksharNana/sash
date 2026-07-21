@@ -69,6 +69,84 @@ class OpenAIProvider(LLMProvider):
             time_sec=elapsed,
         )
 
+    def submit_batch(
+        self, batch_lines: list[dict], input_file_path: str
+    ) -> str:
+        with open(input_file_path, "w", encoding="utf-8") as f:
+            for line in batch_lines:
+                f.write(json.dumps(line, ensure_ascii=False) + "\n")
+
+        upload = self._client.files.create(
+            file=open(input_file_path, "rb"),
+            purpose="batch",
+        )
+
+        batch = self._client.batches.create(
+            input_file_id=upload.id,
+            endpoint="/v1/chat/completions",
+            completion_window="24h",
+        )
+
+        return batch.id
+
+    def poll_batch(
+        self, batch_id: str, sleep_sec: int = 30
+    ) -> dict:
+        while True:
+            batch = self._client.batches.retrieve(batch_id)
+            if batch.status in ("completed", "failed", "expired", "cancelled"):
+                return batch
+
+            counts = batch.request_counts
+            if counts:
+                print(
+                    f"Batch {batch_id}: status={batch.status}, "
+                    f"completed={counts.completed}, failed={counts.failed}, "
+                    f"total={counts.total}",
+                    flush=True,
+                )
+            else:
+                print(
+                    f"Batch {batch_id}: status={batch.status}",
+                    flush=True,
+                )
+
+            time.sleep(sleep_sec)
+
+    def download_batch_results(self, batch_id: str) -> str:
+        batch = self._client.batches.retrieve(batch_id)
+        output_file_id = batch.output_file_id
+        if not output_file_id:
+            raise ValueError(f"Batch {batch_id} has no output file")
+        content = self._client.files.content(output_file_id)
+        return content.read().decode("utf-8")
+
+
+def build_batch_line(
+    custom_id: str,
+    model: str,
+    prompt: str,
+    temperature: float = -1.0,
+    max_tokens: int | None = None,
+) -> dict:
+    body: dict = {
+        "model": model,
+        "messages": [{"role": "user", "content": prompt}],
+    }
+    if temperature >= 0:
+        body["temperature"] = temperature
+    if max_tokens is not None:
+        body["max_tokens"] = max_tokens
+    if "5.6" in model or "5.7" in model or "5.8" in model or "5.9" in model or "6." in model:
+        body["prompt_cache_options"] = {"mode": "explicit"}
+
+    return {
+        "custom_id": custom_id,
+        "method": "POST",
+        "url": "/v1/chat/completions",
+        "body": body,
+    }
+
 
 class AnthropicProvider(LLMProvider):
     def __init__(
