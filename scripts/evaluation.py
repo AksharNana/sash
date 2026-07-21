@@ -1617,7 +1617,7 @@ if __name__ == "__main__":
 
     llm_prompt = args.llm_prompt
     if llm_prompt is None and args.llm is not None:
-        llm_prompt = ROOT_DIR / "scripts" / "eval_llm_prompt.md"
+        llm_prompt = ROOT_DIR / "scripts" / "prompt_without_codes.md"
 
     jsonl_output = args.jsonl_output
     if jsonl_output is None and args.llm is not None:
