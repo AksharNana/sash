@@ -28,6 +28,9 @@ eval = [
     "anthropic>=0.40.0",
     "pyyaml>=6.0.3",
     "jsonschema>=4.26.0",
+    "textual>=0.80.0",
     "matplotlib",
     "matplotlib_set_diagrams",
+    "tree-sitter-languages>=1.10.2",
+    "tree-sitter-yaml>=0.7.2",
 ]
