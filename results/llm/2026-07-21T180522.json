@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-07-21T18:05:22.564650+00:00",
+  "description": "GPT 5.6 Sol; c-makefile but the posix.sh version; Error codes NOT given in prompt",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*c-makefile",
+  "args": {
+    "fixed": false,
+    "skip_buggy": false,
+    "variants": false,
+    "variants_only": false
+  },
+  "stats": {
+    "num_analyses": 1,
+    "num_successful": 1,
+    "num_crashed": 0,
+    "num_timed_out": 0,
+    "expected_bugs": 2,
+    "detected_bugs": 0,
+    "undetected_bugs": 2,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 0,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 1925,
+    "tokens_out": 3817,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 76.34340279106982
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-makefile/posix.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L52:del_sys_file",
+          "L58:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L52:del_sys_file",
+          "L58:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 75.59194299997762,
+      "tokens_in": 1925,
+      "tokens_out": 3817,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L74:DANGEROUS_RM: Unset LIBDIR and CAMLP5N make the removal path expand to /.",
+        "L79:DANGEROUS_RM: Unset LIBDIR and CAMLP5N make the removal path expand to /.",
+        "L80:OVERBROAD_GLOB: An empty CAMLP5N makes the pattern match every file in the binary directory.",
+        "L81:OVERBROAD_GLOB: An empty CAMLP5N makes the pattern match every file in the manual directory.",
+        "L87:OVERBROAD_GLOB: An empty CAMLP5N makes boot/\"${CAMLP5N}\"* expand to boot/*.",
+        "L104:MISPLACED_ASSIGNMENT: FROM=boot and TO=boot.new are ordinary arguments after the command name and are ignored by the dispatcher.",
+        "L111:MISPLACED_ASSIGNMENT: FROM=boot and TO=boot.new are ordinary arguments after the command name and are ignored by the dispatcher.",
+        "L210:ERREXIT_STATUS: When .gitignore is absent, the test returns failure and makes the optional mv_git operation abort callers under set -e."
+      ]
+    }
+  ]
+}

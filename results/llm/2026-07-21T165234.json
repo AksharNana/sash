@@ -1,0 +1,325 @@
+{
+  "timestamp": "2026-07-21T16:52:34.605448+00:00",
+  "description": "GPT 5.6 Sol; A selection of potentially difficult-to-analyze scripts; Error codes NOT given in prompt; No timeout",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*wf-troll|c-debootstrap|m1-redir|c-ignored|sf-overwrite_file_2|m2-rm_root",
+  "args": {
+    "fixed": false,
+    "skip_buggy": false,
+    "variants": false,
+    "variants_only": false
+  },
+  "stats": {
+    "num_analyses": 7,
+    "num_successful": 7,
+    "num_crashed": 0,
+    "num_timed_out": 0,
+    "expected_bugs": 27,
+    "detected_bugs": 0,
+    "undetected_bugs": 27,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 0,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 12761,
+    "tokens_out": 20861,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 475.5662226669956
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L488:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L488:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 83.26744170801248,
+      "tokens_in": 4068,
+      "tokens_out": 5191,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L21:UNQUOTED_EXPANSION: Unquoted DEBOOTSTRAP_DIR can split or glob the functions-file path",
+        "L45:NON_POSIX_SYNTAX: local is not specified by POSIX sh",
+        "L47:WRONG_VARIABLE: Loop checks only $1 instead of the current phase in $x",
+        "L112:NON_POSIX_ECHO: echo -n is not portable POSIX output syntax",
+        "L123:NON_POSIX_ECHO: echo -n is not portable POSIX output syntax",
+        "L187:UNQUOTED_EXPANSION: Unquoted $1 can undergo field splitting and pathname expansion",
+        "L191:UNQUOTED_EXPANSION: Unquoted $1 can undergo field splitting and pathname expansion",
+        "L253:UNQUOTED_EXPANSION: Unquoted TARGET can split or glob while constructing its absolute path",
+        "L255:UNCHECKED_CD: A failed cd is ignored, causing TARGET to be built from the wrong directory",
+        "L423:UNCHECKED_CD: Unquoted TARGET can split, and tar still runs from the current directory if cd fails",
+        "L424:UNQUOTED_REDIRECTION: Unquoted MAKE_TARBALL can produce an ambiguous or unintended redirection",
+        "L434:UNQUOTED_EXPANSION: Unquoted TARGET can split or glob the destination path",
+        "L435:UNQUOTED_EXPANSION: Unquoted source and destination paths can split or glob",
+        "L436:UNQUOTED_EXPANSION: Unquoted SCRIPT and TARGET paths can split or glob",
+        "L437:UNQUOTED_REDIRECTION: Unquoted TARGET in the redirection path is not portable",
+        "L438:UNQUOTED_REDIRECTION: Unquoted TARGET in the redirection path is not portable",
+        "L440:UNQUOTED_REDIRECTION: Unquoted TARGET in the redirection path is not portable",
+        "L441:UNQUOTED_REDIRECTION: Unquoted TARGET in the redirection path is not portable",
+        "L442:UNQUOTED_REDIRECTION: Unquoted TARGET in the redirection path is not portable",
+        "L444:UNQUOTED_EXPANSION: Unquoted TARGET can split or glob the chmod path",
+        "L450:UNQUOTED_EXPANSION: Unquoted DEBOOTSTRAP_DIR can split or glob the required-file path",
+        "L451:UNQUOTED_EXPANSION: Unquoted DEBOOTSTRAP_DIR can split or glob the base-file path",
+        "L475:UNQUOTED_EXPANSION: Unquoted TARGET paths can split or glob during log copying"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-redir_to_func-redir_to_func/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L24:redir_func",
+          "L24:redir_func"
+        ],
+        "detected": [],
+        "undetected": [
+          "L24:redir_func"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 36.42648804199416,
+      "tokens_in": 374,
+      "tokens_out": 1778,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:STALE_TIMESTAMP: Log timestamp is computed only once at startup, so every log entry gets the same time",
+        "L6:UNQUOTED_EXPANSION: Unquoted $0 is subject to word splitting and pathname expansion",
+        "L10:UNSAFE_READ: read without IFS= and -r strips whitespace and interprets backslashes",
+        "L11:UNQUOTED_EXPANSION: Unquoted log fields are subject to word splitting and pathname expansion",
+        "L15:UNSAFE_READ: read without IFS= and -r strips whitespace and interprets backslashes",
+        "L16:UNQUOTED_EXPANSION: Unquoted log fields are subject to word splitting and pathname expansion",
+        "L20:UNQUOTED_EXPANSION: Unquoted $1 and other log fields are subject to word splitting and pathname expansion",
+        "L25:UNCHECKED_CD: Failure of cd is ignored, so the following ls may run in the wrong directory",
+        "L28:FUNCTION_REDIRECTION_MISUSE: Redirections create files named errorLog and OutputLog instead of invoking those functions"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap_2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L706:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L706:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 105.52204083302058,
+      "tokens_in": 5985,
+      "tokens_out": 6594,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L21:SC2086: Unquoted DEBOOTSTRAP_DIR can split or glob when sourcing functions.",
+        "L66:SC3043: local is not specified by POSIX sh.",
+        "L148:SC3037: echo -n is not portable in POSIX sh.",
+        "L169:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L190:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L214:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L225:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L243:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L257:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L269:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L286:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L298:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L320:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L342:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L353:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L379:SC2166: Using -a to combine test expressions is ambiguous and non-portable.",
+        "L386:SC2086: Unquoted DEBOOTSTRAP_DIR can split or glob in the suite-file path.",
+        "L387:SC2086: Unquoted DEBOOTSTRAP_DIR can split or glob in the architecture-file path.",
+        "L388:SC2086: Unquoted DEBOOTSTRAP_DIR can corrupt the variant-file test.",
+        "L389:SC2086: Unquoted DEBOOTSTRAP_DIR can split or glob in the variant-file path.",
+        "L428:PATH_LOOKUP_MISMATCH: dpkg is found through PATH but then invoked from hard-coded /usr/bin.",
+        "L431:PATH_LOOKUP_MISMATCH: udpkg is found through PATH but then invoked from hard-coded /usr/bin.",
+        "L432:SC2086: Unquoted DEBOOTSTRAP_DIR can corrupt the architecture-file test.",
+        "L433:SC2086: Unquoted DEBOOTSTRAP_DIR can split or glob in the architecture-file path.",
+        "L435:OS_DETECTION: HOST_OS is assigned the architecture value, preventing uname-based OS detection.",
+        "L487:SC2046: Unquoted id command substitution can make the numeric test malformed.",
+        "L626:SC2086: Unquoted MAKE_TARBALL can split, glob, or produce an ambiguous redirect.",
+        "L639:SC2086: Unquoted DEBOOTSTRAP_DIR can split or glob the functions source path passed to cp.",
+        "L640:SC2086: Unquoted SCRIPT can split or glob the suite-script source path passed to cp.",
+        "L656:SC2086: Unquoted DEBOOTSTRAP_DIR can split or glob in the required-file path.",
+        "L657:SC2086: Unquoted DEBOOTSTRAP_DIR can split or glob in the base-file path.",
+        "L672:HTTPS_MIRROR_IGNORED: The mirror-preservation branch recognizes only http://, so an HTTPS user mirror is replaced by the default HTTP mirror."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-troll/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:capturing_empty_output",
+          "L1:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:capturing_empty_output",
+          "L1:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 36.13226266694255,
+      "tokens_in": 182,
+      "tokens_out": 1577,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:SC3003: ANSI-C $'...' quoting is undefined in POSIX sh."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-ignored_command_v/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L111:not_a_command"
+        ],
+        "detected": [],
+        "undetected": [
+          "L111:not_a_command"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 155.138955582981,
+      "tokens_in": 1378,
+      "tokens_out": 2883,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:NONPOSIX_COMMAND: `which` is not a POSIX utility; use `command -v`.",
+        "L27:INVERTED_CONDITION: The script reports zsh missing when `command -v zsh` succeeds.",
+        "L29:WRONG_EXIT_STATUS: The missing-zsh error path exits with status 0.",
+        "L36:FORMAT_STRING: User-controlled `$ZSH` is embedded in the `printf` format string.",
+        "L50:NONPOSIX_VARIABLE: `$OSTYPE` is not defined by POSIX shells, so Cygwin detection is unreliable.",
+        "L59:UNQUOTED_EXPANSION: Unquoted `$ZSH` can split or glob the clone destination.",
+        "L65:DESTRUCTIVE_BACKUP: `mv` silently overwrites an existing `~/.zshrc.pre-oh-my-zsh` backup.",
+        "L71:UNQUOTED_EXPANSION: Unquoted `$ZSH` can split or glob the template path.",
+        "L73:CODE_INJECTION: `$ZSH` is inserted unquoted into generated shell code and unescaped into the sed script.",
+        "L79:ERREXIT_HAZARD: `expr` returns failure when `$SHELL` lacks a slash, causing premature exit under `set -e`.",
+        "L84:UNQUOTED_SUBSTITUTION: The unquoted command substitution can split into multiple `chsh` arguments or be empty."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L9:data_loss",
+          "L10:data_loss"
+        ],
+        "detected": [],
+        "undetected": [
+          "L10:data_loss",
+          "L9:data_loss"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 19.887024082941934,
+      "tokens_in": 348,
+      "tokens_out": 902,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:UNCHECKED_CD: Failure to change directory is ignored, so relative source paths may refer to the wrong directory",
+        "L8:COUNTER_RESET: n is reset to 1 on every iteration, causing each victor to overwrite the same destination files"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-rm_root/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:not_a_command",
+          "L4:not_a_command",
+          "L5:not_a_command",
+          "L6:not_a_command",
+          "L7:not_a_command",
+          "L8:not_a_command",
+          "L9:not_a_command",
+          "L9:unbound",
+          "L10:unbound",
+          "L13:unbound",
+          "L13:unbound",
+          "L14:unbound",
+          "L14:unbound",
+          "L15:unbound",
+          "L11:word_split",
+          "L11:del_sys_file",
+          "L11:del_sys_file",
+          "L11:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L10:unbound",
+          "L5:not_a_command",
+          "L7:not_a_command",
+          "L11:word_split_del_sys_file",
+          "L11:word_split",
+          "L13:unbound",
+          "L9:not_a_command",
+          "L3:not_a_command",
+          "L14:unbound",
+          "L9:unbound",
+          "L6:not_a_command",
+          "L8:not_a_command",
+          "L15:unbound",
+          "L11:del_sys_file",
+          "L4:not_a_command"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 38.52114133408759,
+      "tokens_in": 426,
+      "tokens_out": 1936,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:INVALID_COMMENT_SYNTAX: `//` is parsed as a command, so OUT_DIR is not retained as a shell variable.",
+        "L4:INVALID_COMMENT_SYNTAX: `//` is parsed as a command, so TAR_DIR is not retained as a shell variable.",
+        "L5:INVALID_COMMENT_SYNTAX: `//` is parsed as a command, so DATE is not retained as a shell variable.",
+        "L6:INVALID_COMMENT_SYNTAX: `//` is parsed as a command, so DB_USER is not retained as a shell variable.",
+        "L7:INVALID_COMMENT_SYNTAX: `//` is parsed as a command, so DB_PASS is not retained as a shell variable.",
+        "L8:INVALID_COMMENT_SYNTAX: `//` is parsed as a command, so DAYS is not retained as a shell variable.",
+        "L9:INVALID_COMMENT_SYNTAX: `//` is parsed as a command, so TAR_BAK is not retained as a shell variable.",
+        "L10:INVALID_COMMENT_SYNTAX: The intended `//` comment is passed to cd as extra operands.",
+        "L11:UNSAFE_RM_PATH: Unset OUT_DIR expands `$OUT_DIR/*` to `/*`, causing an attempted recursive deletion of root contents.",
+        "L11:INVALID_COMMENT_SYNTAX: The intended `//` comment is passed to rm as additional operands.",
+        "L12:INVALID_COMMENT_SYNTAX: The intended `//` comment is passed to mkdir as additional directory operands.",
+        "L13:INVALID_COMMENT_SYNTAX: The intended `//` comment is passed to mongodump as additional arguments.",
+        "L14:INVALID_COMMENT_SYNTAX: The intended `//` comment is passed to tar as additional input paths.",
+        "L15:INVALID_COMMENT_SYNTAX: The intended `//` comment is parsed as additional find arguments rather than a comment."
+      ]
+    }
+  ]
+}

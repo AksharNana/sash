@@ -1,0 +1,107 @@
+{
+  "timestamp": "2026-07-21T18:14:02.976291+00:00",
+  "description": "GPT 5.6 Sol; c-unset_var_set_u*; Error codes NOT given in prompt",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*c-unset_var_set_u*",
+  "args": {
+    "fixed": false,
+    "skip_buggy": false,
+    "variants": false,
+    "variants_only": false
+  },
+  "stats": {
+    "num_analyses": 2,
+    "num_successful": 2,
+    "num_crashed": 0,
+    "num_timed_out": 0,
+    "expected_bugs": 2,
+    "detected_bugs": 0,
+    "undetected_bugs": 2,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 0,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 951,
+    "tokens_out": 1889,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 32.33965862507466
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L15:unbound_setu"
+        ],
+        "detected": [],
+        "undetected": [
+          "L15:unbound_setu"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 7.579721124959178,
+      "tokens_in": 246,
+      "tokens_out": 367,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L14:UNBOUND_VARIABLE: DYLD_LIBRARY_PATH may be unset, causing expansion to fail under `set -u`"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_1/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L16:unbound_setu"
+        ],
+        "detected": [],
+        "undetected": [
+          "L16:unbound_setu"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 24.075413125101477,
+      "tokens_in": 705,
+      "tokens_out": 1522,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L14:SC2086: Unquoted LOG_LOCATION can undergo word splitting and pathname expansion.",
+        "L16:SC2154: TEST_VM_NODE_NAMES may be unset, causing immediate failure under set -u.",
+        "L17:SC2086: Unquoted LOG_LOCATION can undergo word splitting and pathname expansion.",
+        "L18:SC2086: Unquoted USER and LOG_LOCATION expansions can split or expand as pathnames.",
+        "L19:SC2086: Unquoted LOG_LOCATION can undergo word splitting and pathname expansion.",
+        "L21:SC2086: Unquoted TEST_VM_NODE_NAMES also permits unintended pathname expansion.",
+        "L22:SC2086: Unquoted node name and log location expansions can split or expand as pathnames.",
+        "L23:SC2086: Unquoted USER, node name, and log location expansions can split or expand as pathnames.",
+        "L24:SC2086: Unquoted node name and log location expansions can split or expand as pathnames.",
+        "L27:SC2086: Unquoted LOG_LOCATION can redirect output to the wrong path.",
+        "L29:SC2086: Unquoted LOG_LOCATION can redirect output to the wrong path.",
+        "L30:SC2091: Command substitution is incorrectly used to test iptables exit status.",
+        "L31:SC2086: Unquoted LOG_LOCATION can redirect output to the wrong path.",
+        "L33:SC2091: Command substitution is incorrectly used to test ip exit status.",
+        "L34:SC2086: Unquoted LOG_LOCATION can redirect output to the wrong path.",
+        "L36:SC2091: Command substitution is incorrectly used to test journalctl exit status.",
+        "L37:SC2086: Unquoted LOG_LOCATION can redirect output to the wrong path.",
+        "L38:SC2086: Unquoted LOG_LOCATION can redirect output to the wrong path.",
+        "L40:SC2086: Unquoted LOG_LOCATION can undergo word splitting and pathname expansion.",
+        "L41:SC2086: Unquoted LOG_LOCATION can undergo word splitting and pathname expansion.",
+        "L43:SC2086: Unquoted USER and LOG_LOCATION expansions can split or expand as pathnames.",
+        "L44:SC2086: Unquoted USER and LOG_LOCATION expansions can split or expand as pathnames.",
+        "L46:SC2086: Unquoted LOG_LOCATION can undergo word splitting and pathname expansion.",
+        "L47:SC2086: Unquoted LOG_LOCATION can undergo word splitting and pathname expansion."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-07-21T18:01:00.062217+00:00",
+  "description": "GPT 5.6 Sol; c-makefile; Error codes NOT given in prompt",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*c-makefile",
+  "args": {
+    "fixed": false,
+    "skip_buggy": false,
+    "variants": false,
+    "variants_only": false
+  },
+  "stats": {
+    "num_analyses": 1,
+    "num_successful": 1,
+    "num_crashed": 0,
+    "num_timed_out": 0,
+    "expected_bugs": 2,
+    "detected_bugs": 0,
+    "undetected_bugs": 2,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 0,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 3711,
+    "tokens_out": 5305,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 103.7991771249799
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-makefile/original.makefile",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L52:del_sys_file",
+          "L58:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L58:del_sys_file",
+          "L52:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 103.19283983297646,
+      "tokens_in": 3711,
+      "tokens_out": 5305,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L54:UNQUOTED_VARIABLE: DESTDIR is passed unquoted, causing word splitting and glob expansion",
+        "L54:MASKED_EXIT_STATUS: trailing cd masks failure of the recursive install",
+        "L59:UNCHECKED_CD: failed cd can make uninstall delete matching files from the wrong directory",
+        "L59:MASKED_EXIT_STATUS: trailing cd masks failure of the removal command",
+        "L60:UNCHECKED_CD: failed cd can make uninstall delete matching files from the wrong directory",
+        "L161:UNCHECKED_CD: cd occurs before set -e, so failure does not stop the cold build"
+      ]
+    }
+  ]
+}

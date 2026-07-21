@@ -1,0 +1,64 @@
+{
+  "timestamp": "2026-07-21T17:32:36.452186+00:00",
+  "description": "GPT 5.6 Sol; sf-cd_into_file with comment saying it uses a special version of mktemp that is not buggy; Error codes NOT given in prompt; No timeout",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*sf-cd_into_file",
+  "args": {
+    "fixed": false,
+    "skip_buggy": false,
+    "variants": false,
+    "variants_only": false
+  },
+  "stats": {
+    "num_analyses": 1,
+    "num_successful": 1,
+    "num_crashed": 0,
+    "num_timed_out": 0,
+    "expected_bugs": 1,
+    "detected_bugs": 0,
+    "undetected_bugs": 1,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 0,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 381,
+    "tokens_out": 1155,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 27.066856542020105
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-cd_into_file/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L10:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L10:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 26.397826457978226,
+      "tokens_in": 381,
+      "tokens_out": 1155,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L12:POSIX_VIOLATION: `source` is not POSIX; use the `.` utility instead",
+        "L18:UNCHECKED_COMMAND_FAILURE: archiving continues even if the preceding setup or clone command chain fails",
+        "L20:DATA_LOSS: temporary repositories are deleted regardless of whether `tar` successfully creates the archive",
+        "L21:FALSE_SUCCESS_REPORT: success is reported even if archiving or cleanup fails",
+        "L25:POSIX_VIOLATION: `[[ ... ]]` is not POSIX test syntax; use `[ ... ]` instead"
+      ]
+    }
+  ]
+}
