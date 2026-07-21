@@ -312,13 +312,16 @@ def merge_partial_fields(fields: list[Field], sep: str | None = " ", state: "Sta
         arbitraries = [field for field in fields if isinstance(field.content, CompletelyArbitrary)]
         prefix, suffix = collect_prefixes_suffixes(fields)
         quoted = all(a.content.quoted for a in arbitraries) # type: ignore
+        arbitrary_count = WordCount(0, 0)
+        for a in arbitraries:
+            arbitrary_count = merge_counts(arbitrary_count, a.count, sep=0) # type: ignore
         if state is not None:
             # TODO: Some sources (which are useful for diagnostics) are lost; fix that
             arbitrary = Field(CompletelyArbitrary(freeze_thing(arbitraries[0].content.source), # type: ignore
                                                   ArbitraryType.APPROXIMATION,
                                                   state,
                                                   quoted=quoted),
-                                                  WordCount(0, inf))
+                                                  arbitrary_count)
         else:
             base = arbitraries[0].content
             maybe_empty = any(a.content.maybe_empty for a in arbitraries) # type: ignore
@@ -327,7 +330,7 @@ def merge_partial_fields(fields: list[Field], sep: str | None = " ", state: "Sta
                                                   base.producing_state, # type: ignore
                                                   quoted=quoted,
                                                   maybe_empty=maybe_empty),
-                                                  WordCount(0, inf))
+                                                  arbitrary_count)
         if prefix is not None:
             arbitrary = add_prefix(arbitrary, prefix)
         if suffix is not None:

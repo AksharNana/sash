@@ -1274,7 +1274,7 @@ def join_fields(fields: list[Field]) -> Field:
     return merge_partial_fields(fields, sep=" ", state=None)
 
 
-def collapse_fields(fields: list[Field], source: AST.AstNode | None = None) -> Field:
+def collapse_fields(fields: list[Field], source: AST.AstNode | list | None = None) -> Field:
     """Collapse alternative versions of a field into one field abstracting over all of them."""
     # if all alternatives are the same, return that
     if all(field == fields[0] for field in fields):
