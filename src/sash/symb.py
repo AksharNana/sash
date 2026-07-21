@@ -509,12 +509,22 @@ def expand_args_dumb(traces: Traces,
         #     collapsed_field = collapse_fields(fields_at_i)
         #     expanded_args.append(collapsed_field)
 
-        # Design 2: if all fields are the same across all traces, keep that, else give up entirely
-        if all(field == expanded_fields[0] for field in expanded_fields):
+        # Design 2: if all fields are the same across all traces, keep that, else collapse per-position
+        if not expanded_fields:
+            continue
+        if all(fl == expanded_fields[0] for fl in expanded_fields):
             expanded_args.extend(expanded_fields[0])
         else:
-            # todo could be smarter about the ranges of word counts and prefix/suffix preservation, but wont do unless needed
-            expanded_args.append(arbitrary_field(arg, ArbitraryType.APPROXIMATION, None))
+            field_counts = [len(fl) for fl in expanded_fields]
+            if min(field_counts) != max(field_counts):
+                expanded_args.append(arbitrary_field(arg, ArbitraryType.APPROXIMATION, None))
+            else:
+                for i in range(field_counts[0]):
+                    fields_at_i = [fl[i] for fl in expanded_fields]
+                    if all(f == fields_at_i[0] for f in fields_at_i):
+                        expanded_args.append(fields_at_i[0])
+                    else:
+                        expanded_args.append(collapse_fields(fields_at_i, source=arg))
     return res_traces + terminated_traces, expanded_args
 
 

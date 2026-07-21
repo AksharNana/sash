@@ -1008,8 +1008,8 @@ def test_expand_args_dumb_collapses_multipath(config):
     assert len(expanded) == 2
     assert_symstr_field(expanded[0], "echo", 1, 1)
     assert isinstance(expanded[1].content, CompletelyArbitrary)
-    assert expanded[1].count.min == 0
-    assert expanded[1].count.max == math.inf
+    assert expanded[1].count.min == 1
+    assert expanded[1].count.max == 1
 
 
 # expand_args should preserve per-trace expansions with wordcount-only globs.
