@@ -12,7 +12,7 @@ bugs:
 
 ground_truths:
   # Base versions
-  - path: original.sh
+  - path: original.makefile
     kind: original
     bugs:
       bug00: { lines: [52, 58] }
