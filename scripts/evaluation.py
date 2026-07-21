@@ -1283,6 +1283,8 @@ def generate_html_report(
         total_solver_time=total_solver_time,
     )
 
+    eprint(f"HTML report generated: {filename}")
+
 
 def export_llm_csv(file: Path, jobs: list[FinishedJob]):
     fieldnames = [
@@ -1404,8 +1406,6 @@ def write_jsonl_log(
     }
     with jsonl_file.open("a", encoding="utf-8") as f:
         f.write(json_module.dumps(entry, default=str) + "\n")
-
-    eprint(f"HTML report generated: {filename}")
 
 
 ROOT_DIR = git_toplevel()
