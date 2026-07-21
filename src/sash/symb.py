@@ -1273,7 +1273,7 @@ def collapse_fields(fields: list[Field], source: AST.AstNode | None = None) -> F
         # otherwise, return a CompletelyArbitrary field with min/max word counts
         min_words = min(field.count.min for field in fields)
         max_words = max(field.count.max for field in fields)
-        return Field(CompletelyArbitrary(freeze(source) if source is not None else source,
+        return Field(CompletelyArbitrary(freeze_thing(source) if source is not None else source,
                                          ArbitraryType.APPROXIMATION,
                                          None),
                      WordCount(min_words, max_words))
