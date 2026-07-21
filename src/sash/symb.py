@@ -1541,17 +1541,7 @@ def handle_commandnode(traces: Traces,
             # TODO: Unify rm with other commands
             case cmd_name if spec := get_spec(cmd_name, tuple(expanded_args)):
                 logging.debug("Adding %s precondition: %s", cmd_name, spec.check)
-                if cmd_name == "env":
-                    match spec.failure_postcond:
-                        case Not(CommandExists(non_existent_cmd_field)):
-                            non_existent_cmd_name = non_existent_cmd_field.try_to_str()
-                            if isinstance(non_existent_cmd_name, str):
-                                should_report = any(
-                                    non_existent_cmd_name not in trace.latest_state.known_existing_commands
-                                    for trace in t1
-                                )
-                                if should_report:
-                                    Reporter.add_issue(reporter.NotACommand(non_existent_cmd_name, context_line), config)
+
                 if spec.min_operands > 0:
                     trace_expansions = expand_args(t1, node.arguments, config)
                     has_sufficient_operands = False

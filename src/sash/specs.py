@@ -1051,8 +1051,12 @@ class Env(Cmd):
             if isinstance(subcmd_name, str):
                 if spec := get_spec(subcmd_name, tuple(operands[start_idx:])):
                     return spec
-                # Since the sub-command has no spec, it might not exist.
-                return CmdSpec(check, success_postcond, ~CommandExists(subcmd), io)
+
+                check = SimpleConstraint(
+                    CommandExists(subcmd),
+                    lambda line: reporter.NotACommand(subcmd_name, line),
+                )
+                failure_postcond = ~CommandExists(subcmd)
 
         return CmdSpec(check, success_postcond, failure_postcond, io)
 
