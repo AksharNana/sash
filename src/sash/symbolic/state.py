@@ -328,7 +328,7 @@ class State:
         )
 
 def is_special_var(name: str) -> bool:
-    return name.isdecimal() or name in ["@", "#"]
+    return name.isdecimal() or name in ["@", "#", "$", "!", "-"]
 
 @dataclass(frozen=True)
 class Trace:
