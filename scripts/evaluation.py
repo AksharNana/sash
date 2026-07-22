@@ -49,6 +49,7 @@ def build_cli():
     llm_group.add_argument('--llm-api-key', type=str, default=None, metavar='KEY', help='API key (falls back to OPENAI_API_KEY env var or .env file)')
     llm_group.add_argument('--llm-temperature', type=float, default=-1.0, metavar='FLOAT', help='Sampling temperature (default: model default)')
     llm_group.add_argument('--llm-max-tokens', type=int, default=None, metavar='INT', help='Max output tokens')
+    llm_group.add_argument('--llm-reasoning-effort', type=str, default=None, choices=['low', 'medium', 'high', 'xhigh', 'max', 'auto'], help='Reasoning effort for supported models')
     llm_group.add_argument('--llm-timeout', type=float, default=0.0, metavar='SEC', help='Per-call API timeout in seconds (default: 0 = unlimited)')
     llm_group.add_argument('--llm-mapper', nargs='?', const="openai:gpt-5.4-mini", default=None, metavar='PROVIDER:MODEL', help='Enable mapper LLM; uses openai:gpt-5.4-mini if no model given')
     llm_group.add_argument('--llm-batch', nargs='?', const=True, default=None, metavar='FILE', help='Submit prompts as an OpenAI batch and await completion; if FILE is given, process the batch results JSONL offline')
@@ -77,6 +78,7 @@ def main(
     llm_api_key: str | None = None,
     llm_temperature: float = -1.0,
     llm_max_tokens: int | None = None,
+    llm_reasoning_effort: str | None = None,
     llm_timeout: float | None = None,
     llm_mapper_spec: str | None = None,
     llm_batch: str | bool | None = None,
@@ -151,7 +153,7 @@ def main(
             model = llm_spec.split(":", 1)[1]
             batch_lines, jobs_map = _render_batch_lines(
                 jobs, model, prompt_template, codes_catalog,
-                llm_temperature, llm_max_tokens,
+                llm_temperature, llm_max_tokens, llm_reasoning_effort,
             )
 
             batch_dir = ROOT_DIR / "results" / "llm" / "batches"
@@ -174,6 +176,7 @@ def main(
                     temperature=llm_temperature,
                     max_tokens=llm_max_tokens,
                     timeout=llm_timeout,
+                    reasoning_effort=llm_reasoning_effort,
                 )
                 batch_id = provider.submit_batch(batch_lines, str(request_path))
                 eprint(f"Batch submitted: id={batch_id}")
@@ -209,6 +212,7 @@ def main(
                     llm_temperature,
                     llm_max_tokens,
                     llm_timeout,
+                    llm_reasoning_effort,
                     llm_mapper_spec,
                     prompt_template,
                     codes_catalog,
@@ -829,6 +833,7 @@ def _llm_worker_init(
     temperature: float,
     max_tokens: int | None,
     timeout: float | None,
+    reasoning_effort: str | None,
     mapper_spec: str | None,
     prompt_template: str,
     codes_catalog: str,
@@ -842,6 +847,7 @@ def _llm_worker_init(
         temperature=temperature,
         max_tokens=max_tokens,
         timeout=timeout,
+        reasoning_effort=reasoning_effort,
     )
     if mapper_spec:
         LLM_MAPPER_PROVIDER = llm.create_provider(
@@ -1567,6 +1573,7 @@ def _render_batch_lines(
     codes_catalog: str,
     temperature: float,
     max_tokens: int | None,
+    reasoning_effort: str | None,
 ) -> tuple[list[dict], dict[str, Job]]:
     batch_lines = []
     jobs_map: dict[str, Job] = {}
@@ -1582,6 +1589,7 @@ def _render_batch_lines(
                 prompt=prompt,
                 temperature=temperature,
                 max_tokens=max_tokens,
+                reasoning_effort=reasoning_effort,
             )
         )
     return batch_lines, jobs_map
@@ -1857,6 +1865,7 @@ if __name__ == "__main__":
         llm_api_key=args.llm_api_key,
         llm_temperature=args.llm_temperature,
         llm_max_tokens=args.llm_max_tokens,
+        llm_reasoning_effort=args.llm_reasoning_effort,
         llm_timeout=llm_timeout,
         llm_mapper_spec=args.llm_mapper,
         llm_batch=llm_batch,

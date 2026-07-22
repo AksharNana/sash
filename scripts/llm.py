@@ -30,6 +30,7 @@ class OpenAIProvider(LLMProvider):
         temperature: float = 0.0,
         max_tokens: int | None = None,
         timeout: float | None = None,
+        reasoning_effort: str | None = None,
     ):
         from openai import OpenAI
 
@@ -37,6 +38,7 @@ class OpenAIProvider(LLMProvider):
         self._temperature = temperature
         self._max_tokens = max_tokens
         self._timeout = timeout
+        self._reasoning_effort = reasoning_effort
         self._client = OpenAI(api_key=api_key, base_url=base_url, timeout=timeout)
 
     def generate(self, prompt: str) -> LLMResponse:
@@ -49,6 +51,8 @@ class OpenAIProvider(LLMProvider):
             kwargs["temperature"] = self._temperature
         if self._max_tokens is not None:
             kwargs["max_tokens"] = self._max_tokens
+        if self._reasoning_effort is not None:
+            kwargs["reasoning_effort"] = self._reasoning_effort
         if "5.6" in self._model:
             kwargs["prompt_cache_options"] = {"mode": "explicit"}
         response = self._client.chat.completions.create(**kwargs)
@@ -128,6 +132,7 @@ def build_batch_line(
     prompt: str,
     temperature: float = -1.0,
     max_tokens: int | None = None,
+    reasoning_effort: str | None = None,
 ) -> dict:
     body: dict = {
         "model": model,
@@ -137,6 +142,8 @@ def build_batch_line(
         body["temperature"] = temperature
     if max_tokens is not None:
         body["max_tokens"] = max_tokens
+    if reasoning_effort is not None:
+        body["reasoning_effort"] = reasoning_effort
     if "5.6" in model or "5.7" in model or "5.8" in model or "5.9" in model or "6." in model:
         body["prompt_cache_options"] = {"mode": "explicit"}
 
@@ -205,6 +212,7 @@ def create_provider(
     temperature: float = 0.0,
     max_tokens: int | None = None,
     timeout: float | None = None,
+    reasoning_effort: str | None = None,
     **kwargs,
 ) -> LLMProvider:
     if ":" not in spec:
@@ -221,6 +229,7 @@ def create_provider(
             temperature=temperature,
             max_tokens=max_tokens,
             timeout=timeout,
+            reasoning_effort=reasoning_effort,
         )
     elif provider_name == "anthropic":
         return AnthropicProvider(
