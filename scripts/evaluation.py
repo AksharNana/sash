@@ -53,8 +53,8 @@ def build_cli():
     llm_group.add_argument('--llm-timeout', type=float, default=0.0, metavar='SEC', help='Per-call API timeout in seconds (default: 0 = unlimited)')
     llm_group.add_argument('--llm-mapper', nargs='?', const="openai:gpt-5.4-mini", default=None, metavar='PROVIDER:MODEL', help='Enable mapper LLM; uses openai:gpt-5.4-mini if no model given')
     llm_group.add_argument('--llm-batch', nargs='?', const=True, default=None, metavar='FILE', help='Submit prompts as an OpenAI batch and await completion; if FILE is given, process the batch results JSONL offline')
+    llm_group.add_argument('--llm-eval-name', type=str, default=None, metavar='NAME', help='Base name for this experiment run; files are written as NAME-N.suffix under results/llm/ (default: timestamp)')
     llm_group.add_argument('--description', type=str, default=None, metavar='STR', help='Human-readable label for this experiment run')
-    llm_group.add_argument('--jsonl-output', type=Path, default=None, metavar='FILE', help='Append-only JSONL experiment log file (default: results/llm_stats.jsonl)')
 
     return parser
     # fmt: on
@@ -82,8 +82,8 @@ def main(
     llm_timeout: float | None = None,
     llm_mapper_spec: str | None = None,
     llm_batch: str | bool | None = None,
+    llm_eval_name: str | None = None,
     description: str | None = None,
-    jsonl_output: Path | None = None,
 ):
     if no_color:
         disable_color()
@@ -144,7 +144,10 @@ def main(
         prompt_template = llm_prompt.read_text(encoding="utf-8")
         codes_catalog = llm.build_codes_catalog()
         valid_codes = sash.reporter.Issue.all_codes()
-        run_ts = datetime.now(timezone.utc)
+
+        results_dir = ROOT_DIR / "results" / "llm"
+        results_dir.mkdir(parents=True, exist_ok=True)
+        run_name = _next_name(results_dir, llm_eval_name)
 
         if llm_batch is not None:
             if llm_mapper_spec is not None:
@@ -156,10 +159,7 @@ def main(
                 llm_temperature, llm_max_tokens, llm_reasoning_effort,
             )
 
-            batch_dir = ROOT_DIR / "results" / "llm" / "batches"
-            batch_dir.mkdir(parents=True, exist_ok=True)
-            ts_str = run_ts.strftime("%Y%m%dT%H%M%S")
-            request_path = batch_dir / f"batch_{ts_str}.jsonl"
+            request_path = results_dir / f"{run_name}.batch.jsonl"
 
             with request_path.open("w", encoding="utf-8") as f:
                 for line in batch_lines:
@@ -188,7 +188,7 @@ def main(
                             eprint(f"  {err.code}: {err.message}")
                     exit(1)
                 response_text = provider.download_batch_results(batch_id)
-                response_path = batch_dir / f"batch_{ts_str}-response.jsonl"
+                response_path = results_dir / f"{run_name}.batch.response.jsonl"
                 response_path.write_text(response_text, encoding="utf-8")
                 eprint(f"Batch results saved to: {response_path}")
 
@@ -271,27 +271,8 @@ def main(
                 "HTML report not yet supported for LLM mode; skipping",
             )
 
-        if jsonl_output is not None:
-            write_jsonl_log(
-                jsonl_file=jsonl_output,
-                description=description,
-                model=llm_spec,
-                mapper_model=llm_mapper_spec,
-                temperature=llm_temperature,
-                benchmark_filter=bench_filter.pattern,
-                stats=stats,
-                jobs=finished,
-                duration_sec=duration_sec,
-                args={
-                    "fixed": run_fixed,
-                    "skip_buggy": not run_buggy,
-                    "variants": run_variants,
-                    "variants_only": run_only_variants,
-                },
-            )
-
         report_path = write_llm_report(
-            timestamp=run_ts,
+            report_path=results_dir / f"{run_name}.report.json",
             description=description,
             model=llm_spec,
             mapper_model=llm_mapper_spec,
@@ -1427,48 +1408,6 @@ def export_llm_csv(file: Path, jobs: list[FinishedJob]):
             )
 
 
-def write_jsonl_log(
-    jsonl_file: Path,
-    description: str | None,
-    model: str,
-    mapper_model: str | None,
-    temperature: float,
-    benchmark_filter: str,
-    stats: EvalStats,
-    jobs: list[FinishedJob],
-    duration_sec: float,
-    args: dict,
-):
-    jsonl_file.parent.mkdir(parents=True, exist_ok=True)
-    entry = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "description": description,
-        "model": model,
-        "mapper_model": mapper_model,
-        "temperature": temperature if temperature >= 0 else None,
-        "benchmark_filter": benchmark_filter,
-        "num_analyses": stats.analyses,
-        "num_successful": stats.successful,
-        "num_crashed": stats.crashed,
-        "num_timed_out": stats.timed_out,
-        "expected_bugs": stats.buggy_expected_bugs,
-        "detected_bugs": stats.buggy_detected_bugs,
-        "undetected_bugs": stats.buggy_undetected_bugs,
-        "unexpected_bugs": stats.buggy_unexpected_bugs,
-        "fixed_expected_missing": stats.fixed_expected_missing_bugs,
-        "fixed_regressions": stats.fixed_regression_bugs,
-        "fixed_rest": stats.fixed_rest_bugs,
-        "tokens_in": stats.total_tokens_in,
-        "tokens_out": stats.total_tokens_out,
-        "mapping_tokens_in": stats.total_mapper_tokens_in,
-        "mapping_tokens_out": stats.total_mapper_tokens_out,
-        "cost_usd": stats.total_cost if stats.total_cost > 0 else None,
-        "mapping_cost_usd": stats.total_mapper_cost if stats.total_mapper_cost > 0 else None,
-        "duration_sec": duration_sec,
-        "args": args,
-    }
-    with jsonl_file.open("a", encoding="utf-8") as f:
-        f.write(json_module.dumps(entry, default=str) + "\n")
 
 
 ROOT_DIR = git_toplevel()
@@ -1704,8 +1643,28 @@ def _build_finished_jobs_from_batch(
     return finished
 
 
+def _next_name(results_dir: Path, base_name: str | None) -> str:
+    if base_name is None:
+        base_name = datetime.now(timezone.utc).strftime("%Y_%m_%d-%H_%M_%S")
+
+    existing = set()
+    for f in results_dir.glob("*.report.json"):
+        stem = f.stem
+        if stem.endswith(".report"):
+            stem = stem[: -len(".report")]
+        existing.add(stem)
+
+    if base_name not in existing:
+        return base_name
+
+    idx = 1
+    while f"{base_name}-{idx}" in existing:
+        idx += 1
+    return f"{base_name}-{idx}"
+
+
 def write_llm_report(
-    timestamp: datetime,
+    report_path: Path,
     description: str | None,
     model: str,
     mapper_model: str | None,
@@ -1716,9 +1675,9 @@ def write_llm_report(
     duration_sec: float,
     args: dict,
 ):
-    report_dir = ROOT_DIR / "results" / "llm"
-    report_dir.mkdir(parents=True, exist_ok=True)
-    report_file = report_dir / f"{timestamp.strftime('%Y-%m-%dT%H%M%S')}.json"
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.now(timezone.utc)
 
     def _compute_job_bugs(job: FinishedJob):
         info = job.additional_info or {}
@@ -1795,8 +1754,8 @@ def write_llm_report(
         "jobs": jobs_data,
     }
 
-    report_file.write_text(json_module.dumps(report, indent=2, default=str), encoding="utf-8")
-    return report_file
+    report_path.write_text(json_module.dumps(report, indent=2, default=str), encoding="utf-8")
+    return report_path
 
 
 # ANSI color codes
@@ -1819,10 +1778,6 @@ if __name__ == "__main__":
     llm_prompt = args.llm_prompt
     if llm_prompt is None and args.llm is not None:
         llm_prompt = ROOT_DIR / "scripts" / "prompt_without_codes.md"
-
-    jsonl_output = args.jsonl_output
-    if jsonl_output is None and args.llm is not None:
-        jsonl_output = ROOT_DIR / "results" / "llm_stats.jsonl"
 
     llm_batch = args.llm_batch
     if isinstance(llm_batch, str):
@@ -1869,6 +1824,6 @@ if __name__ == "__main__":
         llm_timeout=llm_timeout,
         llm_mapper_spec=args.llm_mapper,
         llm_batch=llm_batch,
+        llm_eval_name=args.llm_eval_name,
         description=args.description,
-        jsonl_output=jsonl_output,
     )

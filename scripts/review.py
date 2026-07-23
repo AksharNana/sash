@@ -115,7 +115,7 @@ class ReviewApp(App):
         super().__init__()
         self._report_path = report_path
         self._progress_path = report_path.with_name(
-            report_path.stem + ".progress.json"
+            report_path.stem + ".review.json"
         )
         self._report = json.loads(report_path.read_text(encoding="utf-8"))
         self._jobs = self._report.get("jobs", [])
