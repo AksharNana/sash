@@ -1583,19 +1583,6 @@ def _build_finished_jobs_from_batch(
 
         issues = llm.parse_analysis_response(text, valid_codes)
 
-        if not text and not issues:
-            finished.append(
-                FinishedJob(
-                    benchmark=job.benchmark,
-                    ground_truth=job.ground_truth,
-                    timed_out=False,
-                    crashed=True,
-                    exn_traceback="Empty or unparseable batch response",
-                    report=None,
-                )
-            )
-            continue
-
         result = {
             "benchmark": str(job.benchmark),
             "ground_truth": job.ground_truth,
@@ -1647,18 +1634,11 @@ def _next_name(results_dir: Path, base_name: str | None) -> str:
     if base_name is None:
         base_name = datetime.now(timezone.utc).strftime("%Y_%m_%d-%H_%M_%S")
 
-    existing = set()
-    for f in results_dir.glob("*.report.json"):
-        stem = f.stem
-        if stem.endswith(".report"):
-            stem = stem[: -len(".report")]
-        existing.add(stem)
-
-    if base_name not in existing:
-        return base_name
-
     idx = 1
-    while f"{base_name}-{idx}" in existing:
+    while (
+        (results_dir / f"{base_name}-{idx}.report.json").exists()
+        or (results_dir / f"{base_name}-{idx}.batch.jsonl").exists()
+    ):
         idx += 1
     return f"{base_name}-{idx}"
 
