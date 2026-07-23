@@ -284,10 +284,43 @@ class ReviewApp(App):
             "[b]ctrl+q[/] quit without saving"
         )
 
+    def _expected_count(self, job: dict) -> int:
+        benchmark_path = Path(job["benchmark"])
+        info_path = benchmark_path.parent / "info.yaml"
+        if not info_path.exists():
+            return 0
+
+        info = yaml.safe_load(info_path.read_text(encoding="utf-8"))
+        job_filename = benchmark_path.name
+
+        matched_gt = None
+        for gt in info.get("ground_truths", []):
+            if Path(gt["path"]).name == job_filename and gt["kind"] == job.get("kind"):
+                matched_gt = gt
+                break
+        if matched_gt is None:
+            for gt in info.get("ground_truths", []):
+                if Path(gt["path"]).name == job_filename:
+                    matched_gt = gt
+                    break
+        if matched_gt is None:
+            return 0
+
+        total = 0
+        for bug_info in matched_gt.get("bugs", {}).values():
+            lines = bug_info.get("lines", bug_info.get("regression_lines", []))
+            total += len(lines)
+        return total
+
     def _mark(self, status: str) -> None:
         job = self._current_job()
         if job is None:
             return
+        total = self._expected_count(job)
+        if status == "all":
+            status = f"{total}/{total}"
+        elif status == "none":
+            status = f"0/{total}"
         self._reviewed[self._job_id(job)] = {
             "status": status,
             "at": datetime.now(timezone.utc).isoformat(),
