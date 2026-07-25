@@ -1176,7 +1176,7 @@ def expand_to_word_simple(stuff: list[AST.ArgChar],
                         if not is_special_var(name):
                             error_code = reporter.UnboundIDSetU if self.state.opts.is_set(SetOptions.NOUNSET) else reporter.UnboundID
                             Reporter.add_issue(error_code(var_node.pretty(), context_line), config)
-                        if config.unbound_policy == UnboundVariablePolicy.EMPTY:
+                        if config.unbound_policy == UnboundVariablePolicy.EMPTY and not is_special_var(name):
                             empty_word_value = empty_word(self.quoted)
                             self.add_word(empty_word_value)
                             self.state = self.state.extend_localenv({
