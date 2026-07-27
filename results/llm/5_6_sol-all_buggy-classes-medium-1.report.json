@@ -1,0 +1,1843 @@
+{
+  "timestamp": "2026-07-23T16:38:25.102109+00:00",
+  "description": "GPT 5.6 Sol; All buggy programs; Bug classes given in prompt; Reasoning effort medium",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*.*",
+  "args": {
+    "fixed": false,
+    "skip_buggy": false,
+    "variants": false,
+    "variants_only": false
+  },
+  "stats": {
+    "num_analyses": 61,
+    "num_successful": 60,
+    "num_crashed": 1,
+    "num_timed_out": 0,
+    "expected_bugs": 115,
+    "detected_bugs": 0,
+    "undetected_bugs": 115,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 0,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 60428,
+    "tokens_out": 95416,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 0.01084874989464879
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude4/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L6:data_loss"
+        ],
+        "detected": [],
+        "undetected": [
+          "L6:data_loss"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 253,
+      "tokens_out": 198,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:DATA_LOSS: Redirects to ordinary file \"nul\", truncating any existing file instead of discarding output.",
+        "L5:DATA_LOSS: Redirects to ordinary file \"nul\", truncating it again instead of discarding output."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude3/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:cmd_expected_path_state",
+          "L6:data_loss"
+        ],
+        "detected": [],
+        "undetected": [
+          "L6:data_loss",
+          "L3:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 278,
+      "tokens_out": 127,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:DATA-LOSS: Deletes the newly created some/dir/newfile.cpp file."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-backup_manager/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L179:const_cond"
+        ],
+        "detected": [],
+        "undetected": [
+          "L179:const_cond"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 8965,
+      "tokens_out": 8445,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L33:DATA_LOSS: Empty bm_pending_incremental_list causes deletion of .orig in the current directory.",
+        "L85:DANGEROUS_FIELD_SPLITTING: Unquoted bm_pending_archive can split or glob, causing unintended files to be deleted.",
+        "L91:DANGEROUS_FIELD_SPLITTING: Unquoted bm_pending_incremental_list can make rm delete unintended files.",
+        "L92:DANGEROUS_FIELD_SPLITTING: Unquoted destination path can split or glob and break restoration of the incremental list.",
+        "L95:DANGEROUS_FIELD_SPLITTING: Unquoted bm_pending_incremental_list can make rm delete unintended files.",
+        "L111:DANGEROUS_FIELD_SPLITTING: Unquoted file_to_create corrupts DAR slice globbing when the archive path contains whitespace.",
+        "L183:DANGEROUS_FIELD_SPLITTING: Unquoted file_to_create can make failure cleanup delete unintended files.",
+        "L207:DANGEROUS_FIELD_SPLITTING: Unquoted file_to_create can make failure cleanup delete unintended files.",
+        "L711:DATA_LOSS: Empty bm_pending_incremental_list causes deletion of .orig when a non-incremental archive is skipped.",
+        "L839:DANGEROUS_FIELD_SPLITTING: Unquoted target_expanded splits expanded target paths containing whitespace.",
+        "L987:DANGEROUS_FIELD_SPLITTING: Unquoted mysql_conffile can make cleanup delete unintended files when HOME contains whitespace or glob characters.",
+        "L1024:DANGEROUS_FIELD_SPLITTING: Unquoted array expansion flattens and splits archive names containing whitespace.",
+        "L1030:BAD_CONTROL_FLOW: Continuing before incrementing index leaves all subsequent archive names mapped to the same incomplete array entry."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:cmd_expected_path_state",
+          "L5:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L5:del_sys_file",
+          "L3:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 246,
+      "tokens_out": 208,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:DATA_LOSS: Recursively deletes all non-hidden files and directories in the home directory, or in the current directory if the preceding cd fails."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude5/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L4:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L4:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 248,
+      "tokens_out": 190,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:DATA_LOSS: cd - returns to the original directory, so rm -rf * recursively deletes its non-hidden contents instead of the build directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-for_mv/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L14:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L14:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 338,
+      "tokens_out": 554,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L14:COMMAND_ALWAYS_FAILS: Quoting \"${FILEMASK}\" prevents wildcard expansion, so mv looks for a literal question-mark filename instead of extracted XML files."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-sc_author/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L2:cmd_expected_path_state",
+          "L2:del_sys_file",
+          "L3:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L2:del_sys_file",
+          "L3:del_sys_file",
+          "L2:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 250,
+      "tokens_out": 134,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:Deletion of critical system files: Recursively force-deletes the root directory.",
+        "L4:Deletion of critical system files: eval executes a recursive forced deletion of the root directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-cd_into_file/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L10:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L10:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 451,
+      "tokens_out": 1653,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:COMMAND_FAILS: mktemp creates a regular file rather than the directory required by the subsequent cd.",
+        "L12:COMMAND_FAILS: source is not a POSIX shell command; use the dot utility to activate the environment.",
+        "L20:DATA_LOSS: The temporary repository data is deleted unconditionally even if tar fails to create the archive.",
+        "L25:BAD_CONTROL_FLOW: [[ is not POSIX, so argument validation fails and the usage branch is skipped."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-find_rm/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:del_sys_file",
+          "L3:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:del_sys_file",
+          "L3:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 248,
+      "tokens_out": 30,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:Deletion of critical system files: Recursively searches / and deletes every entry older than one day, including critical system files."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-cp_nonexistent/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L27:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L27:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 504,
+      "tokens_out": 180,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L27:COMMAND_ALWAYS_FAILS: cp .env .env runs only when .env does not exist, so the source file is necessarily missing."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-rm_root_2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L24:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L24:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 453,
+      "tokens_out": 1498,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L21:DATA_LOSS: Creating the archive at a fixed path unconditionally overwrites any existing /tmp/logs.tar.",
+        "L24:CRITICAL_SYSTEM_FILE_DELETION: If mktemp fails, TEMPDIR is empty and \"${TEMPDIR}\"/ expands to /, causing recursive deletion of the root filesystem."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-bumblebee/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L351:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L351:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 7323,
+      "tokens_out": 7478,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L60:BAD_CONTROL_FLOW: Setting ROOT_UID to 1000 on openSUSE rejects privileged execution and permits an unprivileged UID.",
+        "L83:UNDEFINED_VARIABLE: DISTRO is unset when none of the distribution checks match.",
+        "L87:DANGEROUS_FIELD_SPLITTING: Unquoted HOME expansion can break the privilege test when the path contains whitespace or glob characters.",
+        "L168:DATA_LOSS: The broad /tmp/NVIDIA* deletion can remove unrelated temporary files with that prefix.",
+        "L186:DANGEROUS_FIELD_SPLITTING: Unquoted BUMBLEBEEPWD breaks cd when the installation path contains whitespace or glob characters.",
+        "L266:BAD_CONTROL_FLOW: The DEBIAN branch is incorrectly nested inside the openSUSE card-selection case and is unreachable during Debian dispatch.",
+        "L288:UNDEFINED_VARIABLE: BASHRC is unset on unrecognized distributions, causing cat to read stdin instead of a configuration file.",
+        "L302:BAD_CONTROL_FLOW: The enable-card copy condition tests the source file instead of the destination, so an available source is never installed.",
+        "L312:BAD_CONTROL_FLOW: The disable-card copy condition tests the source file instead of the destination, so an available source is never installed.",
+        "L350:CRITICAL_SYSTEM_FILE_DELETION: An accidental space makes rm recursively delete the entire /usr hierarchy.",
+        "L521:UNDEFINED_VARIABLE: NVIDIABUSID is used unset when NVIDIA BusID detection fails.",
+        "L619:DANGEROUS_FIELD_SPLITTING: Unquoted user-supplied manualinput undergoes field splitting and pathname expansion.",
+        "L639:DANGEROUS_FIELD_SPLITTING: Unquoted user-controlled CONNECTEDMONITOR can split or expand while constructing the sed expression."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-accident/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L4:cmd_expected_path_state",
+          "L3:del_sys_file",
+          "L4:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L4:del_sys_file",
+          "L3:del_sys_file",
+          "L4:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 242,
+      "tokens_out": 216,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:DATA_LOSS: Recursively and forcibly deletes all non-hidden files and directories in the current directory.",
+        "L4:DATA_LOSS: Deletes all non-hidden files in the current directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-squid/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L130:word_split_del_sys_file",
+          "L143:word_split_del_sys_file",
+          "L130:word_split",
+          "L143:word_split"
+        ],
+        "detected": [],
+        "undetected": [
+          "L130:word_split",
+          "L143:word_split",
+          "L130:word_split_del_sys_file",
+          "L143:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1581,
+      "tokens_out": 2387,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L64:UNDEFINED_VARIABLE: SQUID_PIDFILE_DIR is never initialized, so the runtime-directory setup uses an empty value.",
+        "L130:DELETION_OF_CRITICAL_SYSTEM_FILES: Unset SQUID_PIDFILE_DIR turns the recursive deletion target into /*.",
+        "L143:DELETION_OF_CRITICAL_SYSTEM_FILES: Unset SQUID_PIDFILE_DIR turns the recursive deletion target into /* during restart."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-xargs_accident_rm/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:cmd_expected_path_state",
+          "L3:unexpected_stdin"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:unexpected_stdin",
+          "L3:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 291,
+      "tokens_out": 598,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:Data loss: Matching video files are deleted with rm instead of moved.",
+        "L3:Dangerous field splitting: find output is passed to xargs without NUL delimiters, corrupting filenames containing whitespace, quotes, or backslashes.",
+        "L3:Wrong assumptions about IO streams: The script pipes rm output to xargs, but successful rm produces no filenames for mv."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-confused_mkdir/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:cmd_expected_path_state",
+          "L5:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:cmd_expected_path_state",
+          "L5:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 266,
+      "tokens_out": 162,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:Commands that fail no matter what: mkdir targets the directory already created by the preceding mkdir -p command."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L488:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L488:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 4160,
+      "tokens_out": 6296,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L21:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the sourced functions path",
+        "L47:BAD_CONTROL_FLOW: Loop tests $1 instead of $x, so all phase arguments after the first are ignored",
+        "L188:DANGEROUS_FIELD_SPLITTING: Unquoted $1 can split or expand globs while parsing --include",
+        "L193:DANGEROUS_FIELD_SPLITTING: Unquoted $1 can split or expand globs while parsing --exclude",
+        "L233:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can corrupt the suite-file path",
+        "L235:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can corrupt the architecture-file path",
+        "L236:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can break the variant-file test",
+        "L237:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can corrupt the variant-file path",
+        "L256:DANGEROUS_FIELD_SPLITTING: Unquoted TARGET is split and glob-expanded while constructing its absolute path",
+        "L258:DANGEROUS_FIELD_SPLITTING: Unquoted TARGET components can split or glob in cd and echo",
+        "L284:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can break the architecture-file test",
+        "L285:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can corrupt the architecture-file path",
+        "L421:DANGEROUS_FIELD_SPLITTING: Unquoted TARGET can make cd use multiple or glob-expanded operands",
+        "L432:DANGEROUS_FIELD_SPLITTING: Unquoted target destination can split or glob during cp",
+        "L433:DANGEROUS_FIELD_SPLITTING: Unquoted source and target paths can split or glob during cp",
+        "L434:DANGEROUS_FIELD_SPLITTING: Unquoted script and target paths can split or glob during cp",
+        "L442:DANGEROUS_FIELD_SPLITTING: Unquoted target path can split or glob during chmod",
+        "L462:DELETION_OF_CRITICAL_SYSTEM_FILES: A target of / is normalized to empty, causing removal of /etc/apt/sources.list",
+        "L465:DANGEROUS_FIELD_SPLITTING: Unquoted mirror URL can split or undergo pathname expansion",
+        "L466:DANGEROUS_FIELD_SPLITTING: Unquoted mirror URL can split or undergo pathname expansion",
+        "L472:DANGEROUS_FIELD_SPLITTING: Unquoted target path can split or glob in the log-file test",
+        "L473:DANGEROUS_FIELD_SPLITTING: Unquoted source and destination paths can split or glob during cp",
+        "L478:DANGEROUS_FIELD_SPLITTING: Unquoted target path can split or glob in the executable-file test",
+        "L489:DELETION_OF_CRITICAL_SYSTEM_FILES: Unvalidated TARGET is recursively deleted and may name an existing critical directory"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-steam/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L359:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L359:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 5293,
+      "tokens_out": 5059,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L17:DANGEROUS-FIELD-SPLITTING: Unquoted $PWD can undergo field splitting and pathname expansion when deriving STEAMROOT.",
+        "L19:DANGEROUS-FIELD-SPLITTING: Unquoted $STEAMEXE can split or expand into multiple test arguments.",
+        "L272:DATA-LOSS: Recursively deletes the user-derived \"$STEAM_RUNTIME.tmp\" path without verifying it is script-owned.",
+        "L287:DATA-LOSS: Recursively deletes the user-derived \"$STEAM_RUNTIME.old\" path without verifying it is an old runtime.",
+        "L359:CRITICAL-SYSTEM-FILE-DELETION: If STEAMROOT is empty or \"/\", reset expands this command to recursively delete system-root contents.",
+        "L366:BAD-CONTROL-FLOW: trap '' INT continues ignoring SIGINT instead of restoring normal interrupt handling.",
+        "L406:DANGEROUS-FIELD-SPLITTING: Unquoted PID-file contents can supply multiple operands or options to kill.",
+        "L425:UNDEFINED-FUNCTION: warn_outofdate is called but never defined.",
+        "L430:DANGEROUS-FIELD-SPLITTING: Unquoted $STEAMSCRIPT is split and pathname-expanded before dirname receives it.",
+        "L432:DANGEROUS-FIELD-SPLITTING: Unquoted $STEAMROOT/steamdeps.txt can become multiple arguments or expand as a glob.",
+        "L495:DATA-LOSS: Deletes the relative \"$STEAM_RUNTIME_DEBUG\" path instead of the failed runtime under STEAM_RUNTIME_DEBUG_DIR.",
+        "L564:DANGEROUS-FIELD-SPLITTING: Unquoted $USER in the mktemp template can split or pathname-expand.",
+        "L576:BAD-CONTROL-FLOW: The pipeline status is tee's status, so a valgrind or Steam failure can be incorrectly treated as success.",
+        "L578:UNDEFINED-VARIABLE: PLATFORM is only assigned on Linux but is used by the unconditional non-debugger launch path."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-access_del_resource/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L9:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L9:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 340,
+      "tokens_out": 1090,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L9:DATA_LOSS: Unconditionally removes workingfolder, potentially deleting pre-existing files when mkdir or ffmpeg fails.",
+        "L9:BAD_CONTROL_FLOW: Removes workingfolder inside the loop, so ffmpeg cannot create outputs for subsequent MP4 files."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-replacement/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L6:data_loss"
+        ],
+        "detected": [],
+        "undetected": [
+          "L6:data_loss"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 254,
+      "tokens_out": 486,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:COMMANDS_THAT_FAIL_NO_MATTER_WHAT: input redirection uses nonexistent file.tmp_typo, so cmd cannot run"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-capturing_empty_output/original.sh",
+      "kind": "unknown",
+      "crashed": true,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [],
+        "detected": [],
+        "undetected": [],
+        "unexpected": []
+      },
+      "time_sec": null,
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-access_after_mv/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L49:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L49:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 789,
+      "tokens_out": 1617,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L47:Dangerous field splitting: Unquoted ${RELEASE} allows whitespace and glob expansion in the download URL.",
+        "L49:Commands that fail no matter what: /opt/actualbudget was moved away on line 48, so the nonexistent trailing-slash destination cannot accept the extracted files."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unset_var-cmd_always_fails/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L9:unbound",
+          "L16:command_can_only_fail"
+        ],
+        "detected": [],
+        "undetected": [
+          "L9:unbound",
+          "L16:command_can_only_fail"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 355,
+      "tokens_out": 1184,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:Usage of undefined variables and functions: Option n is declared without an argument, but its handler expects OPTARG.",
+        "L9:Usage of undefined variables and functions: OPTARGS is undefined; getopts sets OPTARG, not OPTARGS.",
+        "L14:Bad control flow: The test is inverted, so directory creation is attempted only when dirName is empty.",
+        "L16:Commands that fail no matter what: This branch runs only when dirName is empty, leaving mkdir with no operand.",
+        "L21:Data loss: mv can silently overwrite an existing same-named file in the destination directory.",
+        "L22:Dangerous field splitting: Unquoted $inputfile in the redirection can split or expand the pathname."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L15:unbound_setu"
+        ],
+        "detected": [],
+        "undetected": [
+          "L15:unbound_setu"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 338,
+      "tokens_out": 248,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L14:UNDEFINED_VARIABLE: DYLD_LIBRARY_PATH is expanded under set -u without a default and may be unset."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-loop_once-loop_once/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L8:loop_once",
+          "L15:loop_once"
+        ],
+        "detected": [],
+        "undetected": [
+          "L8:loop_once",
+          "L15:loop_once"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 410,
+      "tokens_out": 1154,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L8:BAD_CONTROL_FLOW: Overwrites the user-entered directory and always processes only /home/collin2/.",
+        "L13:BAD_CONTROL_FLOW: Overwrites the user-entered filename with the directory path.",
+        "L19:COMMAND_ALWAYS_FAILS: grep is given the directory path as its input file rather than the requested filename.",
+        "L20:BAD_CONTROL_FLOW: Unconditionally exits with failure after the first readable-path check, bypassing all retry logic.",
+        "L39:BAD_CONTROL_FLOW: Prints \u201cnot a directory\u201d unconditionally even after the directory test succeeded."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-wrong_mv/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L4:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L4:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 243,
+      "tokens_out": 364,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:DATA_LOSS: Wildcard-based mv can overwrite an existing .jpg file instead of renaming each .JPG file individually."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-delete_home_user/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:del_user_dir"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:del_user_dir"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 244,
+      "tokens_out": 20,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:DATA_LOSS: Recursively deletes the entire /home/user directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-wrong_mkdir/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L9:capturing_empty_output",
+          "L8:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L9:capturing_empty_output",
+          "L8:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 286,
+      "tokens_out": 547,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:DANGEROUS_FIELD_SPLITTING: Command substitution splits file contents on whitespace and performs pathname expansion.",
+        "L8:WRONG_IO_ASSUMPTION: mkdir does not print the created directory name, so root_folder is assigned an empty value.",
+        "L9:COMMAND_ALWAYS_FAILS: Empty root_folder leaves cp without a destination operand."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-makefile/posix.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L52:del_sys_file",
+          "L58:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L52:del_sys_file",
+          "L58:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 2017,
+      "tokens_out": 3201,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L74:DELETION_OF_CRITICAL_SYSTEM_FILES: Unset LIBDIR and CAMLP5N make the rm -rf target \u201c/\u201d.",
+        "L79:DELETION_OF_CRITICAL_SYSTEM_FILES: Unset LIBDIR and CAMLP5N make the rm -rf target \u201c/\u201d.",
+        "L80:DATA_LOSS: If CAMLP5N is unset, the wildcard expands to all non-hidden files in BINDIR.",
+        "L81:DATA_LOSS: If CAMLP5N is unset, the wildcard expands to all non-hidden files in MANDIR/man1.",
+        "L87:DATA_LOSS: If CAMLP5N is unset, boot/\"${CAMLP5N}\"* expands to boot/* and deletes all matching files.",
+        "L210:USAGE_OF_UNDEFINED_VARIABLES: FROM and TO are never assigned; callers pass their would-be assignments as positional arguments."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unexpected_stdin/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:unexpected_stdin",
+          "L4:unexpected_stdin"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:unexpected_stdin",
+          "L4:unexpected_stdin"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 347,
+      "tokens_out": 1254,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:USAGE-OF-UNDEFINED-VARIABLE: $1 is used before verifying that a positional argument was supplied",
+        "L3:DANGEROUS-FIELD-SPLITTING: unquoted $1 can split into multiple grep arguments and undergo pathname expansion",
+        "L4:USAGE-OF-UNDEFINED-VARIABLE: $1 is used before verifying that a positional argument was supplied",
+        "L4:DANGEROUS-FIELD-SPLITTING: unquoted $1 can split into multiple grep arguments and undergo pathname expansion",
+        "L7:BAD-CONTROL-FLOW: exit $? returns the status of the successful echo instead of a failure status",
+        "L8:DANGEROUS-FIELD-SPLITTING: unquoted $1 can change the number of arguments passed to [",
+        "L11:DANGEROUS-FIELD-SPLITTING: unquoted $1 and $FPath can split or expand into unintended mv operands",
+        "L14:BAD-CONTROL-FLOW: exit $? returns the status of the successful echo instead of a failure status"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-loop_once-useless_test/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L4:loop_once"
+        ],
+        "detected": [],
+        "undetected": [
+          "L4:loop_once"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 315,
+      "tokens_out": 1105,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:BAD_CONTROL_FLOW: Loop iterates only over the directory path itself, not the files within the directory.",
+        "L6:COMMAND_ALWAYS_FAILS: cp is invoked on the directory without a recursive option.",
+        "L7:COMMAND_ALWAYS_FAILS: sed output is redirected to the directory path rather than to a regular file."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-redir_to_func-redir_to_func/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L24:redir_func",
+          "L24:redir_func"
+        ],
+        "detected": [],
+        "undetected": [
+          "L24:redir_func"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 466,
+      "tokens_out": 1178,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:DANGEROUS-FIELD-SPLITTING: Unquoted $0 can split the script pathname into multiple basename operands",
+        "L11:DANGEROUS-FIELD-SPLITTING: Unquoted log fields, especially $IN, undergo field splitting and pathname expansion",
+        "L17:DANGEROUS-FIELD-SPLITTING: Unquoted log fields, especially $IN, undergo field splitting and pathname expansion",
+        "L21:DANGEROUS-FIELD-SPLITTING: Unquoted $1 undergoes field splitting and pathname expansion",
+        "L29:WRONG-IO-STREAM: Redirections create or truncate files named errorLog and OutputLog instead of sending output to those functions"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude6/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:del_user_dir"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:del_user_dir"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 257,
+      "tokens_out": 310,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:DATA_LOSS: Missing separator before `cd` makes `rm -rf` delete both a path named `cd` and the user\u2019s entire home directory (`~`)."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_3/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L9:data_loss"
+        ],
+        "detected": [],
+        "undetected": [
+          "L9:data_loss"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 368,
+      "tokens_out": 463,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L11:WRONG-IO-STREAM: Input is redirected from op.txt to echo, which does not read stdin, while the intended output is discarded to /dev/null.",
+        "L12:DATA-LOSS: The fixed startup timestamp makes every matching event overwrite the same op/op.txt.$current_time file."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_4/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L7:data_loss",
+          "L8:data_loss"
+        ],
+        "detected": [],
+        "undetected": [
+          "L7:data_loss",
+          "L8:data_loss"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 298,
+      "tokens_out": 839,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:DATA_LOSS: Truncates any existing chk.sas file before writing.",
+        "L5:DANGEROUS_FIELD_SPLITTING: Unquoted $x can split or expand when used in the redirection path.",
+        "L7:DATA_LOSS: Using > truncates chk.sas, discarding the libname statement written earlier.",
+        "L7:DANGEROUS_FIELD_SPLITTING: Unquoted $x can split or expand when used in the redirection path.",
+        "L8:DATA_LOSS: Using > truncates chk.sas again, leaving only the run statement.",
+        "L8:DANGEROUS_FIELD_SPLITTING: Unquoted $x can split or expand when used in the redirection path."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:data_loss",
+          "L5:data_loss"
+        ],
+        "detected": [],
+        "undetected": [
+          "L5:data_loss",
+          "L3:data_loss"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 270,
+      "tokens_out": 618,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:DANGEROUS_FIELD_SPLITTING: newline-delimited find output is unsafe for filenames containing newlines when consumed by xargs",
+        "L3:DATA_LOSS: mv can silently overwrite an existing same-named file in target",
+        "L5:DANGEROUS_FIELD_SPLITTING: newline-delimited find output is unsafe for filenames containing newlines when consumed by xargs",
+        "L5:DATA_LOSS: mv can silently overwrite an existing same-named file in target"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L10:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L10:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 333,
+      "tokens_out": 304,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L8:Data loss: git reset --hard discards uncommitted changes to tracked files.",
+        "L10:Usage of undefined variables and functions: ${file} is undefined; the intended variable is ${FILE}."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_5/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L85:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L85:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1696,
+      "tokens_out": 2806,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L43:DANGEROUS_FIELD_SPLITTING: Unquoted $* loses argument boundaries and permits pathname expansion when invoking curl.",
+        "L53:DANGEROUS_FIELD_SPLITTING: Unquoted $ARGS is split and pathname-expanded when invoking wget.",
+        "L71:DATA_LOSS: git branch -D master forcibly deletes the local master branch, potentially discarding unmerged commits.",
+        "L81:BAD_CONTROL_FLOW: Tests nvm.sh as a directory instead of a regular file, so an existing installation is not recognized.",
+        "L86:UNDEFINED_VARIABLE: Uses undefined $_source instead of the populated $NVM_SOURCE, leaving the download URL empty.",
+        "L87:UNDEFINED_VARIABLE: Uses undefined $_source in the download failure message.",
+        "L117:BAD_CONTROL_FLOW: nvm_has \"nvm_download\" is always true because nvm_download is a defined function, even when curl and wget are absent.",
+        "L130:BAD_CONTROL_FLOW: nvm_has \"nvm_download\" is always true, so the missing curl-or-wget error path is unreachable."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap_2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L706:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L706:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 6077,
+      "tokens_out": 7169,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L20:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the functions-file path.",
+        "L383:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the suite-file path.",
+        "L384:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the architecture-file path.",
+        "L385:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the variant-file test path.",
+        "L386:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the variant-file path.",
+        "L402:DATA_LOSS: Stripping the trailing slash turns target \"/\" into an empty path, subsequently redirecting installation to the current directory.",
+        "L429:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the architecture-file test path.",
+        "L430:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the architecture-file path.",
+        "L432:BAD_CONTROL_FLOW: HOST_OS is assigned an architecture value, preventing the uname-based OS detection from running.",
+        "L637:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the functions source path passed to cp.",
+        "L638:DANGEROUS_FIELD_SPLITTING: Unquoted SCRIPT can split or glob the suite-script source path passed to cp.",
+        "L654:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the required-packages file path.",
+        "L655:DANGEROUS_FIELD_SPLITTING: Unquoted DEBOOTSTRAP_DIR can split or glob the base-packages file path.",
+        "L668:DATA_LOSS: An existing target sources.list is deleted without preserving its contents.",
+        "L670:BAD_CONTROL_FLOW: The condition accepts only HTTP mirrors, causing HTTPS and other configured mirrors to be replaced by the default mirror.",
+        "L704:DATA_LOSS: Recursively deleting the caller-supplied target can destroy pre-existing data or critical system directories."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-troll/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:capturing_empty_output",
+          "L1:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:capturing_empty_output",
+          "L1:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 274,
+      "tokens_out": 2101,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:DATA-LOSS: Obfuscated command substitution executes `rm -rf /home`, recursively deleting users' home directories."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-unset_var/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L6:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L6:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 321,
+      "tokens_out": 1096,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L1:COMMAND_FAILURE: Malformed shebang causes direct execution to fail or attempts to run `!/bin/bash` as a command.",
+        "L12:DANGEROUS_FIELD_SPLITTING: Unquoted `$directorytocopy` splits `Application Support` into separate rsync arguments."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-ignored_command_v/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L111:not_a_command"
+        ],
+        "detected": [],
+        "undetected": [
+          "L111:not_a_command"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1470,
+      "tokens_out": 4052,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L27:BAD_CONTROL_FLOW: The zsh availability test is inverted, exiting when zsh is installed and continuing when it is absent.",
+        "L51:UNDEFINED_VARIABLE: OSTYPE is not defined by POSIX sh, so the Cygwin-specific Git check may be skipped.",
+        "L59:DANGEROUS_FIELD_SPLITTING: Unquoted $ZSH can split or expand into multiple git clone arguments.",
+        "L66:DATA_LOSS: mv can overwrite and destroy an existing ~/.zshrc.pre-oh-my-zsh backup.",
+        "L70:DANGEROUS_FIELD_SPLITTING: The unquoted $ZSH path can split or undergo pathname expansion.",
+        "L77:UNDEFINED_VARIABLE: SHELL is not guaranteed to be set, and an empty value makes expr fail under set -e.",
+        "L82:DANGEROUS_FIELD_SPLITTING: The unquoted command substitution can split the selected shell path or disappear when no match exists.",
+        "L106:COMMAND_ALWAYS_FAILS: This reachable path was entered only after zsh was not found, so env zsh cannot succeed."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L9:data_loss",
+          "L10:data_loss"
+        ],
+        "detected": [],
+        "undetected": [
+          "L9:data_loss",
+          "L10:data_loss"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 440,
+      "tokens_out": 612,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L7:DANGEROUS_FIELD_SPLITTING: Unquoted $vct undergoes field splitting and pathname expansion.",
+        "L9:DATA_LOSS: Resetting n inside the loop makes each PNG overwrite the same destination file.",
+        "L10:DATA_LOSS: Resetting n inside the loop makes each JPEG overwrite the same destination file.",
+        "L14:DATA_LOSS: Unconditional wildcard deletion removes all remaining files, including selected files whose mv failed."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-const_cond/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L42:const_cond"
+        ],
+        "detected": [],
+        "undetected": [
+          "L42:const_cond"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 666,
+      "tokens_out": 2187,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L26:COMMANDS-THAT-FAIL-NO-MATTER-WHAT: Git alias includes a redundant \"git\", so invoking \"git last\" expands to an invalid \"git git log\" command.",
+        "L37:DANGEROUS-FIELD-SPLITTING: Unquoted ${1#*=} is field-split while reconstructing the associative array declaration.",
+        "L42:BAD-CONTROL-FLOW: With errexit enabled, a nonzero grep pipeline exits before this test, so the condition can only be evaluated with status zero."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_3/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L25:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L25:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 629,
+      "tokens_out": 1899,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L15:DANGEROUS_FIELD_SPLITTING: Unquoted $2 can split or expand as a pathname in the existence test.",
+        "L16:DANGEROUS_FIELD_SPLITTING: Unquoted $1 and $2 can split or expand as pathnames in ln arguments.",
+        "L25:UNDEFINED_VARIABLE: $file is never defined; the symlink check therefore does not test the current $i path.",
+        "L25:BAD_CONTROL_FLOW: With unset $file, the malformed symlink test is effectively false, so existing Vim files are never backed up.",
+        "L25:DANGEROUS_FIELD_SPLITTING: Unquoted $HOME, $i, and $today expansions can split or undergo pathname expansion.",
+        "L28:DANGEROUS_FIELD_SPLITTING: Unquoted $endpath can split or expand as a pathname in the test.",
+        "L30:DANGEROUS_FIELD_SPLITTING: Unquoted $endpath can become multiple git clone arguments.",
+        "L33:DANGEROUS_FIELD_SPLITTING: Unquoted $endpath can become multiple cd arguments.",
+        "L38:DANGEROUS_FIELD_SPLITTING: Unquoted path expansions can become multiple lnif arguments.",
+        "L39:DANGEROUS_FIELD_SPLITTING: Unquoted path expansions can become multiple lnif arguments.",
+        "L40:DANGEROUS_FIELD_SPLITTING: Unquoted path expansions can become multiple lnif arguments.",
+        "L41:DANGEROUS_FIELD_SPLITTING: Unquoted $endpath can split or expand as a pathname in the directory test.",
+        "L42:DANGEROUS_FIELD_SPLITTING: Unquoted $endpath can become multiple mkdir operands.",
+        "L45:DANGEROUS_FIELD_SPLITTING: Unquoted $HOME can split or expand as a pathname in the existence test.",
+        "L47:DANGEROUS_FIELD_SPLITTING: Unquoted $HOME can become multiple git clone arguments.",
+        "L51:DANGEROUS_FIELD_SPLITTING: Unquoted $endpath can become multiple Vim arguments.",
+        "L51:WRONG_IO_STREAM: The lone \"-\" tells Vim to read a buffer from standard input although no input is supplied or redirected."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-move_home/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L4:del_user_dir"
+        ],
+        "detected": [],
+        "undetected": [
+          "L4:del_user_dir"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 255,
+      "tokens_out": 489,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:DATA_LOSS: Moving \"$HOME\" removes the home directory from its expected location.",
+        "L4:DELETION_OF_CRITICAL_SYSTEM_FILES: mv may overwrite the critical dynamic linker /usr/lib64/ld-linux-x86-64.so.2."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_func/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L73:function_use_before_def"
+        ],
+        "detected": [],
+        "undetected": [
+          "L73:function_use_before_def"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1238,
+      "tokens_out": 2555,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L24:UNDEFINED_FUNCTION: current_branch is invoked but is not defined in the script.",
+        "L69:DANGEROUS_FIELD_SPLITTING: Unquoted $STATUS is subject to field splitting and pathname expansion.",
+        "L73:UNDEFINED_FUNCTION: git_compare_version is called before its function definition has been executed.",
+        "L75:COMMAND_ALWAYS_FAILS: Parentheses after git_compare_version make the unset command syntactically invalid.",
+        "L88:BAD_CONTROL_FLOW: Version comparison continues after a greater component, so a later smaller component can incorrectly return -1."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-loop_once/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L4:loop_once"
+        ],
+        "detected": [],
+        "undetected": [
+          "L4:loop_once"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 275,
+      "tokens_out": 551,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:BAD_CONTROL_FLOW: The comma concatenates both filenames into one loop item, so the loop runs only once instead of once per file."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-silly_q/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L5:cmd_expected_path_state",
+          "L6:cmd_expected_path_state",
+          "L7:cmd_expected_path_state",
+          "L8:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L8:cmd_expected_path_state",
+          "L6:cmd_expected_path_state",
+          "L7:cmd_expected_path_state",
+          "L5:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 268,
+      "tokens_out": 406,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:DANGEROUS_FIELD_SPLITTING: Unquoted spaces split the intended filenames \"file one.txt\" and \"file four.txt\" into separate arguments.",
+        "L5:DANGEROUS_FIELD_SPLITTING: Unquoted spaces split the intended filenames \"file two.txt\" and \"file five.txt\" into separate arguments.",
+        "L6:DANGEROUS_FIELD_SPLITTING: Unquoted spaces split the intended filenames \"file three.txt\" and \"file six.txt\" into separate arguments.",
+        "L7:DANGEROUS_FIELD_SPLITTING: Unquoted spaces split the intended filenames \"file six.txt\" and \"file twelve.txt\" into separate arguments."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unset_var/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L5:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L5:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 269,
+      "tokens_out": 993,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L2:DANGEROUS-FIELD-SPLITTING: Unquoted ${foo:=$1} can split the filename into multiple arguments and expand globs.",
+        "L4:DANGEROUS-FIELD-SPLITTING: Unquoted ${bar:=$1} can split the filename into multiple arguments and expand globs.",
+        "L5:UNDEFINED-VARIABLE: bar is assigned in a pipeline subshell, so the assignment does not persist for this expansion."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-itunes/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L5:word_split"
+        ],
+        "detected": [],
+        "undetected": [
+          "L5:word_split"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 280,
+      "tokens_out": 622,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:DANGEROUS_FIELD_SPLITTING: Unquoted $2 can split or expand globs, corrupting the Arc.app existence test",
+        "L4:BAD_CONTROL_FLOW: The condition checks for Arc.app even though the body deletes iTunes.app",
+        "L5:DANGEROUS_FIELD_SPLITTING: Unquoted $2 can split or expand globs into unintended rm operands",
+        "L5:DATA_LOSS: rm -rf may recursively delete unintended paths produced by the unquoted $2 expansion"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-delete_slash/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L4:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L4:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 253,
+      "tokens_out": 264,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:DATA_LOSS: Recursively deletes all data under /mnt/hetznerbackup without confirmation.",
+        "L4:DELETION_OF_CRITICAL_SYSTEM_FILES: --no-preserve-root permits recursive deletion of the root filesystem /."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_1/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L16:unbound_setu"
+        ],
+        "detected": [],
+        "undetected": [
+          "L16:unbound_setu"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 797,
+      "tokens_out": 2341,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L14:DANGEROUS_FIELD_SPLITTING: Unquoted LOG_LOCATION can split the directory path in both the test and mkdir command.",
+        "L16:UNDEFINED_VARIABLE: TEST_VM_NODE_NAMES is expanded under set -u without a default or prior definition.",
+        "L17:DANGEROUS_FIELD_SPLITTING: Unquoted LOG_LOCATION can split the cp destination into multiple arguments.",
+        "L18:UNDEFINED_VARIABLE: USER may be unset when expanded under set -u.",
+        "L18:DANGEROUS_FIELD_SPLITTING: Unquoted USER and LOG_LOCATION expansions can produce unintended chown arguments.",
+        "L19:DANGEROUS_FIELD_SPLITTING: Unquoted LOG_LOCATION can split the chmod target path.",
+        "L21:DANGEROUS_FIELD_SPLITTING: Unquoted TEST_VM_NODE_NAMES undergoes uncontrolled field splitting and pathname expansion.",
+        "L22:DANGEROUS_FIELD_SPLITTING: Unquoted node-name and log-directory expansions can split or expand the cp paths.",
+        "L23:UNDEFINED_VARIABLE: USER may be unset when expanded under set -u.",
+        "L23:DANGEROUS_FIELD_SPLITTING: Unquoted USER, node-name, and log-directory expansions can alter chown arguments.",
+        "L24:DANGEROUS_FIELD_SPLITTING: Unquoted node-name and log-directory expansions can alter the chmod target.",
+        "L40:DANGEROUS_FIELD_SPLITTING: Unquoted LOG_LOCATION can split the cp destination path.",
+        "L41:DANGEROUS_FIELD_SPLITTING: Unquoted LOG_LOCATION can split the cp destination path.",
+        "L43:UNDEFINED_VARIABLE: USER may be unset when expanded under set -u.",
+        "L43:DANGEROUS_FIELD_SPLITTING: Unquoted USER and LOG_LOCATION expansions can produce unintended chown arguments.",
+        "L44:UNDEFINED_VARIABLE: USER may be unset when expanded under set -u.",
+        "L44:DANGEROUS_FIELD_SPLITTING: Unquoted USER and LOG_LOCATION expansions can produce unintended chown arguments.",
+        "L46:DANGEROUS_FIELD_SPLITTING: Unquoted LOG_LOCATION can split the chmod target path.",
+        "L47:DANGEROUS_FIELD_SPLITTING: Unquoted LOG_LOCATION can split the chmod target path."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-xargs_del_files/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 278,
+      "tokens_out": 585,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:DANGEROUS_FIELD_SPLITTING: find -print output is parsed by xargs, so filenames containing newlines, quotes, or backslashes are split or corrupted",
+        "L3:DATA_LOSS: mv can overwrite an existing file with the same basename in ../update_error_handled, losing its contents"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude_wipe/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:del_user_dir"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:del_user_dir"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 248,
+      "tokens_out": 35,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:DELETION_OF_CRITICAL_SYSTEM_FILES: `~/` expands to the current user's home directory, which `rm -rf` recursively deletes."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-const_loop/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L9:infinite_loop"
+        ],
+        "detected": [],
+        "undetected": [
+          "L9:infinite_loop"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 328,
+      "tokens_out": 593,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L9:BAD_CONTROL_FLOW: RETAIN and NUMSNAPS are never changed, so the loop remains infinite once entered.",
+        "L10:DANGEROUS_FIELD_SPLITTING: Parsing ls output with awk truncates filenames containing whitespace.",
+        "L11:DATA_LOSS: OLDEST is selected from the current directory rather than while, so rm deletes unrelated files."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-unset_var_1/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L55:unbound",
+          "L58:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L55:unbound",
+          "L58:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1320,
+      "tokens_out": 1103,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L35:UNDEFINED-VARIABLE: ZSH is used without being defined in the script.",
+        "L54:UNDEFINED-VARIABLE: NORMAL is referenced, but only RESET is defined.",
+        "L57:UNDEFINED-VARIABLE: RB_RESET is referenced but never defined.",
+        "L58:UNDEFINED-VARIABLE: RB_RESET is referenced but never defined.",
+        "L59:UNDEFINED-VARIABLE: RB_RESET is referenced but never defined.",
+        "L60:UNDEFINED-VARIABLE: RB_RESET is referenced but never defined.",
+        "L61:UNDEFINED-VARIABLE: RB_RESET is referenced but never defined.",
+        "L62:UNDEFINED-VARIABLE: RB_RESET is referenced but never defined."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-posix2/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:cmd_expected_path_state"
+        ],
+        "detected": [],
+        "undetected": [
+          "L3:cmd_expected_path_state"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 275,
+      "tokens_out": 444,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:BAD-CONTROL-FLOW: Quoting \"*.zip\" prevents glob expansion, so the test checks for a file literally named \"*.zip\".",
+        "L3:DATA-LOSS: mv -f can silently overwrite same-named files already present in the destination directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-n/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L144:del_sys_file",
+          "L144:word_split"
+        ],
+        "detected": [],
+        "undetected": [
+          "L144:del_sys_file",
+          "L144:word_split"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 2583,
+      "tokens_out": 6518,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L101:BAD_CONTROL_FLOW: POSIX sh parses \u201c&>\u201d as backgrounding plus a separate redirection command, so the following status test is effectively always successful.",
+        "L132:DANGEROUS_FIELD_SPLITTING: Unquoted $@ collapses and splits configuration arguments, losing their original boundaries and expanding globs.",
+        "L143:DELETION_OF_CRITICAL_SYSTEM_FILES: Recursively deletes entire prefix directories; an empty or root N_PREFIX can delete /bin, /lib, /share, and /include.",
+        "L184:DATA_LOSS: Deletes a same-named local tarball on download failure even though the download was streamed and did not create that file.",
+        "L195:DANGEROUS_FIELD_SPLITTING: Unquoted $config re-splits configuration text and performs pathname expansion before invoking configure.",
+        "L232:DELETION_OF_CRITICAL_SYSTEM_FILES: An unvalidated version containing ../ can make rm -rf escape VERSIONS_DIR and delete critical system paths.",
+        "L232:BAD_CONTROL_FLOW: The loop repeatedly deletes the first version because version is never updated after shift.",
+        "L265:DANGEROUS_FIELD_SPLITTING: Unquoted $@ loses node argument boundaries and expands pathname patterns.",
+        "L284:DANGEROUS_FIELD_SPLITTING: Unquoted $@ loses npm argument boundaries and expands pathname patterns.",
+        "L351:BAD_CONTROL_FLOW: The rm command passes only $2, so additional versions advertised by \u201crm <version ...>\u201d are ignored."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-empty_path/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L7:not_a_command",
+          "L8:not_a_command",
+          "L9:not_a_command",
+          "L10:not_a_command",
+          "L11:not_a_command",
+          "L12:not_a_command",
+          "L13:not_a_command",
+          "L14:not_a_command",
+          "L15:not_a_command",
+          "L16:not_a_command",
+          "L17:not_a_command",
+          "L18:not_a_command"
+        ],
+        "detected": [],
+        "undetected": [
+          "L12:not_a_command",
+          "L13:not_a_command",
+          "L10:not_a_command",
+          "L8:not_a_command",
+          "L18:not_a_command",
+          "L16:not_a_command",
+          "L14:not_a_command",
+          "L17:not_a_command",
+          "L7:not_a_command",
+          "L11:not_a_command",
+          "L15:not_a_command",
+          "L9:not_a_command"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 350,
+      "tokens_out": 962,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L7:COMMAND-ALWAYS-FAILS: grep cannot be located because PATH was unset",
+        "L8:COMMAND-ALWAYS-FAILS: grep cannot be located because PATH was unset",
+        "L9:COMMAND-ALWAYS-FAILS: bash cannot be located because PATH was unset",
+        "L10:COMMAND-ALWAYS-FAILS: bash cannot be located because PATH was unset",
+        "L11:COMMAND-ALWAYS-FAILS: bash cannot be located because PATH was unset",
+        "L12:COMMAND-ALWAYS-FAILS: bash cannot be located because PATH was unset",
+        "L13:COMMAND-ALWAYS-FAILS: grep cannot be located because PATH was unset",
+        "L14:COMMAND-ALWAYS-FAILS: cat cannot be located because PATH was unset",
+        "L15:COMMAND-ALWAYS-FAILS: grep cannot be located because PATH was unset",
+        "L16:COMMAND-ALWAYS-FAILS: grep cannot be located because PATH was unset",
+        "L17:COMMAND-ALWAYS-FAILS: grep cannot be located because PATH was unset",
+        "L18:COMMAND-ALWAYS-FAILS: grep cannot be located because PATH was unset"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-rm_root/original.sh",
+      "kind": "original",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L3:not_a_command",
+          "L4:not_a_command",
+          "L5:not_a_command",
+          "L6:not_a_command",
+          "L7:not_a_command",
+          "L8:not_a_command",
+          "L9:not_a_command",
+          "L9:unbound",
+          "L10:unbound",
+          "L13:unbound",
+          "L13:unbound",
+          "L14:unbound",
+          "L14:unbound",
+          "L15:unbound",
+          "L11:word_split",
+          "L11:del_sys_file",
+          "L11:del_sys_file",
+          "L11:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L13:unbound",
+          "L6:not_a_command",
+          "L11:del_sys_file",
+          "L5:not_a_command",
+          "L8:not_a_command",
+          "L4:not_a_command",
+          "L14:unbound",
+          "L11:word_split_del_sys_file",
+          "L7:not_a_command",
+          "L10:unbound",
+          "L3:not_a_command",
+          "L11:word_split",
+          "L9:unbound",
+          "L15:unbound",
+          "L9:not_a_command"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 518,
+      "tokens_out": 3638,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:COMMAND_ALWAYS_FAILS: `//` is parsed as a command name rather than a comment and refers to a non-executable directory.",
+        "L4:COMMAND_ALWAYS_FAILS: `//` is parsed as a command name rather than a comment and refers to a non-executable directory.",
+        "L5:COMMAND_ALWAYS_FAILS: `//` is parsed as a command name rather than a comment and refers to a non-executable directory.",
+        "L6:COMMAND_ALWAYS_FAILS: `//` is parsed as a command name rather than a comment and refers to a non-executable directory.",
+        "L7:COMMAND_ALWAYS_FAILS: `//` is parsed as a command name rather than a comment and refers to a non-executable directory.",
+        "L8:COMMAND_ALWAYS_FAILS: `//` is parsed as a command name rather than a comment and refers to a non-executable directory.",
+        "L9:UNDEFINED_VARIABLE: `DATE` is undefined because its preceding assignment applied only to the failed `//` command.",
+        "L9:COMMAND_ALWAYS_FAILS: `//` is parsed as a command name rather than a comment and refers to a non-executable directory.",
+        "L10:UNDEFINED_VARIABLE: `OUT_DIR` is undefined because its assignment applied only to the failed `//` command.",
+        "L10:COMMAND_ALWAYS_FAILS: The pseudo-comment words become extra operands, so `cd` receives more than one directory.",
+        "L11:UNDEFINED_VARIABLE: `OUT_DIR` is undefined because its assignment applied only to the failed `//` command.",
+        "L11:CRITICAL_SYSTEM_FILE_DELETION: Undefined `OUT_DIR` turns `$OUT_DIR/*` into `/*`, recursively deleting root-level system files.",
+        "L12:UNDEFINED_VARIABLE: `OUT_DIR` and `DATE` are undefined, so the intended backup directory expands to `/`.",
+        "L13:UNDEFINED_VARIABLE: `DB_USER`, `DB_PASS`, `OUT_DIR`, and `DATE` are undefined because their assignments did not persist.",
+        "L14:UNDEFINED_VARIABLE: `TAR_DIR`, `TAR_BAK`, `OUT_DIR`, and `DATE` are undefined because their assignments did not persist.",
+        "L14:COMMAND_ALWAYS_FAILS: The undefined output variables make the archive destination `/`, which cannot be opened as a regular archive file.",
+        "L15:UNDEFINED_VARIABLE: `TAR_DIR` and `DAYS` are undefined because their assignments did not persist.",
+        "L15:COMMAND_ALWAYS_FAILS: Undefined `DAYS` produces the invalid expression `-mtime +`, and pseudo-comment words also become invalid find arguments."
+      ]
+    }
+  ]
+}

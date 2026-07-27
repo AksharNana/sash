@@ -1,0 +1,1763 @@
+{
+  "timestamp": "2026-07-24T01:31:50.140534+00:00",
+  "description": "GPT 5.6 Sol; All fixed programs; No error codes in prompt; Reasoning effort high",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*.*",
+  "args": {
+    "fixed": true,
+    "skip_buggy": true,
+    "variants": false,
+    "variants_only": false
+  },
+  "stats": {
+    "num_analyses": 61,
+    "num_successful": 61,
+    "num_crashed": 0,
+    "num_timed_out": 0,
+    "expected_bugs": 0,
+    "detected_bugs": 0,
+    "undetected_bugs": 0,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 116,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 56993,
+    "tokens_out": 239785,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 0.004582165973260999
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude4/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L6:data_loss"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 166,
+      "tokens_out": 46,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude3/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:cmd_expected_path_state",
+          "L6:data_loss"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 203,
+      "tokens_out": 23,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-backup_manager/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L183:const_cond"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 9073,
+      "tokens_out": 21876,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L32:EMPTY_VARIABLE_PATH: When no incremental list is pending, this removes an unrelated .orig file from the current directory.",
+        "L46:INEXACT_CHECKSUM_MATCH: grep treats the archive basename as an unanchored regular expression and can match another archive entry.",
+        "L48:REGEX_INJECTION: The unescaped archive basename is interpolated into a sed regular expression and may alter or invalidate the command.",
+        "L48:NON_POSIX_OPTION: sed -i is not specified by POSIX and is incompatible across sed implementations.",
+        "L128:PARTIAL_ARCHIVE_RETENTION: A failed archive is chowned but not removed, so a later run may mistake the partial file for a completed archive.",
+        "L128:MISSING_STATE_ROLLBACK: Normal archive failures do not restore the saved incremental-list state.",
+        "L170:STREAM_CORRUPTION: Capturing archive output in a shell variable strips trailing newlines and cannot preserve NUL bytes.",
+        "L172:PIPELINE_STATUS_LOSS: Compressor and GPG failures are ignored because only the earlier producer status is checked.",
+        "L172:LOGFILE_TRUNCATION: Multiple pipeline commands open the same logfile with truncating redirections, destroying diagnostics.",
+        "L176:STREAM_CORRUPTION: Capturing archive output in a shell variable strips trailing newlines and cannot preserve NUL bytes.",
+        "L178:PIPELINE_STATUS_LOSS: Compressor failure is ignored because only the earlier producer status is checked.",
+        "L178:LOGFILE_TRUNCATION: The compressor truncates the logfile containing diagnostics from the producer command.",
+        "L203:STREAM_CORRUPTION: Capturing archive output in a shell variable strips trailing newlines and cannot preserve NUL bytes.",
+        "L203:MISSING_ERROR_REDIRECTION: Producer stderr is not redirected to the logfile in this encryption branch.",
+        "L205:PIPELINE_STATUS_LOSS: GPG failure is ignored because exitcode still contains only the producer command's status.",
+        "L244:EMPTY_ARGUMENT: A skipped existing archive sets file_to_create empty but still calls chown_archive with that empty name.",
+        "L258:UNINTENDED_GLOB_EXPANSION: Blacklist patterns are pathname-expanded by the shell before being converted into exclusion options.",
+        "L265:INVALID_PATH_PREFIX_CHECK: A target such as /foo is incorrectly treated as the parent of a blacklist path such as /foobar.",
+        "L365:NON_PORTABLE_DATE: The %-d date conversion is a non-POSIX extension.",
+        "L424:NON_PORTABLE_DATE: date --date is a GNU extension unavailable on conforming POSIX systems.",
+        "L462:STALE_STATE: maxsize is not reset when slicing is disabled, so an inherited or previous value can be reused.",
+        "L472:STALE_STATE: overwrite is not reset when force is false, so an inherited or previous -w value can be reused.",
+        "L486:INEFFECTIVE_ENVIRONMENT: GZIP=-n is restored before the remotely generated tar command executes and is never propagated to the remote host.",
+        "L490:LOST_QUOTING: The apparent quotes around target are consumed while constructing the string, so remote target names containing whitespace are split.",
+        "L494:LOST_QUOTING: The apparent quotes around target are consumed while constructing the string, so remote target names containing whitespace are split.",
+        "L498:LOST_QUOTING: The apparent quotes around target are consumed while constructing the string, so remote target names containing whitespace are split.",
+        "L502:LOST_QUOTING: The apparent quotes around target are consumed while constructing the string, so remote target names containing whitespace are split.",
+        "L637:ERROR_CLASSIFICATION: Tar commands are tagged as generic, so tar status 1 is treated as a fatal error instead of the documented warning case.",
+        "L670:PIPELINE_STATUS_LOSS: POSIX pipeline status reports only GPG, allowing a failed archive command to be committed when GPG succeeds.",
+        "L686:WRONG_FILENAME: The DAR existence check omits the .master component and does not check the actual file_to_create.1.dar path.",
+        "L711:EMPTY_VARIABLE_PATH: For non-incremental backups this can remove an unrelated .orig file from the current directory.",
+        "L712:NON_LOCAL_CONTROL_FLOW: continue inside this helper depends on a caller's loop and has non-portable behavior when no loop encloses the function call.",
+        "L724:TEMPFILE_LEAK: This temporary logfile is overwritten by another mktemp result without ever being removed.",
+        "L739:ERROR_CLASSIFICATION: Remote tar status is checked without setting BM__CURRENT_COMMAND to tar, so status 1 is misclassified.",
+        "L739:MISSING_INTERRUPT_CLEANUP: The remote output file is created without setting bm_pending_archive, so interruption cleanup leaves a partial archive.",
+        "L798:UNSUPPORTED_CASE_OMISSION: Incremental flags are silently omitted for supported tar.bz and tar.lz archive types.",
+        "L833:COMMAND_INJECTION: eval executes shell syntax contained in a configured target instead of performing safe pathname expansion.",
+        "L860:UNSUPPORTED_CASE_OMISSION: Supported tar.bz and tar.lz types do not initialize tar symlink-handling flags.",
+        "L864:SUBSHELL_SIDE_EFFECT_LOSS: Command substitution isolates the function's ZIP and ZIPOPT exports, so they do not affect the zip process.",
+        "L907:CREDENTIAL_MATCH_BYPASS: The [^:]* host and port alternatives match arbitrary values, allowing unrelated .pgpass entries to be accepted.",
+        "L907:REGEX_INJECTION: Unescaped configuration values are interpreted as extended regular-expression syntax.",
+        "L907:SECRET_EXPOSURE: The database password is passed in grep's command-line argument and can be exposed through the process list.",
+        "L911:INVALID_CREDENTIAL_FORMAT: The generated .pgpass entry lacks the required database field.",
+        "L913:MISSING_CLEANUP: The newly created .pgpass branch never records that the credential file must later be removed.",
+        "L915:INVALID_CREDENTIAL_FORMAT: The newly created .pgpass entry lacks the required database field.",
+        "L915:INSECURE_FILE_CREATION: The password file is written before restrictive permissions are applied.",
+        "L969:CONFIG_INJECTION: Quotes, backslashes, or newlines in the MySQL password are not escaped for option-file syntax."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude2/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L4:cmd_expected_path_state",
+          "L5:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 181,
+      "tokens_out": 603,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L2:WRONG-FILE-TYPE-TEST: Uses -f when testing a path that is created and used as a directory; use -d.",
+        "L5:OPTION-INJECTION: The * expansion may produce leading-hyphen filenames that rm interprets as options.",
+        "L5:INCOMPLETE-GLOB: The * glob does not match hidden entries, so the directory is not fully cleared."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude5/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L6:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 173,
+      "tokens_out": 568,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:GLOB_OPTION_INJECTION: Expanded filenames beginning with '-' can be interpreted as additional rm options.",
+        "L5:INCOMPLETE_GLOB: The '*' glob does not match hidden entries, so the directory is not fully cleaned."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-for_mv/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L14:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 288,
+      "tokens_out": 55,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-sc_author/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L2:cmd_expected_path_state",
+          "L2:del_sys_file",
+          "L3:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 167,
+      "tokens_out": 46,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-cd_into_file/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L12:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 367,
+      "tokens_out": 2208,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:NON-POSIX: mktemp and its -d/-q options are not specified by POSIX.",
+        "L11:UNHANDLED-ERROR: The setup command chain's failure status is ignored, so execution continues after any command fails.",
+        "L18:WORKING-DIRECTORY: Returning to the home directory is conditional on every preceding command succeeding.",
+        "L20:UNHANDLED-ERROR: tar failure is ignored, allowing cleanup and success reporting to continue.",
+        "L21:DATA-LOSS: The temporary repository directory is deleted even when archive creation fails.",
+        "L22:FALSE-SUCCESS: Success is reported unconditionally despite possible setup or archive failures."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-find_rm/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:del_sys_file",
+          "L3:word_split_del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 161,
+      "tokens_out": 30,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-cp_nonexistent/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L27:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 408,
+      "tokens_out": 2294,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L8:NONPORTABLE_ECHO: POSIX echo may not interpret the \\033 color escape consistently.",
+        "L14:UNCHECKED_COMMAND_FAILURE: A failed download does not prevent execution of the installer script.",
+        "L15:UNCHECKED_COMMAND_FAILURE: Docker installation failure does not abort the deployment.",
+        "L21:NONPORTABLE_ECHO: POSIX echo may not interpret the \\033 color escape consistently.",
+        "L22:WORKING_DIRECTORY_DEPENDENCE: Git and subsequent project operations run in the caller's directory rather than the script's directory.",
+        "L22:UNCHECKED_COMMAND_FAILURE: A failed git pull does not abort the deployment.",
+        "L27:UNCHECKED_COMMAND_FAILURE: Failure to create .env does not abort the deployment.",
+        "L31:NONPORTABLE_ECHO: POSIX echo may not interpret the \\033 color escape consistently.",
+        "L32:UNCHECKED_COMMAND_FAILURE: A failed docker compose deployment does not prevent a success message and zero final status.",
+        "L34:NONPORTABLE_ECHO: POSIX echo may not interpret the \\033 color escape consistently."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-rm_root_2/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L24:word_split_del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 363,
+      "tokens_out": 3445,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:REDUNDANT_COMMAND: df -lP is executed twice, with the first invocation unnecessarily writing to standard output.",
+        "L7:REDUNDANT_COMMAND: df -lh is executed twice, with the first invocation unnecessarily writing to standard output.",
+        "L10:NON_POSIX_COMMAND_LOOKUP: which is non-standard and unreliable for testing command availability; use command -v.",
+        "L11:NON_POSIX_COMMAND_LOOKUP: which is non-standard and unreliable for testing command availability; use command -v.",
+        "L14:NON_POSIX_COMMAND_LOOKUP: which is non-standard and unreliable for testing command availability; use command -v.",
+        "L18:UNCHECKED_COMMAND_FAILURE: mktemp failure can leave TEMPDIR empty, but execution continues.",
+        "L18:MISSING_CLEANUP_TRAP: No signal/exit trap is installed to remove the temporary directory on interruption.",
+        "L19:UNCHECKED_CD: Failure to enter TEMPDIR is ignored, so data may be written in the caller's current directory.",
+        "L21:INSECURE_TEMP_FILE: The predictable /tmp/logs.tar pathname permits collisions and symlink-based clobbering.",
+        "L21:ABSOLUTE_ARCHIVE_PATH: Archiving TEMPDIR by its absolute pathname creates unsafe or non-portable archive member names.",
+        "L21:UNCHECKED_COMMAND_FAILURE: tar failure does not prevent compression or deletion of the gathered data.",
+        "L22:UNCHECKED_COMMAND_FAILURE: gzip failure does not prevent deletion of the only gathered-data directory.",
+        "L24:MASKED_EXIT_STATUS: A successful rm makes the script report success even when gathering, archiving, or compression failed."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-bumblebee/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L350:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 7272,
+      "tokens_out": 13952,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L61:INCORRECT_PRIVILEGE_CHECK: Setting ROOT_UID to 1000 makes openSUSE reject sudo/root execution and permit an unprivileged user.",
+        "L81:UNHANDLED_CASE: Unsupported distributions are not rejected, leaving DISTRO and BASHRC unset while installation continues.",
+        "L186:UNQUOTED_EXPANSION: Unquoted BUMBLEBEEPWD breaks cd when the installation path contains whitespace or glob characters.",
+        "L266:MISNESTED_CASE: The DEBIAN arm is inside the openSUSE card-selection case, so Debian package installation is never selected by the outer distro case.",
+        "L270:MASKED_EXIT_STATUS: This checks only the xserver-xorg-core reinstall status and can miss failure of the preceding NVIDIA package installation.",
+        "L302:WRONG_FILE_TEST: The existence test checks the source and only copies when it is absent instead of checking /usr/local/bin/bumblebee-enablecard.",
+        "L312:WRONG_FILE_TEST: The existence test checks the source and only copies when it is absent instead of checking /usr/local/bin/bumblebee-disablecard.",
+        "L379:MASKED_EXIT_STATUS: On x86_64 Debian, intervening ln commands overwrite the VirtualGL dpkg exit status before it is checked.",
+        "L405:MASKED_EXIT_STATUS: On x86_64 Fedora, sed overwrites the VirtualGL yum exit status before it is checked.",
+        "L457:WRONG_ARCHITECTURE_FILE: The 32-bit Ubuntu/openSUSE branch installs optirun64 as optirun instead of optirun32.",
+        "L475:WRONG_ARCHITECTURE_FILE: The 32-bit Debian branch installs optirun64 as optirun instead of optirun32.",
+        "L491:INCONSISTENT_CONDITION: The test searches for nvidia-current but the branch appends nvidia, causing missed detection or duplicate entries.",
+        "L527:UNINITIALIZED_VARIABLE: When NVIDIA BusID detection fails, unset NVIDIABUSID removes the placeholder despite instructing the user to correct it manually.",
+        "L537:INVALID_NUMERIC_TEST: A failed or empty nvidia-xconfig query leaves -gt without a left operand.",
+        "L747:INVALID_AUTOSTART_FILE: GNOME XDG autostart requires a .desktop entry, not a symlink to this shell script."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-accident/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L4:cmd_expected_path_state",
+          "L3:del_sys_file",
+          "L4:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 154,
+      "tokens_out": 228,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L2:UNCHECKED_CD: cd failure is ignored, so the following rm may run in the wrong directory",
+        "L3:INCOMPLETE_GLOB: * does not match hidden entries, leaving dotfiles and dot-directories undeleted"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-squid/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L131:word_split_del_sys_file",
+          "L144:word_split_del_sys_file",
+          "L131:word_split",
+          "L144:word_split"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1472,
+      "tokens_out": 12294,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L43:EXECUTABLE-VALIDATION: SQUID is set to a PATH-resolved name only when /usr/sbin/squid merely exists, leaving it unset if absent and not checking executability.",
+        "L48:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can be split or pathname-expanded instead of being passed as one filename.",
+        "L55:UNQUOTED-EXPANSION: An empty or multiword NETWORKING value makes the test malformed or changes its operands.",
+        "L60:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can make the file test use the wrong number of operands.",
+        "L65:UNSET-VARIABLE: SQUID_PIDFILE_DIR has no default, so the directory test and setup malfunction when sysconfig does not define it.",
+        "L65:PRIVILEGE-CHECK-ORDER: PID-directory creation and ownership changes occur before probe verifies that the caller is root.",
+        "L65:UNCHECKED-STATUS: Failures from mkdir or chown are ignored and startup continues.",
+        "L65:NONPORTABLE-CHOWN: The owner.group form is non-POSIX; chown requires owner:group.",
+        "L68:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can split the configuration filename passed to the parse command.",
+        "L71:NON_POSIX_SYNTAX: $\"...\" localization syntax is not defined by POSIX sh.",
+        "L71:NONPORTABLE-ECHO: POSIX does not define echo -n portably.",
+        "L79:NONPORTABLE-ECHO: POSIX does not define echo -n portably.",
+        "L80:IGNORED-EXIT-STATUS: Failure to initialize cache directories with squid -z is ignored and startup continues.",
+        "L80:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can split the configuration filename passed to squid.",
+        "L83:NON_POSIX_SYNTAX: $\"...\" localization syntax is not defined by POSIX sh.",
+        "L83:NONPORTABLE-ECHO: POSIX does not define echo -n portably.",
+        "L84:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can split the configuration filename used for startup.",
+        "L89:HARDCODED-PIDFILE: Startup waits for /var/run/squid.pid even when the Squid configuration selects another PID file.",
+        "L94:NONPORTABLE-ECHO: POSIX does not define echo -n portably.",
+        "L106:NON_POSIX_SYNTAX: $\"...\" localization syntax is not defined by POSIX sh.",
+        "L106:NONPORTABLE-ECHO: POSIX does not define echo -n portably.",
+        "L107:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can split the configuration filename passed to the check command.",
+        "L110:ASYNC-STATUS-LOSS: Running the shutdown command asynchronously discards its actual exit status.",
+        "L110:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can split the configuration filename passed to the shutdown command.",
+        "L111:PREMATURE-STATE-CHANGE: The subsystem lock is removed before shutdown has been confirmed successful.",
+        "L114:HARDCODED-PIDFILE: Shutdown waits on /var/run/squid.pid rather than the PID file selected by the configuration.",
+        "L119:NONPORTABLE-ECHO: POSIX does not define echo -n portably.",
+        "L131:UNSET-VARIABLE: An undefined SQUID_PIDFILE_DIR triggers the :? expansion and aborts the shell during stop.",
+        "L131:UNSAFE-DELETE: The entire PID directory is recursively cleared even when the preceding stop check failed.",
+        "L136:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can split the configuration filename used for reload.",
+        "L144:UNSAFE-DELETE: Restart redundantly removes every entry under SQUID_PIDFILE_DIR rather than only Squid-owned PID state.",
+        "L153:STATUS-MASKING: The trailing || : converts a failed restart into a successful condrestart result.",
+        "L157:UNQUOTED-EXPANSION: Unquoted SQUID_CONF can split the configuration filename used by the status check.",
+        "L191:NON_POSIX_SYNTAX: $\"...\" localization syntax is not defined by POSIX sh.",
+        "L191:INCOMPLETE-USAGE: The usage text omits the supported condrestart action."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-xargs_accident_rm/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:cmd_expected_path_state",
+          "L3:unexpected_stdin"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 204,
+      "tokens_out": 57,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-confused_mkdir/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:cmd_expected_path_state",
+          "L5:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 187,
+      "tokens_out": 24,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L504:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 4267,
+      "tokens_out": 17773,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L21:UNQUOTED-PATH: Unquoted DEBOOTSTRAP_DIR makes sourcing fail when the directory contains whitespace or glob characters.",
+        "L67:WRONG-LOOP-VARIABLE: The phase loop repeatedly checks $1 instead of the current $local_x value.",
+        "L209:OVERBROAD-OPTION-PATTERN: --include* also accepts malformed options such as --includefoo or --include without '='.",
+        "L213:OVERBROAD-OPTION-PATTERN: --exclude* also accepts malformed options such as --excludefoo or --exclude without '='.",
+        "L222:OVERBROAD-OPTION-PATTERN: --components* also accepts malformed options such as --componentsfoo or --components without '='.",
+        "L230:OVERBROAD-OPTION-PATTERN: --variant* also accepts malformed options such as --variantfoo or --variant without '='.",
+        "L234:OVERBROAD-OPTION-PATTERN: --keyring* also accepts malformed options such as --keyringfoo or --keyring without '='.",
+        "L238:OPTION-VALUE-TRUNCATION: cut -f2 truncates a keyring pathname containing additional '=' characters.",
+        "L254:UNQUOTED-PATH: Unquoted suite-file path breaks when DEBOOTSTRAP_DIR contains whitespace or glob characters.",
+        "L255:UNQUOTED-PATH: Unquoted architecture-file path breaks when DEBOOTSTRAP_DIR contains whitespace or glob characters.",
+        "L256:UNQUOTED-PATH: Unquoted variant-file path can produce an invalid test expression after splitting or globbing.",
+        "L257:UNQUOTED-PATH: Unquoted variant-file path breaks when DEBOOTSTRAP_DIR contains whitespace or glob characters.",
+        "L279:UNQUOTED-PATH: Unquoted pwd and TARGET expansions can split, glob, or mangle a relative target pathname.",
+        "L281:UNQUOTED-PATH: Unquoted target-directory expansions make cd and pathname construction fail for whitespace or glob characters.",
+        "L307:UNQUOTED-PATH: Unquoted architecture-file path can produce an invalid test expression after splitting or globbing.",
+        "L308:UNQUOTED-PATH: Unquoted architecture-file path breaks when DEBOOTSTRAP_DIR contains whitespace or glob characters.",
+        "L370:MASKED-PIPELINE-FAILURE: A zcat failure can be hidden when tar exits successfully because POSIX pipelines return only the last command's status.",
+        "L445:UNQUOTED-PATH: Unquoted TARGET makes the tarball operation fail for target paths containing whitespace or glob characters.",
+        "L455:UNQUOTED-PATH: Unquoted destination path makes cp fail for target paths containing whitespace or glob characters.",
+        "L456:UNQUOTED-PATH: Unquoted source and destination paths make cp fail when either directory contains whitespace or glob characters.",
+        "L457:UNQUOTED-PATH: Unquoted SCRIPT and target paths make cp fail for valid paths containing whitespace or glob characters.",
+        "L465:UNQUOTED-PATH: Unquoted chmod pathname breaks for target paths containing whitespace or glob characters.",
+        "L471:UNQUOTED-PATH: Unquoted required-file path breaks when DEBOOTSTRAP_DIR contains whitespace or glob characters.",
+        "L472:UNQUOTED-PATH: Unquoted base-file path breaks when DEBOOTSTRAP_DIR contains whitespace or glob characters.",
+        "L495:UNQUOTED-PATH: Unquoted log-file path can produce an invalid test expression for target paths containing whitespace.",
+        "L496:UNQUOTED-PATH: Unquoted source and destination paths make the bootstrap-log copy fail for target paths containing whitespace.",
+        "L501:UNQUOTED-PATH: Unquoted debootstrap path can produce an invalid test expression for target paths containing whitespace."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-steam/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L362:word_split_del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 5230,
+      "tokens_out": 16596,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L17:SCRIPT_PATH_RESOLUTION: ${0%/*} fails when $0 contains no slash, leaving STEAMROOT empty.",
+        "L20:UNQUOTED_EXPANSION: Unquoted $STEAMEXE can cause field splitting, glob expansion, or an invalid test expression.",
+        "L28:EXEC_FAILURE_HANDLING: A failed exec may terminate the non-interactive shell before the custom error handler runs.",
+        "L29:WRONG_REDIRECTION: The error message is redirected to stdout with >&1 instead of stderr.",
+        "L32:UNCHECKED_CD: Failure to enter STEAMROOT is ignored, so later operations run in the wrong directory.",
+        "L48:LICENSE_BYPASS: The agreement response is hard-coded to accepted without obtaining user consent.",
+        "L143:OVERBROAD_MATCH: Searching for \"$2=\" without anchoring can match other variable names or multiple lines.",
+        "L160:INVALID_NUMERIC_INPUT: A malformed VERSION makes test fail and is then incorrectly treated as acceptable.",
+        "L198:UMASK_NOT_APPLIED: The current umask is saved, but the promised restrictive umask is never set.",
+        "L359:LATE_SAFETY_CHECK: STEAMROOT is validated only after files and registry data have already been moved.",
+        "L364:UNSAFE_RECURSIVE_DELETE: The nonempty check does not reject STEAMROOT=/, allowing deletion of root contents.",
+        "L371:INCORRECT_SIGNAL_RESET: trap '' INT continues ignoring SIGINT instead of restoring its default handling.",
+        "L374:IGNORED_RETURN_STATUS: Bootstrap installation failure is ignored and reset is still reported successful.",
+        "L411:UNQUOTED_COMMAND_SUBSTITUTION: Unvalidated PID-file contents are field-split into arbitrary kill operands.",
+        "L430:UNDEFINED_COMMAND: warn_outofdate is neither defined in the script nor a standard command.",
+        "L435:UNQUOTED_EXPANSION: Unquoted $STEAMSCRIPT breaks dirname when the configured path contains whitespace or globs.",
+        "L437:UNQUOTED_EXPANSION: The steamdeps.txt path is unquoted and breaks when STEAMROOT contains whitespace or globs.",
+        "L501:WRONG_CLEANUP_PATH: Failed debug-runtime extraction removes a relative name instead of the directory under STEAM_RUNTIME_DEBUG_DIR.",
+        "L551:IGNORED_RESULT: The missing-library check only assigns MISSING_LIBRARIES, which is never inspected or reported.",
+        "L582:PIPELINE_STATUS_LOSS: The pipeline reports tee's status rather than valgrind's failure status.",
+        "L609:MISSING_EXIT_STATUS: Normal execution ends after the final if and returns zero instead of propagating STATUS."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-access_del_resource/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L9:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 251,
+      "tokens_out": 1769,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:UNCHECKED_CD: Failure to enter /storage/sort_tv is ignored, so subsequent relative operations may affect the wrong directory.",
+        "L4:UNSAFE_DIRECTORY_CREATION: A pre-existing workingfolder makes mkdir fail, but the script continues and later moves or deletes its contents.",
+        "L5:UNMATCHED_GLOB: With no matching MP4 files, the loop processes the literal filename '*.mp4'.",
+        "L6:INCORRECT_BASENAME: cut removes everything after the first dot rather than only the final .mp4 suffix.",
+        "L8:UNSAFE_PRIVILEGE_USE: ffmpeg unnecessarily processes input files with elevated privileges.",
+        "L8:MISSING_STREAM_HANDLING: Mandatory 0:a and 0:v mappings make conversion fail when either stream type is absent.",
+        "L9:OVERBROAD_GLOB: Moving workingfolder/* can move stale or unrelated files rather than only the current output.",
+        "L11:UNSAFE_RECURSIVE_DELETE: The script unconditionally deletes workingfolder even when it did not create that directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-replacement/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L6:data_loss"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 175,
+      "tokens_out": 23,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-capturing_empty_output/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L10:capturing_empty_output"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 215,
+      "tokens_out": 1653,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L2:READ-WITHOUT-R: read interprets backslashes instead of preserving the response literally.",
+        "L6:READ-WITHOUT-R: read interprets backslashes in the entered domain name.",
+        "L8:PATH-TRAVERSAL: Unvalidated domTemp can contain '..' components and escape /home/rakesh.",
+        "L10:NON-POSIX-OPTION: mkdir -v is not specified by POSIX and may fail on non-GNU systems."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-access_after_mv/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L50:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 707,
+      "tokens_out": 5859,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:PIPELINE-SUBSHELL: Sourced helper definitions are lost when the pipeline component exits.",
+        "L3:NONPOSIX-DEV-STDIN: /dev/stdin is not guaranteed to exist by POSIX.",
+        "L34:INCORRECT-EXIT-STATUS: Bare exit can report success when no installation was found.",
+        "L46:UNCHECKED-CD: Failure to enter the temporary directory allows subsequent operations in the wrong directory.",
+        "L47:UNQUOTED-EXPANSION: RELEASE is expanded unquoted in the download URL.",
+        "L47:PIPELINE-STATUS-MASKING: A wget failure can be hidden by the status of tar.",
+        "L53:UNCHECKED-CD: Failure to enter the installation directory can run yarn in the wrong directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unset_var-cmd_always_fails/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L9:unbound",
+          "L16:command_can_only_fail"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 266,
+      "tokens_out": 8078,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L1:XTRACE_SECRET_LEAK: The -x shebang flag can expose values and commands loaded from credentials.sh.",
+        "L3:UNSAFE_SOURCE_PATH: credentials.sh is resolved through PATH rather than reliably relative to the script.",
+        "L5:GETOPTS_ARGUMENT_MISMATCH: Option -n is declared without an argument but its handler expects OPTARG.",
+        "L7:UNHANDLED_GETOPTS_ERROR: Missing-argument and unknown-option cases (: and ?) are silently ignored.",
+        "L9:UNUSED_OPTION: The -i argument is assigned to outputPath but never used.",
+        "L16:UNQUOTED_EXPANSION: Unquoted dirName is subject to field splitting and pathname expansion.",
+        "L16:OPTION_INJECTION: A dirName beginning with a hyphen can be interpreted as a mkdir option.",
+        "L16:MASKED_FAILURE: Echoing after mkdir failure returns success and allows execution to continue without the directory.",
+        "L18:IFS_TRIMMING: read lacks IFS=, so leading and trailing whitespace is removed from filenames.",
+        "L18:DROPPED_FINAL_LINE: The loop skips a nonempty final input line that lacks a terminating newline.",
+        "L20:OPTION_INJECTION: A filename beginning with a hyphen can be interpreted as a touch option.",
+        "L21:OPTION_INJECTION: A filename beginning with a hyphen can be interpreted as an mv option.",
+        "L22:UNQUOTED_REDIRECTION: Unquoted inputfile can undergo unwanted shell expansion in some /bin/sh implementations."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_2/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L15:unbound_setu"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 270,
+      "tokens_out": 2647,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-loop_once-loop_once/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L8:loop_once",
+          "L15:loop_once"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 322,
+      "tokens_out": 5824,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:STATE_NOT_RESET: x is initialized only once, so exhausting retries for one directory skips the while loop for later directories.",
+        "L8:INPUT_OVERWRITE: The loop overwrites the entered directory and scans the hard-coded DIR instead.",
+        "L15:INPUT_OVERWRITE: The loop overwrites the entered filename and scans every child of the directory instead.",
+        "L17:INVALID_FILE_TYPE_CHECK: The readability test accepts directories and other non-regular files that grep cannot safely process as files.",
+        "L20:BACKSLASH_MANGLE: read without -r alters backslashes in the search word.",
+        "L21:OPTION_INJECTION: A word beginning with '-' is interpreted as grep options instead of a pattern.",
+        "L22:PREMATURE_EXIT: The script terminates after the first readable pathname instead of continuing the loops.",
+        "L22:WRONG_EXIT_STATUS: exit 1 reports failure even when grep succeeds.",
+        "L28:INCORRECT_ERROR_CONDITION: The message claims nonexistence when the loop only established that no child was readable.",
+        "L42:UNCONDITIONAL_ERROR_MESSAGE: \"not a directory\" is printed after the loop even when valid directories were processed."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-wrong_mv/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L4:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 156,
+      "tokens_out": 34,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-delete_home_user/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:del_user_dir"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 157,
+      "tokens_out": 42,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-wrong_mkdir/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L9:capturing_empty_output",
+          "L8:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 223,
+      "tokens_out": 36,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-makefile/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L82:del_sys_file",
+          "L95:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 2018,
+      "tokens_out": 8662,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L17:ENVIRONMENT_OVERRIDE: DESTDIR is unconditionally reset, discarding any caller-supplied fake-root value.",
+        "L103:EMPTY_VARIABLE_GLOB: An empty CAMLP5N expands the second pattern to boot/*, deleting unrelated boot files.",
+        "L120:MISPLACED_ENV_ASSIGNMENT: FROM=boot and TO=boot.new are passed as ordinary ignored arguments, leaving mv_git without its paths.",
+        "L127:MISPLACED_ENV_ASSIGNMENT: FROM=boot and TO=boot.new are passed as ordinary ignored arguments, leaving mv_git without its paths.",
+        "L226:UNEXPECTED_NONZERO_STATUS: mv_git returns failure when .gitignore is absent, causing callers to abort under set -e."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unexpected_stdin/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:unexpected_stdin",
+          "L4:unexpected_stdin"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 258,
+      "tokens_out": 3871,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:ARGUMENT_CHECK_ORDER: $1 is used before verifying that an argument was supplied",
+        "L3:UNQUOTED_EXPANSION: $HOME is unquoted, allowing field splitting and pathname expansion",
+        "L3:UNSAFE_GREP_PATTERN: $1 is treated as a grep option or regular expression instead of an exact filename",
+        "L4:ARGUMENT_CHECK_ORDER: $1 is used before verifying that an argument was supplied",
+        "L4:UNQUOTED_EXPANSION: $HOME is unquoted, allowing field splitting and pathname expansion",
+        "L4:UNSAFE_GREP_PATTERN: $1 is treated as a grep option or regular expression instead of an exact filename",
+        "L8:WRONG_EXIT_STATUS: exit uses the preceding echo status, normally reporting success for missing input",
+        "L9:UNQUOTED_EXPANSION: Unquoted $1 can be split or glob-expanded and corrupt the test expression",
+        "L12:UNQUOTED_EXPANSION: Unquoted $1 and $FPath can split or glob-expand the source and destination paths",
+        "L15:WRONG_EXIT_STATUS: exit uses the preceding echo status, normally reporting success when the file is absent"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-loop_once-useless_test/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L6:loop_once"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 228,
+      "tokens_out": 3837,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:UNQUOTED_EXPANSION: $DIR is unquoted and subject to field splitting and pathname expansion.",
+        "L8:UNQUOTED_EXPANSION: Unquoted $f expansions break cp for filenames containing whitespace or glob characters.",
+        "L8:UNCHECKED_STATUS: A cp failure is ignored, allowing processing to continue with a missing or stale backup.",
+        "L9:NO_VARIABLE_EXPANSION: Single quotes prevent $OLD and $NEW from expanding in the sed expression.",
+        "L9:INVALID_REDIRECTION: &gt; is literal shell syntax, not >; it backgrounds sed instead of redirecting its output.",
+        "L9:UNQUOTED_EXPANSION: The $f expansions are unquoted and can be split or pathname-expanded.",
+        "L10:INVALID_SUCCESS_CHECK: Testing whether $f exists does not verify sed succeeded, so the backup can be deleted after failure.",
+        "L10:UNQUOTED_EXPANSION: The unquoted $f.bak operand can be split or pathname-expanded by rm."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-redir_to_func-redir_to_func/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L25:redir_func",
+          "L25:redir_func"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 435,
+      "tokens_out": 4898,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:NON_PORTABLE_DATE_FORMAT: The %l date conversion is not specified by POSIX; use %I instead.",
+        "L7:UNQUOTED_EXPANSION: Unquoted $0 can undergo field splitting and pathname expansion before basename receives it.",
+        "L12:UNQUOTED_EXPANSION: Unquoted log-message expansions collapse whitespace and can trigger pathname expansion.",
+        "L18:UNQUOTED_EXPANSION: Unquoted error-message expansions corrupt multiline content and can trigger pathname expansion.",
+        "L22:UNQUOTED_EXPANSION: Unquoted $1 corrupts whitespace and can trigger pathname expansion in custom log messages.",
+        "L28:UNSAFE_CD: cd failure is ignored, while success changes the main shell's directory and breaks later relative log-file references.",
+        "L33:IGNORED_ARGUMENT: errorLog is passed $LE, but the function ignores its argument and reads from stdin instead.",
+        "L36:WRONG_FILENAME: The script reads OutputLog instead of the generated OutputLog.txt file.",
+        "L37:IGNORED_ARGUMENT: OutputLog is passed $LO, but the function ignores its argument and reads from stdin instead."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude6/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L0:del_user_dir"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 167,
+      "tokens_out": 554,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:WRONG_WORKING_DIRECTORY: `cd ~` runs `npx next dev` from the home directory instead of `/Users/user/project/apps/ui`."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_3/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L9:data_loss"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 279,
+      "tokens_out": 1173,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:NON_POSIX_OPTION: tail -F is not specified by POSIX and is not portable.",
+        "L3:INPUT_PARSING: read without IFS= and -r trims whitespace and consumes backslashes from log lines.",
+        "L7:NON_POSIX_OPTION: grep -o is not specified by POSIX and is not portable.",
+        "L7:WRONG_INPUT_SOURCE: The query is extracted from the whole log instead of the current line, so it can select a stale or unrelated DROP statement.",
+        "L8:WRONG_REDIRECTION: QueryResult is discarded to /dev/null while op.txt is opened as unused standard input, leaving op.txt unchanged."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_4/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L7:data_loss",
+          "L8:data_loss"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 207,
+      "tokens_out": 1349,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:UNQUOTED_VARIABLE: Unquoted $x in the redirection path breaks when the working directory contains spaces or glob characters.",
+        "L7:UNQUOTED_VARIABLE: Unquoted $x in the redirection path breaks when the working directory contains spaces or glob characters.",
+        "L8:UNQUOTED_VARIABLE: Unquoted $x in the redirection path breaks when the working directory contains spaces or glob characters.",
+        "L10:MASKED_EXIT_STATUS: Unconditional exit 0 hides failures from the sas command and preceding file writes."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L5:data_loss",
+          "L7:data_loss"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 186,
+      "tokens_out": 2095,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:SC2038: Newline-, quote-, or backslash-containing paths from find are misparsed by xargs.",
+        "L7:SC2038: Newline-, quote-, or backslash-containing paths from find are misparsed by xargs."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_2/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L10:unbound"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 257,
+      "tokens_out": 2197,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:MISSING-ARGUMENT-CHECK: $1 is not validated, so an absent argument targets ../patches/.patch",
+        "L11:UNCHECKED-EXIT-STATUS: Fatal git apply failures are ignored and the script continues",
+        "L15:UNCHECKED-EXIT-STATUS: EOF or read failure skips the intended pause",
+        "L17:INCOMPLETE-DIFF: git diff omits untracked files, so newly added files are absent from the generated patch",
+        "L17:NONATOMIC-OVERWRITE: The existing patch is truncated before git diff succeeds, risking patch loss on failure"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_5/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L85:unbound"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1651,
+      "tokens_out": 10109,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L43:MISSING-ERROR-HANDLING: nvm_download returns success without downloading when neither curl nor wget exists.",
+        "L44:ARGUMENT-BOUNDARY-LOSS: Unquoted $* word-splits and pathname-expands curl arguments instead of preserving \"$@\".",
+        "L47:ARGUMENT-BOUNDARY-LOSS: Joining all wget arguments into one string destroys boundaries for arguments containing whitespace.",
+        "L53:UNQUOTED-EXPANSION: Unquoted $ARGS additionally subjects reconstructed wget arguments to pathname expansion.",
+        "L71:NON-IDEMPOTENT-OPERATION: Deleting master fails on subsequent runs after the branch was already deleted, aborting under set -e.",
+        "L80:WRONG-FILE-TYPE-TEST: nvm.sh is downloaded as a regular file but is tested with -d, so an existing installation is never recognized.",
+        "L118:WRONG-CAPABILITY-CHECK: Testing the always-defined nvm_download function cannot determine whether curl or wget is installed.",
+        "L131:WRONG-CAPABILITY-CHECK: The script-method dependency check always succeeds because nvm_download itself is a defined function.",
+        "L136:UNHANDLED-INPUT: Unsupported METHOD values fall through without installing anything and are treated as success.",
+        "L142:UNSAFE-CODE-GENERATION: NVM_DIR is embedded unescaped into shell code, so quotes or expansions in its value corrupt or inject profile commands.",
+        "L147:WRONG-VARIABLE: This branch guarantees local_NVM_PROFILE is empty, so the suggested touch command has no filename.",
+        "L150:FORMAT-STRING-INJECTION: Passing SOURCE_STR as printf's format interprets percent signs and backslashes originating in NVM_DIR.",
+        "L155:FORMAT-STRING-INJECTION: Passing SOURCE_STR as printf's format can corrupt the profile when NVM_DIR contains percent signs or backslashes.",
+        "L171:INCOMPLETE-CLEANUP: nvm_reset omits the installer helper function nvm_source, leaving it defined after installation."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap_2/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L741:word_split_del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 6274,
+      "tokens_out": 14659,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L21:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can split or glob the sourced functions pathname.",
+        "L406:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can split or glob the suite-file pathname.",
+        "L407:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can split or glob the architecture-file pathname.",
+        "L408:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can corrupt the variant-file existence test.",
+        "L409:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can split or glob the variant-file pathname.",
+        "L425:ROOT_PATH_COLLAPSE: Removing the trailing slash turns a target of \"/\" into an empty string.",
+        "L449:GLOB_CARDINALITY: Testing \"$TARGET\"/* with -e misses dotfiles and fails when multiple entries match.",
+        "L457:COMMAND_LOOKUP_MISMATCH: The PATH-resolved dpkg is checked, but a potentially absent or different /usr/bin/dpkg is executed.",
+        "L460:COMMAND_LOOKUP_MISMATCH: The PATH-resolved udpkg is checked, but a potentially absent or different /usr/bin/udpkg is executed.",
+        "L461:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can corrupt the architecture-file existence test.",
+        "L462:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can split or glob the architecture-file pathname.",
+        "L501:COMMAND_STRING_QUOTING: Embedded quotes in CHROOT_CMD remain literal when the variable is executed and do not protect a whitespace-containing target.",
+        "L655:UNQUOTED_REDIRECTION: Unquoted MAKE_TARBALL can undergo splitting or pathname expansion as a redirection target.",
+        "L668:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can split or glob the functions-file source operand.",
+        "L669:UNQUOTED_PATH: Unquoted SCRIPT can split or glob the suite-script source operand.",
+        "L685:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can split or glob the required-file pathname.",
+        "L686:UNQUOTED_PATH: Unquoted DEBOOTSTRAP_DIR can split or glob the base-file pathname."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-troll/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:capturing_empty_output",
+          "L1:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 184,
+      "tokens_out": 65,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-unset_var/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L6:unbound"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 231,
+      "tokens_out": 1110,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L11:UNQUOTED_EXPANSION: $directorytocopy is subject to field splitting and pathname expansion",
+        "L12:INVALID_OPTION: -progress is parsed as bundled short options instead of the intended --progress option",
+        "L12:UNQUOTED_EXPANSION: Unquoted source and destination paths are subject to field splitting and pathname expansion"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-ignored_command_v/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L113:not_a_command"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1384,
+      "tokens_out": 13829,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:SC2230: `which` is non-POSIX; use `command -v` to detect `tput`",
+        "L30:SC2059: Terminal-control variables are embedded directly in the `printf` format string",
+        "L31:EXIT_STATUS: Bare `exit` reports success when the required `zsh` command is missing",
+        "L39:SC2059: Terminal-control variables are embedded directly in the `printf` format string",
+        "L40:SC2059: User-controlled `$ZSH` is embedded directly in the `printf` format string",
+        "L51:SC2059: Terminal-control variables are embedded directly in the `printf` format string",
+        "L57:SC2154: `OSTYPE` is not defined by POSIX sh, so the Cygwin check may be skipped",
+        "L64:SC2086: Unquoted `$ZSH` is subject to field splitting and pathname expansion",
+        "L70:SC2059: Terminal-control variables are embedded directly in the `printf` format string",
+        "L72:SC2059: Terminal-control variables are embedded directly in the `printf` format string",
+        "L73:BACKUP_CLOBBER: Existing `.zshrc.pre-oh-my-zsh` data can be overwritten by the backup",
+        "L76:SC2059: Terminal-control variables are embedded directly in the `printf` format string",
+        "L77:SC2086: Unquoted `$ZSH/templates/zshrc.zsh-template` is subject to field splitting and pathname expansion",
+        "L79:CONFIG_INJECTION: `$ZSH` is written unquoted and unescaped into `.zshrc`, allowing malformed or executable shell syntax",
+        "L80:UNSAFE_TEMPFILE: Predictable `.zshrc-omztemp` redirection can clobber an existing file or follow a symlink",
+        "L84:ERREXIT: A missing or non-path `$SHELL` makes `expr` return nonzero and aborts under `set -e`",
+        "L88:SC2059: Terminal-control variables are embedded directly in the `printf` format string",
+        "L89:SC2046: Unquoted command-substitution output is subject to field splitting and pathname expansion",
+        "L89:SHELL_SELECTION: No match in `/etc/shells` leaves `chsh -s` without a shell argument",
+        "L93:SC2059: Terminal-control variables are embedded directly in the `printf` format string",
+        "L97:SC2059: `$GREEN` is used directly as the `printf` format string",
+        "L100:SC2028: POSIX `echo` has implementation-defined behavior for the backslashes in this logo line",
+        "L102:SC2028: POSIX `echo` has implementation-defined behavior for the backslashes in this logo line",
+        "L112:SC2059: `$NORMAL` is used directly as the `printf` format string"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_2/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L9:data_loss",
+          "L10:data_loss"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 340,
+      "tokens_out": 1135,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:SC2164: cd failure is unchecked, so subsequent relative mv commands may operate in the wrong directory.",
+        "L7:SC2162: read without -r interprets backslashes instead of preserving the input literally.",
+        "L8:SC2086: unquoted $vct undergoes pathname expansion, so wildcard input can produce unintended selections.",
+        "L14:HIDDEN_FILES_NOT_MATCHED: the * glob does not remove hidden entries, so it may leave files behind."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-const_cond/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L43:const_cond"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 616,
+      "tokens_out": 5271,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L34:UNSAFE_EVAL: The map argument is reparsed as shell code, allowing metacharacters and multiword values to execute unintended commands.",
+        "L38:INEXACT_MATCH: grep treats the key as an unanchored regular expression, so dots or substring matches can falsely report the key as configured.",
+        "L40:WRONG_VALUE: configValue is assigned the configuration key itself instead of the value associated with that key."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_3/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L25:unbound"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 538,
+      "tokens_out": 5302,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:NONPORTABLE_ECHO: echo cannot reliably print arbitrary diagnostic text containing backslashes or leading -n.",
+        "L15:UNQUOTED_EXPANSION: Unquoted $2 is subject to field splitting and pathname expansion in the test.",
+        "L15:BROKEN_SYMLINK_CHECK: -e is false for a dangling destination symlink, causing ln to fail because the path still exists.",
+        "L16:UNQUOTED_EXPANSION: Unquoted $1 and $2 can split or expand into unintended ln arguments.",
+        "L20:NONPORTABLE_ECHO: POSIX echo handling of the embedded \\n escape is implementation-defined.",
+        "L23:NONPORTABLE_ECHO: POSIX echo handling of the embedded \\n escape is implementation-defined.",
+        "L25:UNQUOTED_EXPANSION: Unquoted HOME, i, and today expansions can split or glob backup paths.",
+        "L25:BACKUP_NAME_COLLISION: Date-only backup names can overwrite or misplace backups when the script runs more than once per day.",
+        "L28:UNQUOTED_EXPANSION: Unquoted endpath can split or glob the repository test path.",
+        "L29:NONPORTABLE_ECHO: POSIX echo handling of the embedded \\n escape is implementation-defined.",
+        "L30:UNQUOTED_EXPANSION: Unquoted endpath can become multiple or glob-expanded git clone arguments.",
+        "L30:INSECURE_TRANSPORT: Cloning executable configuration over HTTP permits repository tampering in transit.",
+        "L32:NONPORTABLE_ECHO: POSIX echo handling of the embedded \\n escape is implementation-defined.",
+        "L33:UNQUOTED_EXPANSION: Unquoted endpath can make cd use the wrong pathname.",
+        "L33:INCOMPLETE_SUBMODULE_UPDATE: git pull does not reliably update the recursively cloned submodules.",
+        "L38:UNQUOTED_EXPANSION: Unquoted source and destination paths can change the arguments passed to lnif.",
+        "L39:UNQUOTED_EXPANSION: Unquoted source and destination paths can change the arguments passed to lnif.",
+        "L40:UNQUOTED_EXPANSION: Unquoted source and destination paths can change the arguments passed to lnif.",
+        "L41:UNQUOTED_EXPANSION: Unquoted endpath can split or glob the directory test path.",
+        "L42:UNQUOTED_EXPANSION: Unquoted endpath can produce unintended mkdir operands.",
+        "L45:UNQUOTED_EXPANSION: Unquoted HOME can split or glob the Vundle destination test path.",
+        "L47:UNQUOTED_EXPANSION: Unquoted HOME can produce unintended git clone destination arguments.",
+        "L47:INSECURE_TRANSPORT: Cloning Vundle over HTTP permits repository tampering in transit.",
+        "L51:UNQUOTED_EXPANSION: Unquoted endpath can split or glob the Vim configuration pathname.",
+        "L51:UNINTENDED_STDIN_READ: The standalone - makes Vim read a file from standard input and can block an interactive installation.",
+        "L51:INTERACTIVE_PROMPT: BundleClean without ! can request confirmation and block unattended installation."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-move_home/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L0:del_user_dir"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 168,
+      "tokens_out": 27,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_func/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L120:function_use_before_def"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1420,
+      "tokens_out": 10210,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L45:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L48:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L50:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L53:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L55:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L57:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L60:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L63:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L65:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L68:INCORRECT-REDIRECTION: 1>&2 overrides the /dev/null redirect, leaking matching status lines to stderr",
+        "L71:UNQUOTED-EXPANSION: Unquoted $STATUS is subject to field splitting and pathname expansion",
+        "L87:VERSION-PARSING: Extra version components or suffixes are retained in gv3, making it non-numeric",
+        "L102:INCORRECT-VERSION-COMPARISON: Components are compared independently instead of lexicographically, so a later smaller component can override an earlier larger one"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-loop_once/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L6:loop_once"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 188,
+      "tokens_out": 623,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:UNQUOTED_EXPANSION: Unquoted $file1 and $file2 undergo field splitting and pathname expansion.",
+        "L7:NON_POSIX_OPTION: sed -i.txt is not specified by POSIX and differs across sed implementations.",
+        "L7:SINGLE_QUOTE_EXPANSION: Single quotes prevent $text from expanding, so sed does not search for the configured text.",
+        "L7:UNQUOTED_EXPANSION: Unquoted $i undergoes field splitting and pathname expansion."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-silly_q/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L5:cmd_expected_path_state",
+          "L6:cmd_expected_path_state",
+          "L7:cmd_expected_path_state",
+          "L8:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 189,
+      "tokens_out": 111,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unset_var/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L5:unbound"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 181,
+      "tokens_out": 420,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L2:UNQUOTED-EXPANSION: ${foo:=$1} is subject to field splitting and pathname expansion.",
+        "L5:UNQUOTED-EXPANSION: $bar is subject to field splitting and pathname expansion."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-itunes/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L5:word_split"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 190,
+      "tokens_out": 261,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:SC2086: Unquoted $2 expansion can cause word splitting and pathname expansion.",
+        "L4:WRONG-PATH: Condition checks for Arc.app, but the body deletes iTunes.app."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-delete_slash/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L4:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 166,
+      "tokens_out": 49,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_1/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L16:unbound_setu"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 748,
+      "tokens_out": 5837,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L14:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in both the directory test and mkdir, breaking paths containing whitespace or glob characters.",
+        "L17:UNQUOTED_EXPANSION: The unquoted LOG_LOCATION destination can undergo field splitting and pathname expansion.",
+        "L18:UNQUOTED_EXPANSION: USER and LOG_LOCATION are unquoted in the chown command.",
+        "L18:UNGUARDED_UNSET_VARIABLE: USER is not guaranteed to be set, so set -u can terminate the script here.",
+        "L19:UNQUOTED_EXPANSION: The unquoted LOG_LOCATION path can undergo field splitting and pathname expansion.",
+        "L22:UNQUOTED_EXPANSION: TEST_VM_NODE_NAME and LOG_LOCATION are unquoted in the cp paths.",
+        "L23:UNQUOTED_EXPANSION: USER, LOG_LOCATION, and TEST_VM_NODE_NAME are unquoted in the chown command.",
+        "L23:UNGUARDED_UNSET_VARIABLE: USER is not guaranteed to be set, so set -u can terminate the script here.",
+        "L24:UNQUOTED_EXPANSION: LOG_LOCATION and TEST_VM_NODE_NAME are unquoted in the chmod path.",
+        "L27:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in the redirection target.",
+        "L29:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in the redirection target.",
+        "L30:MISUSED_COMMAND_SUBSTITUTION: The iptables probe is wrapped in command substitution instead of being executed directly as the if condition.",
+        "L31:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in the redirection target.",
+        "L33:MISUSED_COMMAND_SUBSTITUTION: The ip probe is wrapped in command substitution instead of being executed directly as the if condition.",
+        "L34:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in the redirection target.",
+        "L36:MISUSED_COMMAND_SUBSTITUTION: The journalctl probe is wrapped in command substitution instead of being executed directly as the if condition.",
+        "L37:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in the redirection target.",
+        "L38:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in the redirection target.",
+        "L40:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted as the cp destination.",
+        "L41:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted as the cp destination.",
+        "L43:UNQUOTED_EXPANSION: USER and LOG_LOCATION are unquoted in the chown command.",
+        "L43:UNGUARDED_UNSET_VARIABLE: USER is not guaranteed to be set, so set -u can terminate the script here.",
+        "L44:UNQUOTED_EXPANSION: USER and LOG_LOCATION are unquoted in the chown command.",
+        "L44:UNGUARDED_UNSET_VARIABLE: USER is not guaranteed to be set, so set -u can terminate the script here.",
+        "L46:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in the chmod path.",
+        "L47:UNQUOTED_EXPANSION: LOG_LOCATION is unquoted in the chmod path."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-xargs_del_files/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 196,
+      "tokens_out": 1672,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L3:NON_POSIX_FIND_OPTION: find predicate -newermt is not specified by POSIX",
+        "L3:NON_POSIX_DATE_OPTION: date option -d is not specified by POSIX",
+        "L3:UNSAFE_FILENAME_DELIMITING: find -print piped to xargs cannot safely handle filenames containing newlines",
+        "L3:EMPTY_INPUT_EXECUTION: xargs may invoke mv with the literal placeholder when find produces no output",
+        "L3:UNMATCHED_GLOB: ./* remains literal when the directory is empty, causing find to fail"
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude_wipe/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L0:del_user_dir"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 155,
+      "tokens_out": 98,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-const_loop/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L11:infinite_loop"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 260,
+      "tokens_out": 727,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L10:OFF_BY_ONE: The <= condition deletes again when exactly two snapshots remain.",
+        "L11:WRONG_DIRECTORY: ls examines the current directory instead of the while snapshot directory.",
+        "L12:WRONG_PATH: rm uses the bare filename instead of removing while/$OLDEST."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-unset_var_1/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L57:unbound",
+          "L60:unbound"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 1227,
+      "tokens_out": 5951,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L5:TERMINAL_CAPABILITY: `-t` verifies only that stdout is a terminal, not that it supports ANSI or 256-color sequences.",
+        "L37:UNCHECKED_CD: A failed `cd \"$ZSH\"` is ignored, so subsequent Git commands may modify the wrong repository.",
+        "L48:CONFIG_SCOPE: Reading from all Git configuration scopes cannot determine whether the temporary local value must later be removed.",
+        "L48:STDERR_AS_DATA: Redirecting stderr into `resetAutoStash` can save an error message and later write it as the configuration value.",
+        "L49:MISSING_CLEANUP_TRAP: The temporary `rebase.autoStash` change is not restored if the script is interrupted before normal cleanup.",
+        "L54:REMOTE_URL_TYPE: `set-url` changes the primary fetch URL even if the matched legacy URL was a push or secondary URL.",
+        "L62:NONPORTABLE_PRINTF_ESCAPE: The format contains unspecified `\\%` and backslash-space escape sequences instead of escaped literal backslashes.",
+        "L64:NONPORTABLE_PRINTF_ESCAPE: The format uses unspecified backslash-underscore escape sequences instead of `\\\\` for literal backslashes.",
+        "L74:EXIT_STATUS_MASKING: The final cleanup case replaces the failed `git pull` status, so an update failure can result in a zero exit status."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-posix2/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:cmd_expected_path_state"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 188,
+      "tokens_out": 35,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-n/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L146:del_sys_file",
+          "L147:del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 2702,
+      "tokens_out": 13547,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L14:FORMAT_STRING: \"$@\" is embedded in printf's format string, allowing percent sequences in messages to be interpreted.",
+        "L22:FORMAT_STRING: \"$@\" is embedded in printf's format string, allowing percent sequences in error messages to be interpreted.",
+        "L22:CONDITIONAL_EXIT: abort exits only if printf succeeds, so an output failure can let execution continue.",
+        "L38:NONPOSIX_COMMAND: which is not specified by POSIX; command -v should be used to detect wget.",
+        "L41:NONPOSIX_COMMAND: which is not specified by POSIX; command -v should be used to detect curl.",
+        "L101:NONPOSIX_COMMAND: which is not specified by POSIX; command -v should be used to detect node.",
+        "L115:UNMATCHED_GLOB: An empty versions directory leaves the literal \"*\" pattern, which is displayed as an installed version.",
+        "L119:FORMAT_STRING: User-controlled version and configuration text is interpolated into the printf format string.",
+        "L121:FORMAT_STRING: User-controlled version and configuration text is interpolated into the printf format string.",
+        "L134:ARGUMENT_BOUNDARY_LOSS: Assigning $@ to one scalar flattens all configuration arguments and loses their original boundaries.",
+        "L145:MISSING_DIRECTORY_SETUP: Only lib/node is created, so activation fails or miscopies files when bin or include does not exist.",
+        "L147:WRONG_COPY_DESTINATION: The trailing \".\" becomes cp's destination, so libraries are copied into the current directory instead of $N_PREFIX/lib/node.",
+        "L155:VERSION_LOGIC: Testing only the minor component selects the obsolete root URL for major versions above zero whose minor is below five.",
+        "L174:ARGUMENT_BOUNDARY_LOSS: Assigning $@ to one scalar flattens all configuration arguments and loses their original boundaries.",
+        "L188:UNQUOTED_URL: A custom URL is expanded unquoted, permitting word splitting, pathname expansion, and downloader-option injection.",
+        "L191:PIPELINE_STATUS: $? reports only tar's status, so failure of the downloader itself is not reliably detected.",
+        "L192:INVALID_CLEANUP: The tarball was streamed directly to tar and never saved as $local_tarball, so this rm targets a nonexistent file.",
+        "L193:NONPORTABLE_ECHO: POSIX echo does not portably interpret the \\033 escape used for colored output.",
+        "L202:STATUS_MASKING: Failure of the configure/install command chain is ignored because subsequent unset commands make the function return success.",
+        "L206:GLOBAL_VARIABLE_CLOBBER: cleanup overwrites and unsets the caller's local_version and local_dir because POSIX shell function variables are global.",
+        "L208:UNSAFE_ECHO: Unquoted configuration text can be split or globbed, and echo can corrupt values containing options or backslashes.",
+        "L210:NONIDEMPOTENT_SYMLINK: ln -s fails once the current symlink already exists, leaving it pointing at the previous version.",
+        "L249:STALE_LOOP_VARIABLE: local_version is never updated after shift, so every loop iteration removes only the first requested version.",
+        "L249:PATH_TRAVERSAL: An unvalidated version is appended to an rm -rf path, allowing \"..\" components to delete outside the versions directory.",
+        "L264:FORMAT_STRING: The path is incorrectly used as printf's format string and percent characters in N_PREFIX are interpreted.",
+        "L285:ARGUMENT_BOUNDARY_LOSS: Unquoted $local_bin and $@ split and glob the executable path and node arguments.",
+        "L285:EXIT_STATUS_LOSS: The node process's status is overwritten by the following unset commands.",
+        "L306:ARGUMENT_BOUNDARY_LOSS: Unquoted executable paths and $@ split and glob npm arguments.",
+        "L306:EXIT_STATUS_LOSS: The npm process's status is overwritten by the following unset commands.",
+        "L331:INVALID_REGEX: \\d is not a POSIX extended-regular-expression digit class, so stable versions are not matched portably.",
+        "L374:ARGUMENT_BOUNDARY_LOSS: Unquoted $@ destroys argument boundaries before execute_with_version receives them.",
+        "L375:ARGUMENT_BOUNDARY_LOSS: Unquoted $@ destroys argument boundaries before execute_with_npm_version receives them.",
+        "L376:ARGUMENT_DROPPING: Only $2 is passed to remove_version, despite the command accepting multiple versions.",
+        "L377:ARGUMENT_DROPPING: Configuration arguments following latest are ignored despite being documented.",
+        "L378:ARGUMENT_DROPPING: Configuration arguments following stable are ignored despite being documented.",
+        "L380:ARGUMENT_BOUNDARY_LOSS: Unquoted $@ destroys custom tarball and configuration argument boundaries.",
+        "L381:ARGUMENT_BOUNDARY_LOSS: Unquoted $@ destroys version and configuration argument boundaries."
+      ]
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-empty_path/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L21:not_a_command",
+          "L22:not_a_command",
+          "L23:not_a_command",
+          "L24:not_a_command",
+          "L25:not_a_command",
+          "L26:not_a_command",
+          "L27:not_a_command",
+          "L28:not_a_command",
+          "L29:not_a_command",
+          "L30:not_a_command",
+          "L31:not_a_command",
+          "L32:not_a_command"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 257,
+      "tokens_out": 820,
+      "cost": null,
+      "raw_llm_output_lines": []
+    },
+    {
+      "benchmark": "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-rm_root/fixed.sh",
+      "kind": "fixed",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": true,
+      "bugs": {
+        "expected_missing": [
+          "L3:not_a_command",
+          "L4:not_a_command",
+          "L5:not_a_command",
+          "L6:not_a_command",
+          "L7:not_a_command",
+          "L8:not_a_command",
+          "L9:not_a_command",
+          "L9:unbound",
+          "L10:unbound",
+          "L13:unbound",
+          "L13:unbound",
+          "L14:unbound",
+          "L14:unbound",
+          "L15:unbound",
+          "L11:word_split",
+          "L11:del_sys_file",
+          "L11:del_sys_file",
+          "L11:word_split_del_sys_file"
+        ],
+        "regressions": [],
+        "no_expectation": []
+      },
+      "time_sec": 0.0,
+      "tokens_in": 427,
+      "tokens_out": 1198,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:CWE-798: Database password is hard-coded in the script.",
+        "L10:SC2164: Failure to change to the temporary directory is not checked.",
+        "L11:INCOMPLETE-CLEANUP: The `*` glob does not remove hidden files from the temporary directory.",
+        "L13:CWE-214: Passing the database password as a command-line argument exposes it through the process list.",
+        "L14:UNCHECKED-STATUS: The backup is archived even if `mongodump` fails, potentially creating a partial backup.",
+        "L15:NON-POSIX: The `find -delete` action is not specified by POSIX.",
+        "L15:OVERBROAD-DELETE: The retention command deletes every old entry under the backup tree rather than only matching backup archives."
+      ]
+    }
+  ]
+}
