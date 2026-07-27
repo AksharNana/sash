@@ -232,7 +232,7 @@ class CapturingEmptyOutput(Issue):
     description: ClassVar[str] = "Command substitution captures output of a command that does not produce any"
 
     def __init__(self, command: str, line: int | None):
-        super().__init__(f"Substitution captures output of '{command}', which doesn't produce any", line)
+        super().__init__(f"Substitution or pipeline captures output of '{command}', which doesn't produce any", line)
 
 
 @dataclass(frozen=True)
