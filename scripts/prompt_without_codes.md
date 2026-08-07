@@ -1,6 +1,6 @@
 <instructions>
 You are a POSIX shell expert.
-Your task is to analyze the given shell script and identify bugs using the bug taxonomy below.
+Your task is to analyze the given shell script and identify bugs in it.
 
 For each bug you find, output exactly one line in this format:
 L<line_number>:<error-code>: <brief-description-of-the-specific-bug-instance>
