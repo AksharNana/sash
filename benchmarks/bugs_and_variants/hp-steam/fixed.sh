@@ -356,7 +356,7 @@ reset_steam()
 		mv -f "$i" "$i.bak"
 	done
 
-    if [ -z "$STEAMROOT" ]; then # fix: exit if STEAMROOT is empty
+    if [ -z "$STEAMROOT" ]; then
         exit 1
     fi
 

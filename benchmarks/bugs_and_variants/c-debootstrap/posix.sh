@@ -64,7 +64,7 @@ am_doing_phase () {
   # usage:   if am_doing_phase finddebs; then ...; fi
   local_x=""
   for local_x in "$@"; do
-    if echo " $WHAT_TO_DO " | grep -q " $1 "; then return 0; fi # bug here as well: should be $local_x and not $1
+    if echo " $WHAT_TO_DO " | grep -q " $1 "; then return 0; fi
   done
   unset local_x
   return 1
@@ -156,8 +156,8 @@ if [ $# != 0 ] ; then
         SECOND_STAGE_ONLY=true
 	shift
 	;;
-      --print-debs) # bug here: this option is supposed to "print the packages to be installed, and exit"
-                    # notice the kill_target phase below; it corresponds to a section of code that deletes files
+      --print-debs)
+
         WHAT_TO_DO="finddebs printdebs kill_target"
         shift
         ;;
@@ -269,7 +269,7 @@ else
   if [ -z "$2" ] && am_doing_phase dldebs first_stage second_stage; then
     usage_err 1 NEEDSUITETARGET "You must specify a suite and a target."
   fi
-  TARGET="$2" # bug here (cont'd): if $2 is not given, $TARGET defaults to `pwd`
+  TARGET="$2"
   TARGET="${TARGET%/}"
   if [ "${TARGET#/}" = "${TARGET}" ]; then
     if [ "${TARGET%/*}" = "$TARGET" ] ; then
@@ -507,8 +507,8 @@ fi
 if am_doing_phase kill_target; then
   if [ "$KEEP_DEBOOTSTRAP_DIR" != true ]; then
     info KILLTARGET "Deleting target directory"
-    rm -rf "$TARGET" # bug here (cont'd): eventually, $TARGET is deleted, which is a directory not created by debootstrap
-                     # the bug report I found this script in mentioned their $HOME being deleted because they ran debootstrap without $2
+    rm -rf "$TARGET"
+
   fi
 fi
 

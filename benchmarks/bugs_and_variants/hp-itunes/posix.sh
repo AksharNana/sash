@@ -2,5 +2,5 @@
 
 # if iTunes application currently exists, delete it
 if [ -e $2Applications/Arc.app ] ; then
-    rm -rf $2Applications/iTunes.app 2> /dev/null # bug here: $2 can word-split
+    rm -rf $2Applications/iTunes.app 2> /dev/null
 fi

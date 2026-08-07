@@ -71,12 +71,12 @@ depend() {
 }
 
 install() {
-    rm -rf "${DESTDIR}${LIBDIR}/${CAMLP5N}" # bug here: will delete / if variables not set
+    rm -rf "${DESTDIR}${LIBDIR}/${CAMLP5N}"
     for i in $DIRS compile; do run_make "$i" install DESTDIR="$DESTDIR"; done
 }
 
 uninstall() {
-    rm -rf "${DESTDIR}${LIBDIR}/${CAMLP5N}" # bug here: will delete / if variables not set
+    rm -rf "${DESTDIR}${LIBDIR}/${CAMLP5N}"
     (cd "${DESTDIR}${BINDIR}" && rm -f *"${CAMLP5N}"* odyl ocpp)
     (cd "${DESTDIR}${MANDIR}/man1" && rm -f *"${CAMLP5N}"* odyl ocpp)
 }

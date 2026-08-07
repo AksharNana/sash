@@ -2,4 +2,4 @@
 file ${foo:=$1}
 echo "foo >$foo<"
 file ${bar:=$1} | cat
-echo "bar >$bar<" # bug here: bar is unset
+echo "bar >$bar<"

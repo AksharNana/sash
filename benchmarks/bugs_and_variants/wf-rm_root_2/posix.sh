@@ -15,10 +15,10 @@ gather_data()
   # etc etc
 }
 
-TEMPDIR=$(mktemp -d) # bug here: mktemp does not exist on all systems (or might fail), so TEMPDIR may be empty
+TEMPDIR=$(mktemp -d)
 cd "${TEMPDIR}"
 gather_data
 tar cf /tmp/logs.tar "${TEMPDIR}"
 gzip -9 /tmp/logs.tar
 cd /
-rm -rf "${TEMPDIR}"/  # Note: this happened before --no-preserve-root was a thing
+rm -rf "${TEMPDIR}"/

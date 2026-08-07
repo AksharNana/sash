@@ -6,14 +6,14 @@ while getopts :i:x:n name
 do
     case $name in
         x)  inputfile="$OPTARG" ;;
-        i)  outputPath="$OPTARGS" ;; # bug here (1): should be $OPTARG
+        i)  outputPath="$OPTARGS" ;;
         n)  dirName="$OPTARG" ;;
     esac
 done
 
 if [ ! "$dirName" ]
 then
-    mkdir $dirName || echo "error while creating dir" # bug here (2): mkdir always fails because of the if condition
+    mkdir $dirName || echo "error while creating dir"
 fi
 while read -r line;
 do

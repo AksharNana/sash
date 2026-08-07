@@ -34,12 +34,12 @@ gitmerge=""  # These are only used in eval, so their values don't matter
 #gitmerge['mergetool.keepTemporaries']='false'
 
 apply_git_config() {
-	eval "configMap="${1#*=} # eval is not supported, so its contents don't matter
+	eval "configMap="${1#*=} # For now assume configMap has valid values (will be implemented later)
 
 	for configKey in ${configMap}
 	do
 		git config --list | grep -q "$configKey"
-		if [ $? -ne 0 ]; then # bug here: due to `set -e`, this can never be true
+		if [ $? -ne 0 ]; then
 			configValue="${configKey}"
 			git config --global "$configKey" "$configValue"
 		fi

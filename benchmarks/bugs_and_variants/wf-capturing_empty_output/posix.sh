@@ -7,7 +7,7 @@ printf " Which Name needs to create? (y/n): "; read dom
 
 path=/home/rakesh/$domTemp
 
-a=`mkdir -p -- "$path"` # bug here: mkdir does not produce output
+a=`mkdir -p -- "$path"`
 
 echo "$a"
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -f # fix: remove -e
+set -f
 babun_tools="babun_tools"
 . "/usr/local/etc/babun.instance"
 . "$babun_tools/script.sh"
@@ -35,7 +35,7 @@ gitmerge=""  # These are only used in eval, so their values don't matter
 #gitmerge['mergetool.keepTemporaries']='false'
 
 apply_git_config() {
-	eval "configMap="${1#*=} # eval is not supported, so its contents don't matter
+	eval "configMap="${1#*=} # For now assume configMap has valid values (will be implemented later)
 
 	for configKey in ${configMap}
 	do

@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# set -Eeuo pipefail -x
-set -e -x # -E and -o pipefail do not change the behavior of this script
+
+set -e -x
 
 # install dependencies
 brew install autoconf-archive automake libsndfile fftw mpg123 libgcrypt libtool

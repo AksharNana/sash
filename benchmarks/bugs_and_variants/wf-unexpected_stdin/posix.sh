@@ -1,7 +1,7 @@
 #!/bin/sh
 
-FPath=$(grep $1 $HOME/.restore.info | cut -d":" -f2) # bug here: if $1 is empty, grep expects input from stdin
-FName=$(grep $1 $HOME/.restore.info | cut -d":" -f1) # bug here: if $1 is empty, grep expects input from stdin
+FPath=$(grep $1 $HOME/.restore.info | cut -d":" -f2)
+FName=$(grep $1 $HOME/.restore.info | cut -d":" -f1)
 if [ $# -eq 0 ]
 then
         echo "No input detected"

@@ -35,7 +35,7 @@ SQUID_OPTS=${SQUID_OPTS:-""}
 SQUID_PIDFILE_TIMEOUT=${SQUID_PIDFILE_TIMEOUT:-20}
 SQUID_SHUTDOWN_TIMEOUT=${SQUID_SHUTDOWN_TIMEOUT:-100}
 SQUID_CONF=${SQUID_CONF:-"/etc/squid/squid.conf"}
-#SQUID_PIDFILE_DIR="/var/run/squid" # This line was probably modified by RedHat
+
 SQUID_USER="squid"
 SQUID_DIR="squid"
 
@@ -128,7 +128,7 @@ stop() {
 		fi
 		echo
 	fi
-	rm -rf $SQUID_PIDFILE_DIR/* # bug here: SQUID_PIDFILE_DIR is set externally
+	rm -rf $SQUID_PIDFILE_DIR/*
 	return $RETVAL
 }
 
@@ -136,12 +136,12 @@ reload() {
 	$SQUID $SQUID_OPTS -k reconfigure -f $SQUID_CONF
 }
 
-# RedHat's version of restart
+
 restart() {
 	stop
 	RETVAL=$?
 	if [ $RETVAL -eq 0 ] ; then
-		rm -rf $SQUID_PIDFILE_DIR/* # bug here: SQUID_PIDFILE_DIR is set externally
+		rm -rf $SQUID_PIDFILE_DIR/*
 		start
 	else
 		echo "Failure stopping squid or stopping squid took too long. Please check before restarting."

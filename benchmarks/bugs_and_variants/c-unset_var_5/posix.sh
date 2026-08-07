@@ -82,8 +82,8 @@ install_nvm_as_script() {
   else
     echo "=> Downloading nvm as script to '$NVM_DIR'"
   fi
-  nvm_download -s "$_source" -o "$NVM_DIR/nvm.sh" || { # bug here: _source is unset
-    echo >&2 "Failed to download '$_source'.." # bug here: _source is unset
+  nvm_download -s "$_source" -o "$NVM_DIR/nvm.sh" || {
+    echo >&2 "Failed to download '$_source'.."
     unset local_NVM_SOURCE
     return 1
   }

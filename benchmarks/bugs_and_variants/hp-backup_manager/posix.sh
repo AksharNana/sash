@@ -176,7 +176,7 @@ __exec_meta_command()
                     file_to_create="$file_to_create.$ext"
                 fi
 
-                if [ $? -gt 0 ]; then # bug here: intent was to check the exit status of the first command in the pipeline on line 173; right now even if it fails the log is deleted
+                if [ $? -gt 0 ]; then
                     warning "Unable to exec \$command; check \$logfile"
                     rm -f $file_to_create
                 else
@@ -200,7 +200,7 @@ __exec_meta_command()
                 $command 1> $file_to_create 2>$logfile
             fi
 
-            if [ $? -gt 0 ]; then # bug here: intent was to check the exit status of the first command in the pipeline on line 197; right now even if it fails the log is deleted
+            if [ $? -gt 0 ]; then
                 warning "Unable to exec \$command; check \$logfile"
                 rm -f $file_to_create
             else
@@ -698,7 +698,7 @@ __build_local_archive()
         warning "File \$file_to_check already exists, skipping."
         debug "rm -f ${bm_pending_incremental_list}.orig"
         rm -f "${bm_pending_incremental_list}.orig"
-        continue # if this causes problems we can remove it, i'm pretty sure it's not needed here
+        continue
     fi
 }
 

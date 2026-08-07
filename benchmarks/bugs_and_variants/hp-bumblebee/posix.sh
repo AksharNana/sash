@@ -347,7 +347,7 @@ case "$DISTRO" in
   ln -s /usr/lib/mesa/ld.so.conf /etc/alternatives/gl_conf
   rm -rf /etc/alternatives/xorg_extra_modules
   rm -rf /etc/alternatives/xorg_extra_modules-bumblebee
-  rm -rf /usr /lib/nvidia-current/xorg/xorg # bug here
+  rm -rf /usr /lib/nvidia-current/xorg/xorg
   ln -s /usr/lib/nvidia-current/xorg /etc/alternatives/xorg_extra_modules-bumblebee
   ldconfig
  ;;

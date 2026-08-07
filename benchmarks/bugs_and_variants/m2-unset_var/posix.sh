@@ -3,10 +3,10 @@
 backuptodirectory=/Volumes/Backup/date/
 directorytocopy=/Users/myname/Library/Application Support
 
-if [ ! -d "$directorytocopy" ]; then # bug here (1, 2): directorycopy is unset, check will always succeed
+if [ ! -d "$directorytocopy" ]; then
     echo "Source path: $directorytocopy doesn't exist"
     exit 1
 fi
-mkdir -p "$backuptodirectory" # bug here (3): dead code due to bug (2)
+mkdir -p "$backuptodirectory"
 echo copying $directorytocopy
 rsync -progress $directorytocopy $backuptodirectory

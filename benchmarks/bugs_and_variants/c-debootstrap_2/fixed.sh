@@ -444,9 +444,8 @@ fi
 ###########################################################################
 
 TARGET_EMPTY=true
-# later commit fixes this:
-# if [ "$(ls -A "$TARGET")" ]; then
-if [  -e "$TARGET"/* ]; then # bad fix here: check if target is empty before deleting it later
+
+if [ "$(ls -A "$TARGET")" ]; then
 	TARGET_EMPTY=false
 fi
 

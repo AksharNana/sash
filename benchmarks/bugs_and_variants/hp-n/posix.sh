@@ -142,7 +142,7 @@ install_node() {
   if test -d $local_dir; then
     # symlink everything, purge old copies or symlinks
     for d in bin lib share include; do
-      rm -rf $N_PREFIX/$d # bug here: if N_REFIX is not set externally, line 6 sets it to /usr/local
+      rm -rf $N_PREFIX/$d
       ln -s $local_dir/$d $N_PREFIX/$d
     done
   # install

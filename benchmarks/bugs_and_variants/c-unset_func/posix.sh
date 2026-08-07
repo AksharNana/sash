@@ -72,7 +72,7 @@ git_prompt_status() {
 }
 
 #this is unlikely to change so make it all statically assigned
-POST_1_7_2_GIT=$(git_compare_version "1.7.2") # bug here: function is defined later
+POST_1_7_2_GIT=$(git_compare_version "1.7.2")
 #clean up the namespace slightly by removing the checker function
 unset -f git_compare_version
 

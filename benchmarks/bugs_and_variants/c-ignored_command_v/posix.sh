@@ -110,7 +110,7 @@ main() {
   echo 'p.p.s. Get stickers and t-shirts at https://shop.planetargon.com.'
   echo ''
   printf "${NORMAL}"
-  env zsh # bug here: zsh is used after line 29 asserts it is not installed
+  env zsh
 }
 
 main

@@ -3,7 +3,7 @@
 # Note(TheJulia): We should proceed with attempting to collect information
 # even if a command fails, and as such set -e should not be present.
 set -ux
-#set -o pipefail # no pipelines are used in this script, so this has no effect
+
 
 # Note(TheJulia): If there is a workspace variable, we want to utilize that as
 # the preference of where to put logs
@@ -13,7 +13,7 @@ LOG_LOCATION="${WORKSPACE:-${SCRIPT_HOME}/..}/logs"
 echo "Making logs directory and collecting logs."
 [ -d ${LOG_LOCATION} ] || mkdir -p ${LOG_LOCATION}
 
-if [ -z "${TEST_VM_NODE_NAMES}" ]; then # bug here: "set -u" makes this fail if the variable is unset (but we don't want that)
+if [ -z "${TEST_VM_NODE_NAMES}" ]; then
     sudo cp /var/log/libvirt/baremetal_logs/testvm[[:digit:]]_console.log ${LOG_LOCATION}
     sudo chown $USER ${LOG_LOCATION}/testvm[[:digit:]]_console.log
     sudo chmod o+r ${LOG_LOCATION}/testvm[[:digit:]]_console.log

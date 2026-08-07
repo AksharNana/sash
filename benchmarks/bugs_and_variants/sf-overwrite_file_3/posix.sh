@@ -6,6 +6,6 @@ tail -n 0 -F hive-server2.log | while read LINE; do
         AuditTypeID=14
         QueryResult="$(grep -oEi 'DROP TABLE [a-zA-Z][a-zA-Z0-9_]*' hive-server2.log | sed -n \$p)"
         echo "$QueryResult" >/dev/null < op.txt
-        cp op.txt op/op.txt.$current_time # bug here: the same file is overwritten on each iteration
+        cp op.txt op/op.txt.$current_time
     fi
 done

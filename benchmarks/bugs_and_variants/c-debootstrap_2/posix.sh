@@ -197,7 +197,7 @@ if [ $# != 0 ] ; then
 		fi
 		;;
 	    --print-debs)
-		WHAT_TO_DO="finddebs printdebs kill_target" # bug here: kill_target will run
+		WHAT_TO_DO="finddebs printdebs kill_target"
 		PRINT_DEBS=true
 		shift
 		;;
@@ -420,7 +420,7 @@ else
 		usage_err 1 NEEDSUITETARGET "You must specify a suite and a target."
 	fi
 	SUITE="$1"
-	TARGET="$2" # bug here (cont'd): user specifies target
+	TARGET="$2"
 	USER_MIRROR="$3"
 	TARGET="${TARGET%/}"
 	if [ "${TARGET#/}" = "${TARGET}" ]; then
@@ -724,6 +724,6 @@ fi
 if am_doing_phase kill_target; then
 	if [ "$KEEP_DEBOOTSTRAP_DIR" != true ]; then
 		info KILLTARGET "Deleting target directory"
-		rm -rf "$TARGET" # bug here (cont'd): target deleted even though it doesn't make sense for this to happen (this is a stretch of "bug" for our case, i know)
+		rm -rf "$TARGET"
 	fi
 fi
