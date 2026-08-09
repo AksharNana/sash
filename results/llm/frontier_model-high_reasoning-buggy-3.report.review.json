@@ -1,0 +1,250 @@
+{
+  "report_path": "results/llm/frontier_model-high_reasoning-buggy-3.report.json",
+  "reviewed": {
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-const_cond/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:50:12.010005+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-cp_nonexistent/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:41:18.787011+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap/posix.sh": {
+      "status": "0/1 and it's not even close",
+      "at": "2026-08-08T11:43:09.456113+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap_2/posix.sh": {
+      "status": "0/1",
+      "at": "2026-08-08T11:48:47.262695+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-ignored_command_v/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:49:10.176276+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-makefile/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:45:59.647732+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_func/posix.sh": {
+      "status": "1/1, 0/1 lines (off-by-one)",
+      "at": "2026-08-08T11:50:49.253016+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_2/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:47:25.774633+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_3/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:50:22.734460+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_5/posix.sh": {
+      "status": "1/1, 0/1 lines (off-by-one)",
+      "at": "2026-08-08T11:47:48.540408+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_1/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:52:49.535350+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_2/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:45:15.640404+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-backup_manager/posix.sh": {
+      "status": "1/1, 0/1 lines (off-by-one)",
+      "at": "2026-08-08T11:40:17.201844+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-bumblebee/posix.sh": {
+      "status": "1/1, 0/1 lines (off-by-one)",
+      "at": "2026-08-08T11:41:55.936668+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-itunes/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:52:37.761589+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-n/posix.sh": {
+      "status": "0/2",
+      "at": "2026-08-08T11:54:06.587312+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-squid/posix.sh": {
+      "status": "4/4",
+      "at": "2026-08-08T11:42:29.308045+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-steam/posix.sh": {
+      "status": "0/1 warns about subshell but not deletion",
+      "at": "2026-08-08T11:44:06.565893+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-const_loop/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:53:13.942760+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-loop_once-useless_test/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:46:37.444133+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-redir_to_func-redir_to_func/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:46:42.069655+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-unset_var_1/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:53:24.811987+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-loop_once-loop_once/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:45:21.838974+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-loop_once/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:52:09.456893+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-rm_root/posix.sh": {
+      "status": "18/18",
+      "at": "2026-08-08T11:54:23.503922+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-unset_var/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:49:04.453602+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-access_after_mv/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:44:53.295844+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-access_del_resource/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:44:31.507533+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-cd_into_file/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:40:59.471341+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file/posix.sh": {
+      "status": "0/2",
+      "at": "2026-08-08T11:47:09.634314+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_2/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:49:32.655832+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_3/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:46:52.748327+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_4/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:47:02.099069+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-accident/posix.sh": {
+      "status": "1/3",
+      "at": "2026-08-08T11:42:10.179834+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-capturing_empty_output/posix.sh": {
+      "status": "0/1",
+      "at": "2026-08-08T11:44:45.359127+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude2/posix.sh": {
+      "status": "1/2",
+      "at": "2026-08-08T11:40:34.305656+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude3/posix.sh": {
+      "status": "0/1",
+      "at": "2026-08-08T11:39:43.732677+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude4/posix.sh": {
+      "status": "1/1, 0/1 lines (off-by-one)",
+      "at": "2026-08-08T11:39:39.679689+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude5/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:40:39.472448+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude6/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:46:46.680532+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude_wipe/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:53:07.804657+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-confused_mkdir/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:42:48.327602+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-delete_home_user/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:45:31.770032+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-delete_slash/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:52:42.704733+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-empty_path/posix.sh": {
+      "status": "12/12",
+      "at": "2026-08-08T11:54:14.861940+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-find_rm/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:41:03.754287+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-for_mv/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:40:45.922479+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-move_home/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:50:26.704710+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-posix2/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:53:29.481689+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-replacement/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:44:39.755347+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-rm_root_2/posix.sh": {
+      "status": "1/1, 0/1 lines (off-by-one)",
+      "at": "2026-08-08T11:41:39.175282+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-sc_author/posix.sh": {
+      "status": "3/3",
+      "at": "2026-08-08T11:40:52.514520+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-silly_q/posix.sh": {
+      "status": "4/4, 0/4 lines (off-by-one)",
+      "at": "2026-08-08T11:52:25.810104+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-troll/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:48:53.226634+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unexpected_stdin/posix.sh": {
+      "status": "2/2 not exactly but close enough",
+      "at": "2026-08-08T11:46:29.364260+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unset_var-cmd_always_fails/posix.sh": {
+      "status": "2/2",
+      "at": "2026-08-08T11:45:07.587979+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unset_var/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:52:32.302725+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-wrong_mkdir/posix.sh": {
+      "status": "1/1, 0/1 lines (off-by-one)",
+      "at": "2026-08-08T11:45:49.475874+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-wrong_mv/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:45:27.421196+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-xargs_accident_rm/posix.sh": {
+      "status": "1/1",
+      "at": "2026-08-08T11:42:43.430292+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-xargs_del_files/posix.sh": {
+      "status": "0/1",
+      "at": "2026-08-08T11:53:03.532304+00:00"
+    }
+  },
+  "current_index": 60
+}

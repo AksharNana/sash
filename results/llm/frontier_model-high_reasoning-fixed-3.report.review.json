@@ -1,0 +1,250 @@
+{
+  "report_path": "results/llm/frontier_model-high_reasoning-fixed-3.report.json",
+  "reviewed": {
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-const_cond/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:36:04.360412+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-cp_nonexistent/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:29:42.565912+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap/fixed.sh": {
+      "status": "0/1 but very little output",
+      "at": "2026-08-09T13:31:18.973904+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-debootstrap_2/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:35:11.586432+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-ignored_command_v/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:35:37.843676+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-makefile/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:33:32.405329+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_func/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:36:24.948540+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_2/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:34:49.363203+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_3/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:36:18.619731+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_5/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:34:56.082564+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_1/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:37:04.441313+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/c-unset_var_set_u_2/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:32:34.734206+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-backup_manager/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:24:18.502458+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-bumblebee/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:30:09.670054+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-itunes/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:36:54.736113+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-n/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:42:05.422189+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-squid/fixed.sh": {
+      "status": "0/4 warns about expected behavior",
+      "at": "2026-08-09T13:30:52.692066+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/hp-steam/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:31:32.639205+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-const_loop/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:37:15.504198+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-loop_once-useless_test/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:34:14.120529+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-redir_to_func-redir_to_func/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:34:26.228627+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m1-unset_var_1/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:37:25.983722+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-loop_once-loop_once/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:32:41.227260+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-loop_once/fixed.sh": {
+      "status": "0/1 complains about correct behavior",
+      "at": "2026-08-09T13:36:40.750512+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-rm_root/fixed.sh": {
+      "status": "18/18",
+      "at": "2026-08-09T13:42:15.207679+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/m2-unset_var/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:35:17.603447+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-access_after_mv/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:32:15.431824+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-access_del_resource/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:31:44.917039+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-cd_into_file/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:29:33.447207+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:34:43.430233+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_2/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:35:54.251732+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_3/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:34:37.685163+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/sf-overwrite_file_4/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:34:40.201897+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-accident/fixed.sh": {
+      "status": "3/3",
+      "at": "2026-08-09T13:30:14.597588+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-capturing_empty_output/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:32:04.628063+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude2/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:24:26.666583+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude3/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:22:50.793668+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude4/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:22:47.542330+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude5/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:26:22.992613+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude6/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:34:30.174539+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-claude_wipe/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:37:13.045001+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-confused_mkdir/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:31:06.306761+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-delete_home_user/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:32:59.309708+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-delete_slash/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:36:57.584564+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-empty_path/fixed.sh": {
+      "status": "12/12",
+      "at": "2026-08-09T13:42:07.343286+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-find_rm/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:29:35.209617+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-for_mv/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:29:25.154362+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-move_home/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:36:20.256586+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-posix2/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:41:49.314575+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-replacement/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:31:58.329974+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-rm_root_2/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:29:52.431169+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-sc_author/fixed.sh": {
+      "status": "3/3",
+      "at": "2026-08-09T13:29:27.284346+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-silly_q/fixed.sh": {
+      "status": "4/4",
+      "at": "2026-08-09T13:36:43.130984+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-troll/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:35:13.722140+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unexpected_stdin/fixed.sh": {
+      "status": "-, unsure",
+      "at": "2026-08-09T13:50:23.645671+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unset_var-cmd_always_fails/fixed.sh": {
+      "status": "2/2",
+      "at": "2026-08-09T13:32:29.710538+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-unset_var/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:36:49.936188+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-wrong_mkdir/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:33:11.864959+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-wrong_mv/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:32:56.622275+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-xargs_accident_rm/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:31:01.049431+00:00"
+    },
+    "/Users/george/Work/sash/repo/benchmarks/bugs_and_variants/wf-xargs_del_files/fixed.sh": {
+      "status": "1/1",
+      "at": "2026-08-09T13:37:11.369480+00:00"
+    }
+  },
+  "current_index": 29
+}
