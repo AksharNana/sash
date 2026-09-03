@@ -1,0 +1,726 @@
+{
+  "timestamp": "2026-08-29T17:40:33.022082+00:00",
+  "description": "GPT 5.6 Sol; buggy variants only; original benchmarks excluded; bug classes given in prompt; reasoning effort high; -j 8",
+  "model": "openai:gpt-5.6-sol",
+  "mapper_model": null,
+  "temperature": null,
+  "benchmark_filter": ".*.*",
+  "args": {
+    "fixed": false,
+    "skip_buggy": false,
+    "variants": false,
+    "variants_only": true,
+    "commented": false,
+    "commented_only": false
+  },
+  "stats": {
+    "num_analyses": 20,
+    "num_successful": 20,
+    "num_crashed": 0,
+    "num_timed_out": 0,
+    "expected_bugs": 42,
+    "detected_bugs": 0,
+    "undetected_bugs": 42,
+    "unexpected_bugs": 0,
+    "fixed_expected_missing": 0,
+    "fixed_regressions": 0,
+    "fixed_rest": 0,
+    "tokens_in": 39522,
+    "tokens_out": 123050,
+    "mapping_tokens_in": 0,
+    "mapping_tokens_out": 0,
+    "cost_usd": null,
+    "mapping_cost_usd": null,
+    "duration_sec": 349.9480329580838
+  },
+  "jobs": [
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-backup_manager/variants/bug-assign_first.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L180:const_cond"
+        ],
+        "detected": [],
+        "undetected": [
+          "L180:const_cond"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 260.561203958001,
+      "tokens_in": 9192,
+      "tokens_out": 17745,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L32:DATA_LOSS: Empty bm_pending_incremental_list makes this delete a literal .orig file in the current directory.",
+        "L54:DANGEROUS_FIELD_SPLITTING: Unquoted file_to_create can split or glob before being passed to the archive-deletion routine.",
+        "L65:DANGEROUS_FIELD_SPLITTING: Unquoted owner and file values can make chown operate on unintended pathnames.",
+        "L67:DANGEROUS_FIELD_SPLITTING: Unquoted mode and file values can make chmod operate on unintended pathnames.",
+        "L83:DANGEROUS_FIELD_SPLITTING: Unquoted bm_pending_archive can make rm delete unintended files.",
+        "L89:DANGEROUS_FIELD_SPLITTING: Unquoted incremental-list pathname can make rm delete unintended files.",
+        "L90:DANGEROUS_FIELD_SPLITTING: The unquoted destination pathname can be split or expanded during restoration.",
+        "L93:DANGEROUS_FIELD_SPLITTING: Unquoted incremental-list pathname can make rm delete unintended files.",
+        "L109:DANGEROUS_FIELD_SPLITTING: The unquoted file_to_create prefix is field-split before the DAR slice glob is expanded.",
+        "L169:BAD_CONTROL_FLOW: The pipeline reports only gpg's status, hiding failures from the archive command or compressor.",
+        "L173:BAD_CONTROL_FLOW: The pipeline reports only the compressor's status, hiding failure of the archive command.",
+        "L177:BAD_CONTROL_FLOW: Status is captured after a successful file_to_create assignment, so exitcode is always zero here.",
+        "L180:DANGEROUS_FIELD_SPLITTING: Unquoted archive pathname can make rm delete unintended files.",
+        "L196:BAD_CONTROL_FLOW: The pipeline reports only gpg's status, hiding failure of the archive-producing command.",
+        "L202:BAD_CONTROL_FLOW: In the GPG branch, the intervening file_to_create assignment masks the pipeline's status.",
+        "L205:DANGEROUS_FIELD_SPLITTING: Unquoted archive pathname can make rm delete unintended files.",
+        "L232:COMMAND_ALWAYS_FAILS: An existing-file skip leaves file_to_create empty, so secure-mode chown and chmod receive no file operand.",
+        "L379:DANGEROUS_FIELD_SPLITTING: The unquoted incremental-list source pathname can be split or glob-expanded by cp.",
+        "L625:BAD_CONTROL_FLOW: Tar executions are labeled generic, making the tar-specific exit-status handling unreachable.",
+        "L629:DANGEROUS_FIELD_SPLITTING: The unquoted output archive pathname is split or glob-expanded when invoking the archive command.",
+        "L658:BAD_CONTROL_FLOW: The pipeline status reflects only gpg, so a failed archive command can still result in committing a truncated archive.",
+        "L699:DATA_LOSS: For non-incremental backups, an empty bm_pending_incremental_list makes this delete a literal .orig file.",
+        "L700:BAD_CONTROL_FLOW: continue is used inside a function instead of returning and can non-locally continue a caller's loop.",
+        "L727:DANGEROUS_FIELD_SPLITTING: Expanding remote_command unquoted reparses embedded paths and options through field splitting and globbing.",
+        "L977:DANGEROUS_FIELD_SPLITTING: Unquoted mysql_conffile can make rm delete unintended files."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/wf-rm_root_2/variants/bug-move_trailing_slash.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L24:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L24:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 15.3773903750116,
+      "tokens_in": 490,
+      "tokens_out": 782,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L24:DELETION_OF_CRITICAL_SYSTEM_FILES: If mktemp fails, TEMPDIR becomes \"/\" and rm -rf attempts to delete the root filesystem."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-bumblebee/variants/bug-rm_loop.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L352:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L352:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 184.68663208396174,
+      "tokens_in": 7408,
+      "tokens_out": 13332,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L51:WRONG_IO_STREAM: grep -r ignores the piped /etc/issue and recursively searches the working directory.",
+        "L54:WRONG_IO_STREAM: grep -r ignores the piped /etc/issue and recursively searches the working directory.",
+        "L57:WRONG_IO_STREAM: grep -r ignores the piped /etc/issue and recursively searches the working directory.",
+        "L60:BAD_CONTROL_FLOW: Setting OpenSUSE's root UID to 1000 rejects root and lets an unprivileged UID run privileged installation commands.",
+        "L61:WRONG_IO_STREAM: grep -r ignores the piped /etc/issue and recursively searches the working directory.",
+        "L64:WRONG_IO_STREAM: grep -r ignores the piped /etc/issue and recursively searches the working directory.",
+        "L72:WRONG_IO_STREAM: grep -r ignores the piped /etc/issue and recursively searches the working directory.",
+        "L83:UNDEFINED_VARIABLE: DISTRO is used without initialization when no distribution-detection branch matches.",
+        "L260:BAD_CONTROL_FLOW: An invalid OpenSUSE card choice claims it will retry but exits the case without any retry loop.",
+        "L265:BAD_CONTROL_FLOW: The DEBIAN branch is nested inside the OpenSUSE card case, so Debian package setup is skipped.",
+        "L301:BAD_CONTROL_FLOW: The source file is tested instead of the installation destination, preventing a valid enable script from being copied.",
+        "L311:BAD_CONTROL_FLOW: The source file is tested instead of the installation destination, preventing a valid disable script from being copied.",
+        "L351:CRITICAL_SYSTEM_FILE_DELETION: The split TO_DEL list makes rm -rf recursively delete /usr.",
+        "L488:BAD_CONTROL_FLOW: The test searches for nvidia-current but appends nvidia, causing repeated duplicate module entries.",
+        "L524:UNDEFINED_VARIABLE: NVIDIABUSID is expanded even after the detection-failure branch leaves it unset."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-squid/variants/bug-indirect_rm.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L132:word_split_del_sys_file",
+          "L147:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L147:word_split_del_sys_file",
+          "L132:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 80.26791816705372,
+      "tokens_in": 1646,
+      "tokens_out": 5767,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L132:DELETION_OF_CRITICAL_SYSTEM_FILES: Unset or externally controlled SQUID_PIDFILE_DIR can make this recursively delete /* or another critical directory.",
+        "L147:DELETION_OF_CRITICAL_SYSTEM_FILES: Unset or externally controlled SQUID_PIDFILE_DIR can make this recursively delete /* or another critical directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-squid/variants/bug-unquoted_pid_dir.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L132:word_split",
+          "L147:word_split"
+        ],
+        "detected": [],
+        "undetected": [
+          "L132:word_split",
+          "L147:word_split"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 122.77834225003608,
+      "tokens_in": 1652,
+      "tokens_out": 8779,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L65:DANGEROUS_FIELD_SPLITTING: Unquoted SQUID_PIDFILE_DIR can split or glob in the test, mkdir, and recursive chown.",
+        "L132:DANGEROUS_FIELD_SPLITTING: Unquoted SQUID_PIDFILE_DIR can expand into multiple unintended rm -rf targets.",
+        "L147:DANGEROUS_FIELD_SPLITTING: Unquoted SQUID_PIDFILE_DIR can expand into multiple unintended rm -rf targets."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-steam/variants/bug-move_trailing_slash.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L359:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L359:word_split_del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 217.8843145420542,
+      "tokens_in": 5321,
+      "tokens_out": 14871,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L17:BAD_CONTROL_FLOW: A failed cd is ignored, leaving STEAMROOT set to \"/\" and allowing execution to continue.",
+        "L19:DANGEROUS_FIELD_SPLITTING: Unquoted STEAMEXE can split or expand into multiple test operands.",
+        "L28:WRONG_IO_STREAM: The steamcmd failure diagnostic is redirected to stdout instead of stderr.",
+        "L48:BAD_CONTROL_FLOW: answer is always \"accepted\", so this rejection test can never succeed.",
+        "L173:DANGEROUS_FIELD_SPLITTING: Unquoted STEAMDATALINK can be split or pathname-expanded while being returned.",
+        "L359:DELETION_OF_CRITICAL_SYSTEM_FILES: If STEAMROOT is \"/\", the wildcard makes rm recursively delete critical top-level system files.",
+        "L406:DANGEROUS_FIELD_SPLITTING: Unquoted PID-file contents can become multiple operands or options to kill.",
+        "L425:UNDEFINED_FUNCTION: warn_outofdate is called but is never defined.",
+        "L430:DANGEROUS_FIELD_SPLITTING: Unquoted STEAMSCRIPT is split or pathname-expanded before being passed to dirname.",
+        "L432:DANGEROUS_FIELD_SPLITTING: The unquoted steamdeps.txt path breaks into multiple arguments when STEAMROOT contains shell metacharacters.",
+        "L495:DATA_LOSS: Cleanup deletes the relative STEAM_RUNTIME_DEBUG path in the current directory instead of the failed extraction under STEAM_RUNTIME_DEBUG_DIR.",
+        "L503:DATA_LOSS: ln -sf can overwrite an unrelated existing file or symlink at the shared /tmp/source path.",
+        "L574:BAD_CONTROL_FLOW: rm overwrites the debugger's exit status, preventing the later restart logic from seeing it.",
+        "L576:BAD_CONTROL_FLOW: The pipeline reports tee's status rather than valgrind or Steam's status to the restart logic."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/wf-unset_var-cmd_always_fails/variants/bug-assign_later.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L9:unbound",
+          "L16:command_can_only_fail"
+        ],
+        "detected": [],
+        "undetected": [
+          "L16:command_can_only_fail",
+          "L9:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 12.0063645420596,
+      "tokens_in": 391,
+      "tokens_out": 566,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L9:UNDEFINED_VARIABLE: OPTARGS is undefined; the option argument is in OPTARG.",
+        "L16:COMMAND_ALWAYS_FAILS: This branch runs only when dirName is empty, so mkdir receives no directory operand."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/m2-loop_once-loop_once/variants/bug-remove_quotes.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L8:loop_once",
+          "L15:loop_once"
+        ],
+        "detected": [],
+        "undetected": [
+          "L8:loop_once",
+          "L15:loop_once"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 26.115014416980557,
+      "tokens_in": 435,
+      "tokens_out": 1694,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L8:BAD-CONTROL-FLOW: The loop overwrites the entered directory and iterates only once over the fixed value of DIR.",
+        "L15:BAD-CONTROL-FLOW: The loop overwrites the entered filename and iterates only once over the directory pathname.",
+        "L21:COMMAND-ALWAYS-FAILS: filename is known to be a directory, so grep is invoked with a directory as its file operand.",
+        "L22:BAD-CONTROL-FLOW: A readable path causes an immediate failure exit, preventing normal completion or retries.",
+        "L42:BAD-CONTROL-FLOW: The \u201cnot a directory\u201d message is printed unconditionally after the loop."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-makefile/variants/bug-assign_first.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L83:del_sys_file",
+          "L90:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L83:del_sys_file",
+          "L90:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 67.37555750005413,
+      "tokens_in": 2123,
+      "tokens_out": 4929,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L82:UNDEFINED_VARIABLE: LIBDIR and CAMLP5N are unset, so TO_DEL resolves to / with the default empty DESTDIR.",
+        "L83:CRITICAL_SYSTEM_FILE_DELETION: TO_DEL resolves to /, causing an attempted recursive deletion of the root filesystem.",
+        "L89:UNDEFINED_VARIABLE: LIBDIR and CAMLP5N are unset, so TO_DEL resolves to / with the default empty DESTDIR.",
+        "L90:CRITICAL_SYSTEM_FILE_DELETION: TO_DEL resolves to /, causing an attempted recursive deletion of the root filesystem.",
+        "L92:UNDEFINED_VARIABLE: BINDIR and CAMLP5N are unset; the empty BINDIR makes cd fail and an empty CAMLP5N would make the removal glob match every entry.",
+        "L93:UNDEFINED_VARIABLE: MANDIR and CAMLP5N are unset; the empty MANDIR yields the wrong directory and an empty CAMLP5N would make the removal glob match every entry.",
+        "L99:DATA_LOSS: Unset CAMLP5N turns boot/\"${CAMLP5N}\"* into boot/*, deleting unrelated files in boot.",
+        "L222:UNDEFINED_VARIABLE: FROM and TO are unset because the callers pass FROM=... and TO=... as ignored positional arguments rather than environment assignments."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-unset_var_2/variants/bug-define_later.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L10:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L10:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 9.29426212492399,
+      "tokens_in": 374,
+      "tokens_out": 568,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L8:DATA_LOSS: git reset --hard discards tracked changes and files newly staged by the preceding git add.",
+        "L10:UNDEFINED_VARIABLE: The lowercase variable file is tested before assignment; the intended variable is FILE."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-unset_var_5/variants/bug-assign_later.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L85:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L85:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 103.49953254195862,
+      "tokens_in": 1763,
+      "tokens_out": 7038,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L43:BAD_CONTROL_FLOW: nvm_download returns success without downloading when neither curl nor wget exists.",
+        "L44:DANGEROUS_FIELD_SPLITTING: Unquoted $* splits and pathname-expands curl arguments, losing original argument boundaries.",
+        "L53:DANGEROUS_FIELD_SPLITTING: Unquoted $ARGS splits and pathname-expands wget arguments, breaking paths containing whitespace or glob characters.",
+        "L71:DATA_LOSS: git branch -D forcibly deletes the local master branch and may discard unmerged commits.",
+        "L85:UNDEFINED_VARIABLE: _source is used before assignment instead of local_NVM_SOURCE, so the downloader receives an empty URL.",
+        "L86:UNDEFINED_VARIABLE: _source is referenced before assignment in the download failure message.",
+        "L114:BAD_CONTROL_FLOW: Unsupported nonempty METHOD values bypass every installation branch and still continue as if installation succeeded.",
+        "L118:BAD_CONTROL_FLOW: nvm_has tests the already-defined nvm_download function, so this downloader-availability test is always true.",
+        "L131:BAD_CONTROL_FLOW: Testing the already-defined nvm_download function makes this missing-downloader check always false."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/m2-unset_var/variants/bug-assign_later.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L6:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L6:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 97.53685916704126,
+      "tokens_in": 366,
+      "tokens_out": 6281,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L6:UNDEFINED_VARIABLE: directorytocopy is unset because line 4 does not perform a persistent assignment.",
+        "L6:BAD_CONTROL_FLOW: The unset variable makes the directory test always true, forcing an exit.",
+        "L10:BAD_CONTROL_FLOW: This command is unreachable because the preceding test always exits."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-const_cond/variants/bug-assign_first.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L43:const_cond"
+        ],
+        "detected": [],
+        "undetected": [
+          "L43:const_cond"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 22.940881917020306,
+      "tokens_in": 734,
+      "tokens_out": 1501,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L43:BAD_CONTROL_FLOW: The test can never be true because `set -e` exits when the preceding `grep` pipeline returns nonzero."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-unset_var_3/variants/bug-define_later.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L25:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L25:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 98.25910591694992,
+      "tokens_in": 654,
+      "tokens_out": 6765,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L25:UNDEFINED_VARIABLE: $file is referenced before assignment, so the symlink check does not test the current $i path."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-unset_func/variants/bug-wrap_func.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L75:function_use_before_def"
+        ],
+        "detected": [],
+        "undetected": [
+          "L75:function_use_before_def"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 126.8451691250084,
+      "tokens_in": 1535,
+      "tokens_out": 8343,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L45:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L48:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L50:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L53:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L55:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L57:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L60:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L63:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L65:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L68:WRONG-IO-STREAM: Redirection order sends matching grep output to stderr instead of discarding it.",
+        "L71:DANGEROUS-FIELD-SPLITTING: Unquoted STATUS undergoes field splitting and pathname expansion.",
+        "L75:UNDEFINED-FUNCTION: git_compare_version is invoked before its definition has been executed.",
+        "L108:BAD-CONTROL-FLOW: Version comparison continues to lower components after a higher installed component, producing incorrect results."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/wf-unset_var/variants/bug-set_in_func.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L5:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L5:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 19.062510167015716,
+      "tokens_in": 300,
+      "tokens_out": 1081,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L2:DANGEROUS_FIELD_SPLITTING: Unquoted ${foo:=$1} may split or glob the filename.",
+        "L5:UNDEFINED_VARIABLE: bar is used without being initialized because set_bar is never called.",
+        "L5:DANGEROUS_FIELD_SPLITTING: Unquoted $bar may split or glob its value.",
+        "L6:UNDEFINED_VARIABLE: bar is expanded without being initialized because set_bar is never called."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-itunes/variants/bug-split_rm_args.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L7:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L7:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 11.964623750071041,
+      "tokens_in": 298,
+      "tokens_out": 567,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L7:Deletion of critical system files: rm receives /usr as a separate operand and recursively deletes it.",
+        "L7:Data loss: \"Applications/iTunes.app\" is a separate relative operand and may delete an unintended directory."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/m1-unset_var_1/variants/bug-init_func.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L62:unbound",
+          "L65:unbound"
+        ],
+        "detected": [],
+        "undetected": [
+          "L62:unbound",
+          "L65:unbound"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 16.649533250019886,
+      "tokens_in": 1436,
+      "tokens_out": 1197,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L42:UNDEFINED_VARIABLE: ZSH is used without being initialized because init is never called",
+        "L62:UNDEFINED_VARIABLE: NORMAL is used without being initialized because init is never called",
+        "L65:UNDEFINED_VARIABLE: RB_RESET is used without being initialized because init is never called",
+        "L66:UNDEFINED_VARIABLE: RB_RESET is used without being initialized because init is never called",
+        "L67:UNDEFINED_VARIABLE: RB_RESET is used without being initialized because init is never called",
+        "L68:UNDEFINED_VARIABLE: RB_RESET is used without being initialized because init is never called",
+        "L69:UNDEFINED_VARIABLE: RB_RESET is used without being initialized because init is never called",
+        "L70:UNDEFINED_VARIABLE: RB_RESET is used without being initialized because init is never called"
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-n/variants/variant1.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L145:del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L145:del_sys_file"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 213.34145658300258,
+      "tokens_in": 2797,
+      "tokens_out": 14595,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L27:DANGEROUS_FIELD_SPLITTING: Unquoted VERSIONS_DIR can make test and mkdir operate on split or glob-expanded paths.",
+        "L29:DANGEROUS_FIELD_SPLITTING: Unquoted VERSIONS_DIR can make the directory check use unintended operands.",
+        "L115:DANGEROUS_FIELD_SPLITTING: Unquoted VERSIONS_DIR can split the installation path before glob expansion.",
+        "L115:BAD_CONTROL_FLOW: An empty versions directory leaves the glob unmatched, so the loop processes and displays a literal asterisk.",
+        "L117:DANGEROUS_FIELD_SPLITTING: Unquoted dir paths can split or expand while reading .config.",
+        "L118:UNDEFINED_VARIABLE: active is undefined when no node executable was found.",
+        "L142:DANGEROUS_FIELD_SPLITTING: Unquoted local_dir can make the directory test use unintended operands.",
+        "L145:DATA_LOSS: Activation recursively deletes the entire prefix bin, lib, share, and include trees, including unrelated files.",
+        "L145:CRITICAL_SYSTEM_FILE_DELETION: An empty N_PREFIX makes the recursive deletion target /bin, /lib, /share, and /include.",
+        "L146:DANGEROUS_FIELD_SPLITTING: Unquoted symlink source and destination paths break for prefixes or versions containing whitespace or glob characters.",
+        "L154:DANGEROUS_FIELD_SPLITTING: Unquoted local_version is split and glob-expanded before being passed to echo.",
+        "L155:DANGEROUS_FIELD_SPLITTING: Unquoted local_minor can give test extra or missing operands.",
+        "L157:DANGEROUS_FIELD_SPLITTING: Unquoted version, URL, and configuration values lose argument boundaries and undergo glob expansion.",
+        "L184:DANGEROUS_FIELD_SPLITTING: Unquoted build-directory path can cause mkdir to create unintended paths.",
+        "L187:DANGEROUS_FIELD_SPLITTING: Unquoted build-directory path can make cd receive multiple or expanded operands.",
+        "L188:DANGEROUS_FIELD_SPLITTING: Unquoted local_url is split and glob-expanded before being passed to the downloader.",
+        "L188:WRONG_IO_STREAM_ASSUMPTION: The logfile redirection applies only to tar, so downloader diagnostics on stderr are not captured.",
+        "L192:COMMAND_ALWAYS_FAILS: The download is streamed directly to tar, so the local tarball named here was never created.",
+        "L192:DANGEROUS_FIELD_SPLITTING: Unquoted local_tarball can expand to and delete unintended matching files.",
+        "L203:DANGEROUS_FIELD_SPLITTING: Unquoted prefix and configuration values are split and glob-expanded before configure receives them.",
+        "L206:DANGEROUS_FIELD_SPLITTING: Unquoted local_version can make cleanup receive the wrong arguments.",
+        "L207:DANGEROUS_FIELD_SPLITTING: Unquoted local_dir can make mkdir operate on unintended paths.",
+        "L208:DANGEROUS_FIELD_SPLITTING: Unquoted local_config is split and glob-expanded before being written to .config.",
+        "L209:DANGEROUS_FIELD_SPLITTING: Unquoted local_version can invoke n with unintended arguments.",
+        "L228:DANGEROUS_FIELD_SPLITTING: Unquoted local_dir can make the cleanup directory test use unintended operands.",
+        "L230:DANGEROUS_FIELD_SPLITTING: Unquoted local_dir in recursive rm can expand to and delete unintended paths.",
+        "L246:DANGEROUS_FIELD_SPLITTING: Unquoted positional parameter can make test receive an invalid or misleading operand list.",
+        "L247:BAD_CONTROL_FLOW: local_version is initialized only once, so shifting through multiple arguments repeatedly processes the first version.",
+        "L249:DANGEROUS_FIELD_SPLITTING: Unquoted version path can glob-expand so recursive rm deletes multiple versions.",
+        "L249:CRITICAL_SYSTEM_FILE_DELETION: An unvalidated version containing parent-directory components can escape VERSIONS_DIR and recursively delete system directories.",
+        "L260:DANGEROUS_FIELD_SPLITTING: Unquoted positional parameter can make test receive an invalid or misleading operand list.",
+        "L263:DANGEROUS_FIELD_SPLITTING: Unquoted local_bin can make the file test use unintended operands.",
+        "L264:DANGEROUS_FIELD_SPLITTING: Unquoted local_bin is split into multiple printf arguments and may be interpreted as a format string.",
+        "L278:DANGEROUS_FIELD_SPLITTING: Unquoted positional parameter can make test receive an invalid or misleading operand list.",
+        "L284:DANGEROUS_FIELD_SPLITTING: Unquoted local_bin can make the file test use unintended operands.",
+        "L285:DANGEROUS_FIELD_SPLITTING: Unquoted executable path and $@ split and glob-expand the node invocation and its arguments.",
+        "L299:DANGEROUS_FIELD_SPLITTING: Unquoted positional parameter can make test receive an invalid or misleading operand list.",
+        "L305:DANGEROUS_FIELD_SPLITTING: Unquoted npm path can make the file test use unintended operands.",
+        "L306:DANGEROUS_FIELD_SPLITTING: Unquoted executable paths and $@ split and glob-expand the npm invocation and its arguments.",
+        "L349:UNDEFINED_VARIABLE: active is undefined when no node executable was found.",
+        "L352:DANGEROUS_FIELD_SPLITTING: Unquoted VERSIONS_DIR can make the installed-version test use unintended operands.",
+        "L373:DANGEROUS_FIELD_SPLITTING: Unquoted version argument is split and glob-expanded before bin-path lookup.",
+        "L374:DANGEROUS_FIELD_SPLITTING: Unquoted $@ destroys argument boundaries before executing node.",
+        "L375:DANGEROUS_FIELD_SPLITTING: Unquoted $@ destroys argument boundaries before executing npm.",
+        "L376:DANGEROUS_FIELD_SPLITTING: Unquoted version argument can expand into unintended removal operands.",
+        "L376:BAD_CONTROL_FLOW: Only $2 is forwarded, so additional versions requested by the rm command are ignored.",
+        "L380:DANGEROUS_FIELD_SPLITTING: Unquoted $@ destroys custom-install argument boundaries and performs glob expansion.",
+        "L381:DANGEROUS_FIELD_SPLITTING: Unquoted $@ destroys install argument boundaries and performs glob expansion."
+      ]
+    },
+    {
+      "benchmark": "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/m2-rm_root/variants/bug-too_many_diffs.sh",
+      "kind": "buggy_variant",
+      "crashed": false,
+      "timed_out": false,
+      "detected_all": false,
+      "bugs": {
+        "expected": [
+          "L4:not_a_command",
+          "L5:not_a_command",
+          "L6:not_a_command",
+          "L7:not_a_command",
+          "L8:not_a_command",
+          "L9:not_a_command",
+          "L10:not_a_command",
+          "L10:unbound",
+          "L11:unbound",
+          "L14:unbound",
+          "L14:unbound",
+          "L15:unbound",
+          "L15:unbound",
+          "L16:unbound",
+          "L12:word_split",
+          "L12:del_sys_file",
+          "L12:word_split_del_sys_file"
+        ],
+        "detected": [],
+        "undetected": [
+          "L7:not_a_command",
+          "L10:unbound",
+          "L5:not_a_command",
+          "L11:unbound",
+          "L16:unbound",
+          "L12:del_sys_file",
+          "L6:not_a_command",
+          "L8:not_a_command",
+          "L12:word_split",
+          "L12:word_split_del_sys_file",
+          "L4:not_a_command",
+          "L10:not_a_command",
+          "L15:unbound",
+          "L14:unbound",
+          "L9:not_a_command"
+        ],
+        "unexpected": []
+      },
+      "time_sec": 103.5083317089593,
+      "tokens_in": 607,
+      "tokens_out": 6649,
+      "cost": null,
+      "raw_llm_output_lines": [
+        "L4:COMMAND_ALWAYS_FAILS: `\"$COMMENT\"` expands to `//`, causing an attempt to execute the root directory.",
+        "L5:COMMAND_ALWAYS_FAILS: `\"$COMMENT\"` expands to `//`, causing an attempt to execute the root directory.",
+        "L6:COMMAND_ALWAYS_FAILS: `\"$COMMENT\"` expands to `//`, causing an attempt to execute the root directory.",
+        "L7:COMMAND_ALWAYS_FAILS: `\"$COMMENT\"` expands to `//`, causing an attempt to execute the root directory.",
+        "L8:COMMAND_ALWAYS_FAILS: `\"$COMMENT\"` expands to `//`, causing an attempt to execute the root directory.",
+        "L9:COMMAND_ALWAYS_FAILS: `\"$COMMENT\"` expands to `//`, causing an attempt to execute the root directory.",
+        "L10:UNDEFINED_VARIABLE: `DATE` is unset because its earlier assignment was temporary to a failed command.",
+        "L10:COMMAND_ALWAYS_FAILS: `\"$COMMENT\"` expands to `//`, causing an attempt to execute the root directory.",
+        "L11:UNDEFINED_VARIABLE: `OUT_DIR` is unset because its earlier assignment was temporary to a failed command.",
+        "L11:COMMAND_ALWAYS_FAILS: With `OUT_DIR` empty, `cd` receives the two operands `//` and `h`.",
+        "L12:UNDEFINED_VARIABLE: `OUT_DIR` is unset because its earlier assignment was temporary to a failed command.",
+        "L12:CRITICAL_SYSTEM_FILE_DELETION: Empty `OUT_DIR` turns `$OUT_DIR/*` into `/*`, recursively deleting root-level system files.",
+        "L12:DATA_LOSS: The faux comment leaves `i` as an additional recursive-deletion operand.",
+        "L13:UNDEFINED_VARIABLE: `OUT_DIR` and `DATE` are unset, so the intended backup path collapses to `/`.",
+        "L14:UNDEFINED_VARIABLE: `DB_USER`, `DB_PASS`, `OUT_DIR`, and `DATE` are unset in the mongodump invocation.",
+        "L14:COMMAND_ALWAYS_FAILS: Empty option values and the added `// k` operands produce a malformed mongodump command.",
+        "L15:UNDEFINED_VARIABLE: `TAR_DIR`, `TAR_BAK`, `OUT_DIR`, and `DATE` are unset, collapsing both paths to `/`.",
+        "L15:COMMAND_ALWAYS_FAILS: The collapsed archive filename is `/`, which cannot be opened as a tar output file.",
+        "L16:UNDEFINED_VARIABLE: `TAR_DIR` and `DAYS` are unset, producing root path `/` and invalid age argument `+`.",
+        "L16:COMMAND_ALWAYS_FAILS: `find` receives an invalid `-mtime +` expression followed by invalid trailing operands."
+      ]
+    }
+  ]
+}

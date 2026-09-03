@@ -1,0 +1,86 @@
+{
+  "report_path": "results/llm/5_6_sol-buggy_variants-classes-high-1.report.json",
+  "reviewed": {
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-const_cond/variants/bug-assign_first.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-makefile/variants/bug-assign_first.sh": {
+      "status": "2/2",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-unset_func/variants/bug-wrap_func.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-unset_var_2/variants/bug-define_later.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-unset_var_3/variants/bug-define_later.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/c-unset_var_5/variants/bug-assign_later.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-backup_manager/variants/bug-assign_first.sh": {
+      "status": "0/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-bumblebee/variants/bug-rm_loop.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-itunes/variants/bug-split_rm_args.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-n/variants/variant1.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-squid/variants/bug-indirect_rm.sh": {
+      "status": "2/2",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-squid/variants/bug-unquoted_pid_dir.sh": {
+      "status": "2/2",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/hp-steam/variants/bug-move_trailing_slash.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/m1-unset_var_1/variants/bug-init_func.sh": {
+      "status": "2/2",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/m2-loop_once-loop_once/variants/bug-remove_quotes.sh": {
+      "status": "2/2",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/m2-rm_root/variants/bug-too_many_diffs.sh": {
+      "status": "15/17",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/m2-unset_var/variants/bug-assign_later.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/wf-rm_root_2/variants/bug-move_trailing_slash.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/wf-unset_var-cmd_always_fails/variants/bug-assign_later.sh": {
+      "status": "2/2",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    },
+    "/Users/vagozino/projects/resash/benchmarks/bugs_and_variants/wf-unset_var/variants/bug-set_in_func.sh": {
+      "status": "1/1",
+      "at": "2026-08-29T17:48:51.836178+00:00"
+    }
+  },
+  "current_index": 19
+}
