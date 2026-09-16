@@ -5,9 +5,12 @@ sources:
 
 bugs:
   bug00:
-    description: Detected issue code 'cmd_expected_path_state' in benchmark script
-    code: cmd_expected_path_state
+    description: The glob in the test is quoted, so it is never expanded; the test only checks for a file literally named '*.zip', so it practically always fails and the files are never moved
+    code: const_cond
     shellcheck: null
+    notes:
+      - ShellCheck (0.11.0) reports nothing on this script
+      - This bug used to be SaSh's cmd_expected_path_state warning about mv's destination 'zip/', which is a false positive (it relied on assuming 'zip/' is a file); see issue #42 (quoted_glob_no_match)
 
 ground_truths:
   - path: original.sh

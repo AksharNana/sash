@@ -1233,6 +1233,51 @@ fi
     report = reset_and_run_main(script, solver=True)
     assert_expected_report(report, [])
 
+UNKNOWN_PATHS_ARE_FILES = "unknown paths are assumed to be files"
+
+@pytest.mark.parametrize("script_body", [
+    "cd datadir/",
+    "cd ..",
+    "mkdir -p /Volumes/Backup/date/",
+    "mkdir /Volumes/Backup/date/",
+    'backup=/Volumes/Backup/date/\nmkdir -p "$backup"',
+])
+def test_trailing_slash_path_not_assumed_to_be_file(tmp_path, script_body):
+    """A path ending in '/' (or '.'/'..') can only be a directory, so it must not be assumed to be a file."""
+    script = write_script(tmp_path, script_body + "\n")
+    report = reset_and_run_main(script, solver=True)
+    assert_expected_report(report, [], [UNKNOWN_PATHS_ARE_FILES])
+
+@pytest.mark.parametrize("script_body, cmd, state, path", [
+    ("cd datadir", "cd", "directory", "datadir"),
+    ("mkdir -p /Volumes/Backup/date", "mkdir", "non-files", "/Volumes/Backup/date"),
+    ("mkdir -p / // j", "mkdir", "non-files", "j"),
+])
+def test_path_without_trailing_slash_still_assumed_to_be_file(tmp_path, script_body, cmd, state, path):
+    """Without a trailing slash, an unknown path may be a file, so the conditional issue is still reported."""
+    script = write_script(tmp_path, script_body + "\n")
+    report = reset_and_run_main(script, solver=True)
+    expected_error = reporter.ExpectedPathState(cmd, state, [create_field(path)], 0)
+    assert_expected_report(report, [expected_error], [UNKNOWN_PATHS_ARE_FILES])
+
+def test_partially_unknown_trailing_slash_path_does_not_exempt_other_paths(tmp_path):
+    """Exempting "$X/" would let the solver choose X=j, treating j as a directory and hiding the issue on j."""
+    script = write_script(tmp_path, 'mkdir -p "$X/" j\n')
+    report = reset_and_run_main(script, solver=True)
+    assert any(isinstance(issue, reporter.ExpectedPathState) and "${X}" in issue.message and "j" in issue.message
+               for issue in report.issues), report.to_dict()
+
+@pytest.mark.parametrize("script_body, cmd, state", [
+    ("touch x\ncd x/", "cd", "directory"),
+    ("touch x\nmkdir -p x/", "mkdir", "non-files"),
+])
+def test_trailing_slash_path_that_is_a_file_is_reported(tmp_path, script_body, cmd, state):
+    """A path ending in '/' that the script itself made a file is a real bug, reported without any assumption."""
+    script = write_script(tmp_path, script_body + "\n")
+    report = reset_and_run_main(script, solver=True)
+    expected_error = reporter.ExpectedPathState(cmd, state, [create_field("x/")], 0)
+    assert_expected_report(report, [expected_error])
+
 def test_mkdir_produces_empty_output(tmp_path):
     """Test that `mkdir` with no verbose flag produces empty output if the argument is not empty."""
     script = write_script(tmp_path, """
