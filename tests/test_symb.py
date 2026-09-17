@@ -40,7 +40,7 @@ def test_bound_variable_no_error(tmp_path):
 
 def test_special_vars_no_unbound_error(tmp_path):
     # Using a parameter variable should not produce an unbound error
-    script = write_script(tmp_path, 'echo $1 $5 "$@" $# $HOME $PWD\n')
+    script = write_script(tmp_path, 'echo $1 $5 "$@" "$*" $# $HOME $PWD\n')
     report = reset_and_run_main(script)
     assert_expected_report(report, [])
 

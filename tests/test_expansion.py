@@ -932,6 +932,17 @@ def test_expand_simple_dollar_star_quoted_joins_with_ifs(config):
     assert field_texts(fields) == ["echo", "a b:c"]
 
 
+def test_expand_simple_dollar_star_preserves_abstract_word_count(config):
+    state = make_state(env={"1": stored_arbitrary("1", 1, math.inf)})
+    fields = expand_command([lit("echo"), var("*")], state, config)
+    assert_arbitrary_field(fields[1], ArbitraryType.ENVIRONMENT, 1, math.inf)
+
+
+def test_expand_simple_dollar_star_in_word_is_special(config):
+    fields = expand_command([lit("echo"), word(var("*"), lit("suffix"))], make_state(), config)
+    assert_arbitrary_field(fields[1], ArbitraryType.APPROXIMATION, 1, math.inf)
+
+
 # Unquoted literal glob should widen wordcount but keep literal content.
 def test_expand_simple_glob_wordcount_only(config):
     state = make_state()
