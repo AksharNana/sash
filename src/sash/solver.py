@@ -8,7 +8,8 @@ from dataclasses import replace
 import logging
 from sash.symbolic.strings import ArbitraryType, CompletelyArbitrary, Field, SymStr
 from sash.util import shasta_pretty
-from sash.util import _as_boolref
+from sash.util import _as_boolref, iter_constraint
+from sash.specs import is_definitely_dir
 from sash.frozen import FrozenAst
 from sash.fs import FSModelSimple, FileInfo, File, Read, Unread
 from pprint import pformat
@@ -202,6 +203,27 @@ def model_to_reports(assertion: Assertion,
         )
 
 
+def _paths_that_cannot_be_files(constraint: RefineableConstraint) -> tuple[Field, ...]:
+    """
+    Return the fully known paths referenced by `constraint` that are spelled in a way that only a directory
+    can match (e.g. 'dir/', '.', or '..'); such paths can never be regular files.
+
+    Partially unknown paths (e.g. "$DIR/") are not returned: exempting them from the "unknown paths are files"
+    assumption would let the solver pick a value for $DIR that aliases another path in the assertion,
+    which would then no longer be assumed to be a file either.
+    """
+    def cannot_be_file(path: Field) -> bool:
+        return isinstance(path.content, SymStr) and bool(path.content.parts) and is_definitely_dir(path)
+
+    paths: dict[Field, None] = {} # Used as an ordered set
+    for c in (constraint.full, *(c for c, _ in constraint.refinements)):
+        for node in iter_constraint(c, skip=[]):
+            match node:
+                case IsFile(path) | IsDir(path) | IsDeleted(path) | IsRead(path) if cannot_be_file(path):
+                    paths[path] = None
+    return tuple(paths)
+
+
 def assume_unknowns_are_files(assertions: Sequence[Assertion]) -> tuple[Assertion, ...]:
     def is_redirection_assertion(assertion: Assertion) -> bool:
         source = assertion.source_str
@@ -219,7 +241,11 @@ def assume_unknowns_are_files(assertions: Sequence[Assertion]) -> tuple[Assertio
         state = assertion.producing_state
         fs_model = state.fs_model
         assert isinstance(fs_model, FSModelSimple), "assume_unknowns_are_files requires FSModelSimple"
-        new_fs_model = fs_model.set_default_path_state(FileInfo.mk_pair(File, Read))
+        # Paths that can only name a directory (e.g., 'dir/') are exempt, since assuming they are files is impossible
+        # The exempt paths are normalized the same way as paths in constraints are, before being converted to z3
+        exempt_paths = tuple(field_to_z3(path.try_without_trailing_slash())
+                             for path in _paths_that_cannot_be_files(assertion.constraint))
+        new_fs_model = fs_model.set_default_path_state(FileInfo.mk_pair(File, Read), exempt_paths)
         new_state = replace(state, fs_model=new_fs_model).add_pathcond(Description("unknown paths are assumed to be files"))
         conditional_constraint = with_file_constraint(assertion.constraint)
         new_assertion = replace(assertion,

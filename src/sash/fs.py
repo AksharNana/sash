@@ -211,9 +211,18 @@ class FSModelSimple(FSModel):
                 exprs.append(_as_boolref(fsvar == arr_expr))
         return _as_boolref(z3.And(*exprs))
 
-    def set_default_path_state(self, default: z3.ExprRef) -> "FSModelSimple":
-        """Return a new FSModelSimple where any unknown paths default to the given state."""
+    def set_default_path_state(self, default: z3.ExprRef, exempt_paths: tuple[z3.ExprRef, ...] = ()) -> "FSModelSimple":
+        """
+        Return a new FSModelSimple where any unknown paths default to the given state.
+
+        The paths in `exempt_paths` (z3 path expressions) do not get the default;
+        their initial state is left unconstrained, as if no default had been set.
+        """
         base_fs_array = z3.K(z3.StringSort(), default)
+        if exempt_paths:
+            unconstrained_fs_array = z3.FreshConst(z3.ArraySort(z3.StringSort(), FileInfo), "fs0_unconstrained")
+            for path_z3 in exempt_paths:
+                base_fs_array = z3.Store(base_fs_array, path_z3, z3.Select(unconstrained_fs_array, path_z3))
         logging.debug(f"Setting default path state to {base_fs_array}")
         new_history = ((self.history[0][0], base_fs_array),) + self.history[1:]
         return replace(self, history=new_history)
