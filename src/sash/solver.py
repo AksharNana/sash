@@ -372,4 +372,7 @@ def run_solver(traces: list[Trace], config: InterpConfig, stop: threading.Event 
 
         solver.pop()
 
+    Reporter.drop_issues_under_predicate(
+        lambda issue: isinstance(issue, ExpectedPathState) and issue.message.startswith("Command 'cd'") and issue.constraint == Description("unknown paths are assumed to be files")
+    )
     logging.info("Solving produced %d new reports", len(Reporter._issues) - total_issues_before_solver)

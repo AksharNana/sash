@@ -429,6 +429,14 @@ class Reporter:
         cls._issues = {issue: cons for issue, cons in cls._issues.items() if not type(issue) in issue_types}
 
     @classmethod
+    def drop_issues_under_predicate(cls, predicate):
+        cls._issues = {
+            issue: cons
+            for issue, cons in cls._issues.items()
+            if not predicate(issue)
+        }
+
+    @classmethod
     def get_report(cls) -> Report:
         if math.isnan(cls._exec_time):
             logging.debug("Execution time not set; defaulting to 0.0")
