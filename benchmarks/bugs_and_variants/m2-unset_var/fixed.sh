@@ -8,5 +8,5 @@ if [ ! -d "$directorytocopy" ]; then
     exit 1
 fi
 mkdir -p "$backuptodirectory"
-echo copying $directorytocopy
-rsync -progress $directorytocopy $backuptodirectory
+echo copying "$directorytocopy"
+rsync -progress "$directorytocopy" "$backuptodirectory"
