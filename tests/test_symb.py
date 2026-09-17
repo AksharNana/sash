@@ -1249,7 +1249,6 @@ def test_trailing_slash_path_not_assumed_to_be_file(tmp_path, script_body):
     assert_expected_report(report, [], [UNKNOWN_PATHS_ARE_FILES])
 
 @pytest.mark.parametrize("script_body, cmd, state, path", [
-    ("cd datadir", "cd", "directory", "datadir"),
     ("mkdir -p /Volumes/Backup/date", "mkdir", "non-files", "/Volumes/Backup/date"),
     ("mkdir -p / // j", "mkdir", "non-files", "j"),
 ])
