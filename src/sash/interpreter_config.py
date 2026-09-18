@@ -60,6 +60,7 @@ class InterpConfig:
     disable_trace_collapsing: bool = False
     in_checked_position: bool = False
     in_boundness_test: bool = False
+    in_uncalled_function: bool = False
     force_fork_all: bool = False
     max_loop_unroll: int = 2
     unbound_policy: UnboundVariablePolicy = UnboundVariablePolicy.SYMBOLIC
