@@ -275,6 +275,16 @@ rm -rf "$STEAMROOT/"*
     expected_error = reporter.DeleteSystemFile('PWD', 0)
     assert_expected_report(report, [expected_error])
 
+
+def test_dangerous_word_split_reports_use_site(tmp_path):
+    script = write_script(tmp_path, "read CLIENT\nrm -rf ovpn-$CLIENT\n")
+    report = reset_and_run_main(script)
+
+    warnings = [issue for issue in report.issues if isinstance(issue, reporter.DangerousWordSplit)]
+    assert len(warnings) == 1
+    assert warnings[0].line == 2
+    assert "rm -rf ovpn-${CLIENT}" in warnings[0].message
+
 def test_steamroot_fix(tmp_path):
     # Deleting $STEAMROOT/* should not produce an error if STEAMROOT is properly constrained
     script = write_script(tmp_path, """

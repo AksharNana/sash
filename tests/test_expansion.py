@@ -908,6 +908,17 @@ def test_expand_simple_dollar_at_quoted_expands_each_positional(config):
     assert field_texts(fields) == ["echo", "a b", "c", "d e"]
 
 
+def test_expand_simple_dollar_at_without_known_parameters_is_abstract(config):
+    fields = expand_command([lit("echo"), q(var("@"))], make_state(), config)
+    assert_arbitrary_field(fields[1], ArbitraryType.APPROXIMATION, 0, math.inf)
+
+
+def test_expand_simple_dollar_at_quoted_preserves_abstract_argument_count(config):
+    state = make_state(env={"1": stored_arbitrary("1", 1, math.inf)})
+    fields = expand_command([lit("echo"), q(var("@"))], state, config)
+    assert_arbitrary_field(fields[1], ArbitraryType.ENVIRONMENT, 1, math.inf)
+
+
 def test_expand_simple_dollar_at_unquoted_splits_each_param(config):
     state = make_state(
         env={

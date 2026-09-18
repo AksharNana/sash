@@ -425,6 +425,11 @@ def expand_simple(stuff: list[AST.ArgChar],
     def expand_positional(var_node: AST.VArgChar, quoted: bool) -> list[tuple[list[Field], State]]:
         params = _collect_positional_params(state)
         if not params:
+            if var_node.var == "@":
+                arbitrary = CompletelyArbitrary(
+                    freeze_thing(var_node), ArbitraryType.APPROXIMATION, state, quoted=quoted
+                )
+                return [([Field(arbitrary, WordCount(0, inf))], state)]
             return [([], state)]
         if var_node.var == "*" and quoted:
             ifs_value = _concrete_ifs_value(state)
@@ -443,7 +448,19 @@ def expand_simple(stuff: list[AST.ArgChar],
             return [([Field(SymStr((joined,)), WordCount(1, 1))], state)]
 
         if quoted:
-            fields = [param.to_field().quote() for param in params]
+            fields = []
+            for param in params:
+                field = param.to_field()
+                if var_node.var == "@" and field.count.max > 1:
+                    # Within double quotes, "$@" still contributes one field per
+                    # positional argument. Preserve an abstract argument count.
+                    count = WordCount(max(1, field.count.min), field.count.max)
+                    content = field.content
+                    if isinstance(content, CompletelyArbitrary):
+                        content = replace(content, quoted=True)
+                    fields.append(Field(content, count))
+                else:
+                    fields.append(field.quote())
             return [(fields, state)]
 
         ifs_value = _concrete_ifs_value(state)
@@ -1503,7 +1520,7 @@ def handle_commandnode(traces: Traces,
                     match arg:
                         case Field(CompletelyArbitrary() as content, WordCount(_, max_words)):
                             if not content.quoted and max_words > 1:
-                                Reporter.add_issue(reporter.DangerousWordSplit(content.source, context_line), config)
+                                Reporter.add_issue(reporter.DangerousWordSplit(node, context_line), config)
 
         match expanded_args[0].try_to_str():
             case "rm":
@@ -1831,7 +1848,7 @@ def handle_rm(expanded_args: tuple[Field, ...], trace: Trace, node: AST.CommandN
         match arg_field:
             case Field(CompletelyArbitrary() as content, WordCount(_, max_words)):
                 if not content.quoted and max_words > 1:
-                    Reporter.add_issue(reporter.DangerousWordSplit(content.source, context_line), config)
+                    Reporter.add_issue(reporter.DangerousWordSplit(node, context_line), config)
                 maybe_report_protected_split(content, max_words)
 
     return (
