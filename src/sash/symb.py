@@ -1173,7 +1173,7 @@ def expand_to_word_simple(stuff: list[AST.ArgChar],
                         default_word, default_state = expand_default_value(self)
                         assign_default_value(self, default_word, default_state)
                     else:
-                        if not is_special_var(name):
+                        if not config.in_boundness_test and not is_special_var(name):
                             error_code = reporter.UnboundIDSetU if self.state.opts.is_set(SetOptions.NOUNSET) else reporter.UnboundID
                             Reporter.add_issue(error_code(var_node.pretty(), context_line), config)
                         if config.unbound_policy == UnboundVariablePolicy.EMPTY and not is_special_var(name):
@@ -1441,7 +1441,12 @@ def handle_commandnode(traces: Traces,
         logging.debug("Handling command node %s with %d traces", trim_string_for_logging(node.pretty()), len(traces))
 
     # Handle variable expansion before we evaluate the command itself
-    t1, expanded_args = expand_args_dumb(traces, node.arguments, config)
+    expansion_config = config
+    if node.arguments and extract_literal_strings_from_arg(node.arguments[0]) in {"test", "["}:
+        test_args = [extract_literal_strings_from_arg(arg) for arg in node.arguments[1:]]
+        if test_args and (test_args[0] == "-z" or len(test_args) <= 2):
+            expansion_config = replace(config, in_boundness_test=True)
+    t1, expanded_args = expand_args_dumb(traces, node.arguments, expansion_config)
     t1_active, t1_inactive = drop_terminated_traces(t1)
     if not t1_active:
         logging.debug("All traces terminated during expansion of %s", trim_string_for_logging(node.pretty()))
@@ -1474,6 +1479,24 @@ def handle_commandnode(traces: Traces,
     if expanded_args:
         # TODO: Improve the structure of this function and move this code block elsewhere
         match expanded_args[0].try_to_str():
+            case "export":
+                for arg in expanded_args[1:]:
+                    assignment = arg.try_to_str()
+                    if assignment is None:
+                        continue
+                    name, separator, value = assignment.partition("=")
+                    if not separator or not name.isidentifier():
+                        continue
+                    t1 = trace_map(
+                        t1,
+                        lambda s, name=name, value=value: s.set_env(
+                            name,
+                            ShellVar(
+                                PreSplitWord.from_field(Field.create_constant(value)),
+                                export=True,
+                            ),
+                        ),
+                    )
             case "test" | "[":
                 # Warn about field splitting in test commands
                 for arg in expanded_args[1:]:
