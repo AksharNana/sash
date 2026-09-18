@@ -1200,10 +1200,13 @@ def expand_to_word_simple(stuff: list[AST.ArgChar],
                                 name: ShellVar(empty_word_value.prepare_for_storage(), ghost=True)
                             })
                         else:
+                            scalar_special_var = is_scalar_special_var(name)
                             arbitrary_for_this_var = arbitrary_word(
                                 var_node,
                                 ArbitraryType.APPROXIMATION if is_special_var(name) else ArbitraryType.ENVIRONMENT,
                                 self.state,
+                                min_words=1 if scalar_special_var else 0,
+                                max_words=1 if scalar_special_var else None,
                                 quoted=self.quoted,
                             )
                             self.state = self.state.extend_localenv({

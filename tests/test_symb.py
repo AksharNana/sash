@@ -60,6 +60,13 @@ def test_special_vars_no_unbound_error(tmp_path):
     report = reset_and_run_main(script)
     assert_expected_report(report, [])
 
+
+def test_positional_argument_count_is_single_word(tmp_path):
+    script = write_script(tmp_path, "[ ${#} != 0 ]\n")
+    report = reset_and_run_main(script)
+    assert_expected_report(report, [])
+
+
 def test_boundness_check_no_error(tmp_path):
     # Using a parameter variable should not produce an unbound error
     script = write_script(tmp_path,

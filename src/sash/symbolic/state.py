@@ -330,6 +330,10 @@ class State:
 def is_special_var(name: str) -> bool:
     return name.isdecimal() or name in ["@", "*", "#", "$", "!", "-"]
 
+
+def is_scalar_special_var(name: str) -> bool:
+    return name in ["#", "?", "$", "!", "-"]
+
 @dataclass(frozen=True)
 class Trace:
     states: tuple[State, ...]
