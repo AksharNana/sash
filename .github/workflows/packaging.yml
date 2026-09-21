@@ -28,7 +28,7 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: sash-orig.tar.gz
-          path: dist/ppa/sash_*.orig.tar.gz
+          path: dist/ppa/sash-analyzer_*.orig.tar.gz
 
   ppa-source-check:
     needs: dist
@@ -57,18 +57,18 @@ jobs:
 
       - name: Lint the source package
         run: |
-          lintian dist/ppa/sash_*~${{ matrix.series }}1_source.changes
+          lintian dist/ppa/sash-analyzer_*~${{ matrix.series }}1_source.changes
 
       - name: Upload Debian source package
         uses: actions/upload-artifact@v7
         with:
           name: sash-ppa-source-${{ matrix.series }}
           path: |
-            dist/ppa/sash_*.dsc
-            dist/ppa/sash_*.orig.tar.gz
-            dist/ppa/sash_*.debian.tar.xz
-            dist/ppa/sash_*_source.changes
-            dist/ppa/sash_*_source.buildinfo
+            dist/ppa/sash-analyzer_*.dsc
+            dist/ppa/sash-analyzer_*.orig.tar.gz
+            dist/ppa/sash-analyzer_*.debian.tar.xz
+            dist/ppa/sash-analyzer_*_source.changes
+            dist/ppa/sash-analyzer_*_source.buildinfo
 
   deb:
     strategy:
@@ -98,7 +98,7 @@ jobs:
         run: |
           docker run --rm -v "$PWD/dist":/dist ${{ matrix.image }} sh -ec '
               apt-get update
-              apt-get install -y /dist/sash_*.deb
+              apt-get install -y /dist/sash-analyzer_*.deb
               sash --help
           '
 
@@ -183,7 +183,7 @@ jobs:
         run: |
           echo "$GPG_PASSPHRASE" > /tmp/gpg-passphrase
           failed=""
-          for changes in sash_*_source.changes
+          for changes in sash-analyzer_*_source.changes
           do
               debsign -k"$KEYID" -p"gpg --batch --yes --pinentry-mode loopback --passphrase-file /tmp/gpg-passphrase" "$changes"
               uploaded=""

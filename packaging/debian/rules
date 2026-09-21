@@ -5,12 +5,12 @@ export CFLAGS += -std=gnu17
 
 # The uv_build backend locates its uv-build binary through PATH, so the venv
 # being built must be on it while sash itself is installed.
-export PATH := $(CURDIR)/debian/sash/opt/venvs/sash/bin:$(PATH)
+export PATH := $(CURDIR)/debian/sash-analyzer/opt/venvs/sash-analyzer/bin:$(PATH)
 
 %:
 	dh $@ --with python-virtualenv
 
-# Bundle sash and its dependencies in /opt/venvs/sash, installing only from
+# Bundle sash and its dependencies in /opt/venvs/sash-analyzer, installing only from
 # vendor/ (created by packaging/scripts/vendor.sh and shipped in the source
 # package), because Launchpad builders have no network access.
 #   --no-deps:          every dependency is listed in vendor/requirements.txt
