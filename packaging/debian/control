@@ -1,0 +1,33 @@
+Source: sash
+Section: devel
+Priority: optional
+Maintainer: SaSh maintainers <atlas@brown.edu>
+Build-Depends: debhelper-compat (= 13),
+               dh-virtualenv (>= 1.2),
+               python3 (>= 3.10),
+               python3-dev,
+               python3-venv,
+               python3-pip,
+               autoconf,
+               automake,
+               libtool
+Standards-Version: 4.6.2
+Homepage: https://github.com/atlas-brown/sash
+Rules-Requires-Root: no
+
+Package: sash
+Architecture: amd64 arm64
+Depends: python3 (>= 3.10), ${shlibs:Depends}, ${misc:Depends}
+Description: static analysis of shell programs using symbolic execution
+ SaSh analyzes POSIX shell programs ahead of time, using symbolic
+ execution to predict their effects on the file system and to find bugs
+ before the program is ever run.
+ .
+ For example, it reports word splitting or empty variables that could
+ lead to deletion of critical paths such as /*, and commands that could
+ silently overwrite files, e.g. two mv commands to the same destination.
+ .
+ SaSh is the artifact of the SOSP'26 paper "Ahead-of-time Analysis of
+ Shell Program Effects". Its Python dependencies (libdash, shasta, z3,
+ pash-annotations) are bundled in a private virtualenv under
+ /opt/venvs/sash.
