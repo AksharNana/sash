@@ -1573,6 +1573,8 @@ def handle_commandnode(traces: Traces,
                 t1 = handle_continue(t1, expanded_args)
             case "read":
                 t1 = handle_read(expanded_args, t1, node)
+            case "getopts":
+                t1 = handle_getopts(expanded_args, t1, node)
             case "xargs":
                 t1 = handle_xargs(t1, node, expanded_args, config)
             case "eval":
@@ -2401,6 +2403,25 @@ def handle_read(expanded_args: list[Field], traces: Traces, node: AST.AstNode) -
             )
         new_traces.append(curr_trace)
     return new_traces
+
+
+# https://pubs.opengroup.org/onlinepubs/9699919799/utilities/getopts.html
+def handle_getopts(expanded_args: list[Field], traces: Traces, node: AST.AstNode) -> Traces:
+    """Bind the variables populated by getopts."""
+    names = ["OPTARG", "OPTIND", "OPTERR"]
+    if len(expanded_args) > 2 and (name := expanded_args[2].try_to_str()):
+        names.append(name)
+
+    for name in names:
+        traces = [
+            record_assignment(
+                trace,
+                name,
+                PreSplitWord.from_field(arbitrary_field(node, ArbitraryType.ENVIRONMENT, trace.latest_state)),
+            )
+            for trace in traces
+        ]
+    return traces
 
 
 def handle_xargs(traces: Traces, node: AST.CommandNode, expanded_args: list[Field], config: InterpConfig) -> Traces:
