@@ -5,8 +5,11 @@ Source: https://github.com/atlas-brown/sash
 Comment:
  The binary package also bundles third-party Python packages (libdash,
  shasta, z3-solver, pash-annotations and their dependencies) in
- /opt/venvs/asash. They keep their own licenses, found in their dist-info
- directories inside that virtualenv.
+ /opt/venvs/asash. Their own licenses are in each package's dist-info
+ directory inside that virtualenv (dist-info/licenses/ or dist-info/),
+ except z3-solver, whose wheel does not bundle license text, only naming
+ it (MIT) in METADATA. libdash's COPYING in particular covers more than
+ one license; read it rather than assume.
 
 Files: *
 Copyright: 2026 The SaSh authors
