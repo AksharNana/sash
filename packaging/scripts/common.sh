@@ -1,6 +1,5 @@
 # Shared helpers for the packaging scripts. Source this file, do not run it.
-# Debian package name. "sash" is taken by the stand-alone shell in Debian/Ubuntu.
-pkg=sash-analyzer
+pkg=asash
 root=$(cd "$(dirname "$0")/../.." && pwd)
 
 upstream_version() {

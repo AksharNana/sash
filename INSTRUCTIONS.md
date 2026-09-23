@@ -50,7 +50,7 @@ git checkout sosp26-ae
 docker build --target dev -t sash .
 docker run --rm -it -v "$(pwd)":/app -v /app/.venv sash  # You are now inside the container!
 uv tool install . && uv tool update-shell; source /root/.bashrc  # Install sash as an executable command inside the container
-sash --help  # Verify sash is runnable
+asash --help  # Verify asash is runnable
 ```
 
 The rest of the instructions assume you are inside the `sash` container, and specifically the `/app` directory.
@@ -63,14 +63,14 @@ This will install SaSh as an executable, but for the evaluation the benchmarks p
 Run the following:
 
 ```bash
-sash --help  # Verify sash is runnable
+asash --help  # Verify asash is runnable
 git clone https://github.com/atlas-brown/sash.git
 cd sash
 git checkout sosp26-ae
 uv sync  # Install python dependencies (needed for running the evaluation)
 ```
 
-The rest of the instructions assume you are inside the root of the repository, can run `sash` as a command, and have `uv` installed.
+The rest of the instructions assume you are inside the root of the repository, can run `asash` as a command, and have `uv` installed.
 
 
 ## Completeness
@@ -99,7 +99,7 @@ All dependencies of SaSh are listed in the [Dockerfile](Dockerfile) and [pyproje
 To verify basic functionality, run SaSh on one of its benchmarks:
 
 ```bash
-sash benchmarks/bugs_and_variants/sf-access_del_resource/posix.sh
+asash benchmarks/bugs_and_variants/sf-access_del_resource/posix.sh
 ```
 
 The expected output should include a warning about an attempt to move a path that has been deleted:
@@ -113,7 +113,7 @@ The script loops twice, on the first iteration deleting a directory (`workingfol
 Running the fixed version of the script, the warning should disappear:
 
 ```bash
-sash benchmarks/bugs_and_variants/sf-access_del_resource/fixed.sh
+asash benchmarks/bugs_and_variants/sf-access_del_resource/fixed.sh
 ```
 
 SaSh will still report possible bugs corresponding to other program fragments.
