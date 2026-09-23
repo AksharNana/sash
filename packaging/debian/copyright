@@ -2,6 +2,11 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: sash
 Upstream-Contact: atlas@brown.edu
 Source: https://github.com/atlas-brown/sash
+Comment:
+ The binary package also bundles third-party Python packages (libdash,
+ shasta, z3-solver, pash-annotations and their dependencies) in
+ /opt/venvs/asash. They keep their own licenses, found in their dist-info
+ directories inside that virtualenv.
 
 Files: *
 Copyright: 2026 The SaSh authors
@@ -29,8 +34,3 @@ License: MIT
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
-
-# NOTE: the binary package also bundles third-party Python packages
-# (libdash, shasta, z3-solver, pash-annotations and their dependencies) in
-# /opt/venvs/sash. They keep their own licenses, found in their dist-info
-# directories inside that virtualenv.
