@@ -1,5 +1,5 @@
-asash (0.1.1-1) UNRELEASED; urgency=medium
+asash (0.1.0-1) UNRELEASED; urgency=medium
 
-  * New upstream release 0.1.1.
+  * Initial packaging.
 
- -- SaSh maintainers <atlas@brown.edu>  Wed, 23 Sep 2026 00:00:00 -0400
+ -- SaSh maintainers <atlas@brown.edu>  Mon, 21 Sep 2026 12:57:36 -0400

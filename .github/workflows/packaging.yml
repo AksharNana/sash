@@ -42,6 +42,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+          NEEDRESTART_MODE: a
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential debhelper dh-virtualenv dpkg-dev lintian
@@ -170,9 +173,13 @@ jobs:
     needs: ppa-source-check
     if: startsWith(github.ref, 'refs/tags/v')
     environment: ppa-release
+    timeout-minutes: 45
 
     steps:
       - name: Install dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+          NEEDRESTART_MODE: a
         run: |
           sudo apt-get update
           sudo apt-get install -y devscripts dput gnupg openssh-client python3-paramiko
@@ -200,7 +207,8 @@ jobs:
           chmod 700 ~/.ssh
           echo "$SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan ppa.launchpad.net >> ~/.ssh/known_hosts
+          ssh-keyscan -T 15 ppa.launchpad.net >> ~/.ssh/known_hosts
+          [ -s ~/.ssh/known_hosts ] || { echo "ssh-keyscan got no host key from ppa.launchpad.net" >&2; exit 1; }
           ssh-keygen -lf ~/.ssh/known_hosts
 
           # the owner is PPA_LOGIN; PPA_TARGET (ppa:owner/name) supplies the name
