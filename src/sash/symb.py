@@ -1190,8 +1190,10 @@ def expand_to_word_simple(stuff: list[AST.ArgChar],
                         default_word, default_state = expand_default_value(self)
                         assign_default_value(self, default_word, default_state)
                     else:
-                        if not config.in_boundness_test and not config.in_uncalled_function and not is_special_var(name):
-                            error_code = reporter.UnboundIDSetU if self.state.opts.is_set(SetOptions.NOUNSET) else reporter.UnboundID
+                        nounset = self.state.opts.is_set(SetOptions.NOUNSET)
+                        suppressed = (config.in_boundness_test and not nounset) or config.in_uncalled_function
+                        if not suppressed and not is_special_var(name):
+                            error_code = reporter.UnboundIDSetU if nounset else reporter.UnboundID
                             Reporter.add_issue(error_code(var_node.pretty(), context_line), config)
                         if config.unbound_policy == UnboundVariablePolicy.EMPTY and not is_special_var(name):
                             empty_word_value = empty_word(self.quoted)
