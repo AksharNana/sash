@@ -78,6 +78,16 @@ All dependencies of SaSh are listed in the [Dockerfile](Dockerfile) and [pyproje
 The following installation instructions make use of these configurations as appropriate.
 
 
+### brew
+
+```sh
+brew tap atlas-brown/tap
+brew install sash
+```
+
+Requires [Docker](https://docs.docker.com/get-docker/).
+
+
 ### Manual Installation
 
 Make sure you have the following installed:
