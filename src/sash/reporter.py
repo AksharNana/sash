@@ -189,11 +189,11 @@ class WordSplitCouldDeleteSystemFile(Issue):
 class DangerousWordSplit(Issue):
     code = "word_split"
     severity = Severity.WARNING
-    description: ClassVar[str] = "Word splitting could lead to unexpected arguments to dangerous commands"
+    description: ClassVar[str] = "Word splitting could lead to unexpected arguments to commands"
 
     def __init__(self, source: AST.CommandNode, line: int | None):
         # TODO: Figure out why source is a tuple sometimes and fix it
-        super().__init__(f"Word splitting could lead to unexpected arguments to dangerous commands:\n{source.pretty() if not isinstance(source, tuple) else source[0].pretty()}", line)
+        super().__init__(f"Word splitting could lead to unexpected arguments to commands:\n{source.pretty() if not isinstance(source, tuple) else source[0].pretty()}", line)
 
 
 @dataclass(frozen=True)
