@@ -1,18 +1,14 @@
 # SaSh: Ahead-of-time Analysis of Shell Program Effects
 
+## Description
+
 [![Tests Passing](https://github.com/atlas-brown/sash/actions/workflows/test.yml/badge.svg)](https://github.com/atlas-brown/sash/actions/workflows/test.yml)
 
 Quick jump: [Examples](#examples) | [Installation](#installation) | [Contributing](#contributing) | [Citation](#citation) | [Contact](#contact)
 
-This is the artifact for the paper "Ahead-of-time Analysis of Shell Program Effects" accepted at SOSP'26.
-It contains all code, data, and experiment scripts to support the paper's contributions.
-
-> [!NOTE]
-> If you're **evaluating the artifact** of the aforementioned paper, jump straight into [INSTRUCTIONS.md](INSTRUCTIONS.md).
-
 SaSh is a static analysis tool for the Unix shell, using symbolic execution to find bugs in shell programs.
 It currently supports the set of features and syntax defined by the POSIX standard.
-After installation, running SaSh is as simple as:
+
 ```bash
 asash program.sh
 > ...
@@ -20,10 +16,7 @@ asash program.sh
 > ...
 ```
 
-
-
 ## Examples
-
 
 ### Empty variable leading to deletion of critical paths
 
@@ -104,14 +97,14 @@ On MacOS, `clang-17` is part of the [`xcode` command line tools](https://develop
 
 Then, run:
 ```bash
-CFLAGS="-std=gnu17" uv tool install git+https://github.com/atlas-brown/sash.git@sosp26-ae
+CFLAGS="-std=gnu17" uv tool install git+https://github.com/atlas-brown/sash.git
 uv tool update-shell  # If PATH needs to be updated
 ```
 
 Or:
 
 ```bash
-CFLAGS="-std=gnu17" pipx install git+https://github.com/atlas-brown/sash.git@sosp26-ae
+CFLAGS="-std=gnu17" pipx install git+https://github.com/atlas-brown/sash.git
 pipx ensurepath  # If PATH needs to be updated
 ```
 
@@ -125,7 +118,6 @@ To install:
 ```bash
 git clone https://github.com/atlas-brown/sash.git
 cd ./sash
-git checkout sosp26-ae
 docker build -t sash .
 docker run --rm sash --help  # Should output a help message
 # Install the wrapper script (see below) onto your PATH, then clean up:
