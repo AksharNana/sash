@@ -51,6 +51,25 @@ def assert_equiv_fs_states(f1, f2, f1_starting_fs_id, f2_starting_fs_id):
     res = s.check(z3.Not(f1 == f2))
     assert res == z3.unsat, f"FS states are not equivalent:\nf1: {f1}\nf2: {f2}\nModel: {s.model()}"
 
+@pytest.mark.parametrize("commands", [
+    'cd /tmp/sash-destination\n',
+    'cd "$1"\n',
+    'cd\n',
+    'cd /tmp/sash-first\ncd /tmp/sash-second\n',
+])
+def test_cd_does_not_constrain_initial_pwd(tmp_path, commands):
+    result = reset_and_run_symbexec_main(write_script(tmp_path, commands))
+    assert result.traces
+    for trace in result.traces:
+        state = trace.latest_state
+        solver = z3.Solver()
+        solver.add(state_to_z3(state))
+        assert solver.check() == z3.sat
+        initial_pwd = field_content_to_z3(state.lookup("PWD_INIT").as_field().content)
+        current_pwd = field_content_to_z3(state.lookup("PWD").as_field().content)
+        assert solver.check(current_pwd != initial_pwd) == z3.sat
+
+
 def test_state_to_z3():
     reset_z3cache()
 

@@ -212,6 +212,10 @@ def test_delete_system_file(tmp_path):
     report = reset_and_run_main(script)
     assert_expected_report(report, [])
 
+    script = write_script(tmp_path, 'cd dir\nrm -rf "$PWD"\n')
+    report = reset_and_run_main(script, solver=True)
+    assert_expected_report(report, [])
+
     script = write_script(tmp_path, "#!/bin/sh\ncd ~\nrm -rf *\n")
     report = reset_and_run_main(script)
     expected_error = reporter.DeleteSystemFile("PWD", 0)
@@ -313,6 +317,29 @@ def test_steamroot_fix(tmp_path):
     """)
     report = reset_and_run_main(script)
     assert_expected_report(report, [])
+
+
+@pytest.mark.parametrize("script_text", [
+    'DEST="$1"\ncd "$DEST"\nrm -rf "$DEST"\n',
+    'STEAMROOT="$(cd "${0%/*}" && echo $PWD)"\n'
+    'cd "$STEAMROOT"\n'
+    'ARCHIVE="$STEAMROOT/$(basename "$1")"\n'
+    'rm -rf "$ARCHIVE"\n',
+])
+def test_cd_target_not_forced_to_initial_pwd(tmp_path, script_text):
+    report = reset_and_run_main(write_script(tmp_path, script_text), solver=True, enable_dfs=True)
+    assert not report.timed_out
+    assert not report.issues, report.to_dict()
+
+
+@pytest.mark.parametrize("restore", ['', 'cd -\n'])
+def test_saved_initial_pwd_delete_after_cd(tmp_path, restore):
+    script = write_script(tmp_path, 'START="$PWD"\ncd /tmp/sash-destination\n' + restore + 'rm -rf "$START"\n')
+    report = reset_and_run_main(script, solver=True)
+    assert any(
+        isinstance(issue, reporter.DeleteSystemFile)
+        for issue in report.issues
+    ), report.to_dict()
 
 
 def test_trimmed_path_not_init_pwd_delete(tmp_path):

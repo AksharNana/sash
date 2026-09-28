@@ -227,7 +227,7 @@ def cd_spec(cmd: CmdInvocation) -> CmdSpec:
 
     if flags == set() and len(operands) == 0: # cd
         assertion    = SimpleConstraint(IsDir(home_var), lambda line: reporter.ExpectedPathState("cd", 'directory', (home_var,), line))
-        succ         = IsDir(home_var) & StringEq(pwd_var, home_var) & IsDir(pwd_var)
+        succ         = IsDir(home_var) & IsDir(pwd_var)
         succ_no_impl = succ
     elif flags == set() and len(operands) == 1 and operands[0].try_to_str() == "-": # cd -
         assertion    = SimpleConstraint(IsDir(oldpwd_var), lambda line: reporter.ExpectedPathState("cd", 'directory', (oldpwd_var,), line))
@@ -237,7 +237,7 @@ def cd_spec(cmd: CmdInvocation) -> CmdSpec:
     elif flags == set() and len(operands) == 1: # cd dir
         d = operands[0]
         assertion    = SimpleConstraint(IsDir(d), lambda line: reporter.ExpectedPathState("cd", 'directory', (d,), line))
-        succ         = IsDir(d) & StringEq(pwd_var, d) & IsDir(pwd_var)
+        succ         = IsDir(d) & IsDir(pwd_var)
         succ_no_impl = succ
     else:
         log_crit_unhandled_inv(cmd)
