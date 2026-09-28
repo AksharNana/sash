@@ -86,6 +86,18 @@ def test_boundness_check_no_error(tmp_path):
     report = reset_and_run_main(script)
     assert_expected_report(report, [])
 
+def test_boundness_check_setu_still_errors(tmp_path):
+    # Under `set -u` the expansion aborts before the test runs, so the
+    # boundness-test suppression must not hide it
+    script = write_script(tmp_path,
+                          'set -u\n'
+                          'if [ -z "$FOO" ]; then\n'
+                          'echo not bound\n'
+                          'fi\n')
+    report = reset_and_run_main(script)
+    expected_error = reporter.UnboundIDSetU(foo_var.pretty(), 0)
+    assert_expected_report(report, [expected_error])
+
 def test_unbound_variable_cmdsubst(tmp_path):
     # Using an unset variable should produce an unbound error
     script = write_script(tmp_path, "echo $(echo $FOO)\n")
