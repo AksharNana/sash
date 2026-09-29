@@ -5,22 +5,29 @@ sources:
 
 bugs:
   bug00:
-    description: Detected issue code 'capturing_empty_output' in benchmark script
+    description: mkdir output captured
     code: capturing_empty_output
     shellcheck: null
+  bug01:
+    description: /usr/local/ddos may not be a directory
+    code: cmd_expected_path_state
+    shellcheck: null
+
 
 ground_truths:
   - path: original.sh
     kind: original
     bugs:
-      bug00: { lines: [9] }
+      bug00: {lines: [9]}
+      bug01: {lines: [8]}
 
   - path: posix.sh
     kind: buggy
     bugs:
-      bug00: { lines: [9] }
-
+      bug00: {lines: [9]}
+      bug01: {lines: [8]}
   - path: fixed.sh
     kind: fixed
     bugs:
-      bug00: { regression_lines: [10], shellcheck: null }
+      bug00: {regression_lines: [9], shellcheck: null}
+      bug01: {regression_lines: [8], shellcheck: null}

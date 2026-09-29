@@ -1,29 +1,22 @@
 # SaSh: Ahead-of-time Analysis of Shell Program Effects
 
+## Description
+
 [![Tests Passing](https://github.com/atlas-brown/sash/actions/workflows/test.yml/badge.svg)](https://github.com/atlas-brown/sash/actions/workflows/test.yml)
 
 Quick jump: [Examples](#examples) | [Installation](#installation) | [Contributing](#contributing) | [Citation](#citation) | [Contact](#contact)
 
-This is the artifact for the paper "Ahead-of-time Analysis of Shell Program Effects" accepted at SOSP'26.
-It contains all code, data, and experiment scripts to support the paper's contributions.
-
-> [!NOTE]
-> If you're **evaluating the artifact** of the aforementioned paper, jump straight into [INSTRUCTIONS.md](INSTRUCTIONS.md).
-
 SaSh is a static analysis tool for the Unix shell, using symbolic execution to find bugs in shell programs.
 It currently supports the set of features and syntax defined by the POSIX standard.
-After installation, running SaSh is as simple as:
+
 ```bash
-sash program.sh
+asash program.sh
 > ...
 > Line 359 (error): Word splitting or empty variable could lead to deletion of system file /*
 > ...
 ```
 
-
-
 ## Examples
-
 
 ### Empty variable leading to deletion of critical paths
 
@@ -41,7 +34,7 @@ Then, `"$ROOT/"*` expand to `/*`, making `rm -rf` delete every user-writable fil
 SaSh detects this ahead of time:
 
 ```
-$ sash install.sh
+$ asash install.sh
 > Line 3 (error): Word splitting or empty variable could lead to deletion of system file /*
 ```
 
@@ -65,7 +58,7 @@ If `target` is a directory, both files end up inside it and the operation is saf
 SaSh warns about the risk:
 
 ```
-$ sash organize.sh
+$ asash organize.sh
 > Line 3 (error): Command 'mv' deletes the following paths, one of which has not been read, potentially causing loss of data: target
     but only if unknown paths are assumed to be files
 ```
@@ -76,6 +69,16 @@ SaSh can be installed natively on Linux and MacOS, or used through Docker.
 
 All dependencies of SaSh are listed in the [Dockerfile](Dockerfile) and [pyproject.toml](pyproject.toml).
 The following installation instructions make use of these configurations as appropriate.
+
+
+### brew
+
+```sh
+brew tap atlas-brown/tap
+brew install sash
+```
+
+Requires [Docker](https://docs.docker.com/get-docker/).
 
 
 ### Manual Installation
@@ -94,14 +97,14 @@ On MacOS, `clang-17` is part of the [`xcode` command line tools](https://develop
 
 Then, run:
 ```bash
-CFLAGS="-std=gnu17" uv tool install git+https://github.com/atlas-brown/sash.git@sosp26-ae
+CFLAGS="-std=gnu17" uv tool install git+https://github.com/atlas-brown/sash.git
 uv tool update-shell  # If PATH needs to be updated
 ```
 
 Or:
 
 ```bash
-CFLAGS="-std=gnu17" pipx install git+https://github.com/atlas-brown/sash.git@sosp26-ae
+CFLAGS="-std=gnu17" pipx install git+https://github.com/atlas-brown/sash.git
 pipx ensurepath  # If PATH needs to be updated
 ```
 
@@ -115,29 +118,28 @@ To install:
 ```bash
 git clone https://github.com/atlas-brown/sash.git
 cd ./sash
-git checkout sosp26-ae
 docker build -t sash .
 docker run --rm sash --help  # Should output a help message
 # Install the wrapper script (see below) onto your PATH, then clean up:
 mkdir -p ~/.local/bin
-install -m 0755 ./scripts/sash-docker.sh ~/.local/bin/sash
+install -m 0755 ./scripts/asash-docker.sh ~/.local/bin/asash
 cd ..
 rm -rf ./sash
 ```
 
 > [!IMPORTANT]
 > The `sash` image reads files from the host, so the file to be analyzed
-> must be mounted into the container. The `sash-docker.sh` wrapper installed above
+> must be mounted into the container. The `asash-docker.sh` wrapper installed above
 > handles this for you: it mounts each file argument (read-only) into the
 > container at its own absolute path and passes everything else through to SaSh,
-> so you can just run `sash file.sh` from anywhere. It runs under either Docker or
-> Podman, auto-detecting whichever is installed (override with `SASH_RUNTIME`).
+> so you can just run `asash file.sh` from anywhere. It runs under either Docker or
+> Podman, auto-detecting whichever is installed (override with `ASASH_RUNTIME`).
 >
 > ```bash
 > # To pass extra `docker run` flags (e.g. '--privileged' for pausing/resuming
-> # execution via CRIU), set SASH_DOCKER_ARGS:
-> SASH_DOCKER_ARGS=--privileged sash file.sh
-> # To run a differently-tagged image, set SASH_IMAGE (default: sash).
+> # execution via CRIU), set ASASH_DOCKER_ARGS:
+> ASASH_DOCKER_ARGS=--privileged asash file.sh
+> # To run a differently-tagged image, set ASASH_IMAGE (default: sash).
 >
 > # Without the wrapper, you can mount manually, but then SaSh can only see files
 > # under the mounted directory:

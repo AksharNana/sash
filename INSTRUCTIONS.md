@@ -24,7 +24,7 @@ This artifact targets the following badges:
 
 Reviewers should confirm the following:
 
-1. **Repository**: The artifact is available at [https://github.com/atlas-brown/sash](https://github.com/atlas-brown/sash) (branch `sosp26-ae` will be frozen) and archived at [Zenodo](https://zenodo.org/records/21288698) (DOI: 10.5281/zenodo.21288698).
+1. **Repository**: The artifact is available at [https://github.com/atlas-brown/sash](https://github.com/atlas-brown/sash) (branch `sosp26-ae` will be frozen) and archived at [Zenodo](https://doi.org/10.5281/zenodo.21288697) (DOI: 10.5281/zenodo.21288697).
 2. **License**: The artifact contains an MIT license ([LICENSE](./LICENSE)), allowing comparison and extension.
 3. **Documentation**: The top-level [INSTRUCTIONS.md](INSTRUCTIONS.md) and [README.md](README.md) go over all artifact contents, its mapping to the paper's contributions, and instructions for its installation and exercise.
 
@@ -50,7 +50,7 @@ git checkout sosp26-ae
 docker build --target dev -t sash .
 docker run --rm -it -v "$(pwd)":/app -v /app/.venv sash  # You are now inside the container!
 uv tool install . && uv tool update-shell; source /root/.bashrc  # Install sash as an executable command inside the container
-sash --help  # Verify sash is runnable
+asash --help  # Verify asash is runnable
 ```
 
 The rest of the instructions assume you are inside the `sash` container, and specifically the `/app` directory.
@@ -63,14 +63,14 @@ This will install SaSh as an executable, but for the evaluation the benchmarks p
 Run the following:
 
 ```bash
-sash --help  # Verify sash is runnable
+asash --help  # Verify asash is runnable
 git clone https://github.com/atlas-brown/sash.git
 cd sash
 git checkout sosp26-ae
 uv sync  # Install python dependencies (needed for running the evaluation)
 ```
 
-The rest of the instructions assume you are inside the root of the repository, can run `sash` as a command, and have `uv` installed.
+The rest of the instructions assume you are inside the root of the repository, can run `asash` as a command, and have `uv` installed.
 
 
 ## Completeness
@@ -99,7 +99,7 @@ All dependencies of SaSh are listed in the [Dockerfile](Dockerfile) and [pyproje
 To verify basic functionality, run SaSh on one of its benchmarks:
 
 ```bash
-sash benchmarks/bugs_and_variants/sf-access_del_resource/posix.sh
+asash benchmarks/bugs_and_variants/sf-access_del_resource/posix.sh
 ```
 
 The expected output should include a warning about an attempt to move a path that has been deleted:
@@ -113,7 +113,7 @@ The script loops twice, on the first iteration deleting a directory (`workingfol
 Running the fixed version of the script, the warning should disappear:
 
 ```bash
-sash benchmarks/bugs_and_variants/sf-access_del_resource/fixed.sh
+asash benchmarks/bugs_and_variants/sf-access_del_resource/fixed.sh
 ```
 
 SaSh will still report possible bugs corresponding to other program fragments.
@@ -121,6 +121,7 @@ The evaluation from now on focuses on the specific bug that was fixed in each sc
 
 The ground truth, which includes the source of the script as well as information about ShellCheck's output on it can be found in: [`benchmarks/bugs_and_variants/sf-access_del_resource/info.yaml`](benchmarks/bugs_and_variants/sf-access_del_resource/info.yaml).
 
+Note: Optionally, use `./scripts/shellcheck_eval.py` to verify that ShellCheck's output matches the ground truth.
 
 # Results Reproduced (key results 40 min; all results 8 hr 40 min)
 

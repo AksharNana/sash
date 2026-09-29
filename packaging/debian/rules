@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+# libdash is built from source and needs gnu17 (see README.md).
+export CFLAGS += -std=gnu17
+
+# The uv_build backend locates its uv-build binary through PATH, so the venv
+# being built must be on it while sash itself is installed.
+export PATH := $(CURDIR)/debian/asash/opt/venvs/asash/bin:$(PATH)
+
+%:
+	dh $@ --with python-virtualenv
+
+override_dh_virtualenv:
+	dh_virtualenv --python python3 \
+		--preinstall=setuptools --preinstall=wheel --preinstall=uv_build \
+		--requirements=vendor/requirements.txt \
+		--extra-pip-arg=--no-index \
+		--extra-pip-arg=--find-links=$(CURDIR)/vendor \
+		--extra-pip-arg=--no-build-isolation \
+		--extra-pip-arg=--no-deps
+
+override_dh_auto_test:

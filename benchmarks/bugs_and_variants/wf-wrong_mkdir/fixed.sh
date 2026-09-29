@@ -1,7 +1,6 @@
 #!/bin/sh
 
-
-
+mkdir -p /usr/local/ddos
 file=baktestuser.txt
 for user in $(cat $file);
 do

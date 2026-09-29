@@ -15,7 +15,7 @@ RUN apt-get update && \
         make \
         cloc \
         shfmt \
-        ca-certificates \
+        ca-certificates && \
     update-ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
@@ -55,4 +55,4 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 USER nonroot
 
 # Entry for system usage
-ENTRYPOINT ["/app/.venv/bin/sash"]
+ENTRYPOINT ["/app/.venv/bin/asash"]

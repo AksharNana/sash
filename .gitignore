@@ -30,3 +30,6 @@ trace_info.jsonl
 
 # Serialized state
 .resumable
+
+# Debian packaging: vendored dependencies
+/vendor/
