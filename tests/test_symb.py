@@ -413,8 +413,30 @@ def test_home_not_deleted_global_invariant(tmp_path):
     assert_expected_report(report, [])
 
     report = reset_and_run_main(script, solver=True)
-    expected_warning = reporter.DeleteUserDirectory("HOME", 0)
+    expected_warning = reporter.DeleteUserDirectory("HOME", 1)
     assert_expected_report(report, [expected_warning])
+
+def test_home_deletion_invariant_reports_fs_update_line(tmp_path):
+    script = write_script(tmp_path, "echo lol\necho lol\necho lol\necho lol\nrm -rf ~\n")
+    report = reset_and_run_main(script, solver=True)
+    home_deletion_issues = [
+        issue
+        for issue in report.issues
+        if isinstance(issue, reporter.DeleteUserDirectory) and issue.message == "Deletes user directory 'HOME'"
+    ]
+    assert len(home_deletion_issues) == 1
+    assert home_deletion_issues[0].line == 5
+
+def test_home_deletion_invariant_with_multiple_home_deleting_rms(tmp_path):
+    script = write_script(tmp_path, "rm -rf ~\necho lol\nrm -rf \"$HOME\"\n")
+    report = reset_and_run_main(script, solver=True)
+    home_deletion_issues = [
+        issue
+        for issue in report.issues
+        if isinstance(issue, reporter.DeleteUserDirectory) and issue.message == "Deletes user directory 'HOME'"
+    ]
+    assert len(home_deletion_issues) == 1
+    assert home_deletion_issues[0].line == 3
 
 
 def test_delete_system_file_with_escaped_cmd_name(tmp_path):

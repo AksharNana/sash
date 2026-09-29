@@ -1647,7 +1647,7 @@ def handle_commandnode(traces: Traces,
                 t_success_precond = [t for t in t_precond if not _pathcond_contradicts(t.latest_state, knowledge_after_exec)]
                 t_success = trace_map(t_success_precond,
                                       lambda s: s.add_pathcond(knowledge_before_exec)\
-                                                 .update_fs(knowledge_after_exec)\
+                                                 .update_fs(knowledge_after_exec, context_line)\
                                                  .add_pathcond(knowledge_after_exec)\
                                                  .update_known_commands(knowledge_after_exec)\
                                                  .set_last_exit_code(SymStr(("0",)),
@@ -1659,7 +1659,7 @@ def handle_commandnode(traces: Traces,
                 if config.in_checked_position or config.force_fork_all:
                     t_failure_precond = [t for t in t_precond if not _pathcond_contradicts(t.latest_state, spec.failure_postcond)]
                     t_failure = trace_map(t_failure_precond,
-                                          lambda s: s.update_fs(spec.failure_postcond)\
+                                          lambda s: s.update_fs(spec.failure_postcond, context_line)\
                                                      .add_pathcond(spec.failure_postcond)\
                                                      .update_known_commands(spec.failure_postcond)\
                                                      .set_last_exit_code(SymStr(("1",)),
@@ -1859,10 +1859,10 @@ def handle_rm(expanded_args: tuple[Field, ...], trace: Trace, node: AST.CommandN
                 maybe_report_protected_split(content, max_words)
 
     return (
-        trace.extend(lambda s: s.update_fs(spec.success_postcond)\
+        trace.extend(lambda s: s.update_fs(spec.success_postcond, context_line)\
                                 .add_pathcond(spec.success_postcond)\
                                 .set_last_exit_code(SymStr(("0",)), Confidence.SPECULATIVE, spec.failure_postcond)),
-        trace.extend(lambda s: s.update_fs(spec.failure_postcond)\
+        trace.extend(lambda s: s.update_fs(spec.failure_postcond, context_line)\
                                 .add_pathcond(spec.failure_postcond)\
                                 .set_last_exit_code(SymStr(("1",)), Confidence.SPECULATIVE, spec.failure_postcond))
     )
@@ -2628,7 +2628,7 @@ def handle_file_redir_node(traces: Traces, node: AST.FileRedirNode, config: Inte
                 DebugLogger.log_assertion(assertion_constraint, t.latest_state, context_line, config.current_pass)
             else:
                 t_precond = t
-            t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsFile)))
+            t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsFile), context_line))
 
         elif node.redir_type == "Append": # >>
             # NOTE: asserting IsFile also implicitly asserts that the file is *unread*
@@ -2639,7 +2639,7 @@ def handle_file_redir_node(traces: Traces, node: AST.FileRedirNode, config: Inte
                 DebugLogger.log_assertion(assertion_constraint, t.latest_state, context_line, config.current_pass)
             else:
                 t_precond = t
-            t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsFile)))
+            t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsFile), context_line))
 
         elif node.redir_type == "From": # <
             # The targets of the redirection were read from
@@ -2650,7 +2650,7 @@ def handle_file_redir_node(traces: Traces, node: AST.FileRedirNode, config: Inte
                 DebugLogger.log_assertion(assertion_constraint, t.latest_state, context_line, config.current_pass)
             else:
                 t_precond = t
-            t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsRead)))
+            t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsRead), context_line))
 
         elif node.redir_type == "FromTo":
             # Conservatively assume the file is opened for reading
@@ -2661,7 +2661,7 @@ def handle_file_redir_node(traces: Traces, node: AST.FileRedirNode, config: Inte
                 DebugLogger.log_assertion(assertion_constraint, t.latest_state, context_line, config.current_pass)
             else:
                 t_precond = t
-            t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsRead)))
+            t_postcond = t_precond.extend(t_precond.latest_state.update_fs(And.from_field_iter(redir_args, IsRead), context_line))
 
         else:
             assert False, f"Unexpected redirection type: {node.redir_type}"
