@@ -438,6 +438,30 @@ def test_home_deletion_invariant_with_multiple_home_deleting_rms(tmp_path):
     assert len(home_deletion_issues) == 1
     assert home_deletion_issues[0].line == 3
 
+def test_rm_home_glob_reports_user_directory(tmp_path):
+    script = write_script(tmp_path, "rm -rf ~/*\n")
+    report = reset_and_run_main(script)
+    home_glob_issues = [
+        issue
+        for issue in report.issues
+        if isinstance(issue, reporter.DeleteUserDirectory)
+    ]
+    assert len(home_glob_issues) == 1
+    assert home_glob_issues[0].message == "Deletes user directory 'HOME/*'"
+    assert home_glob_issues[0].line == 1
+
+def test_rm_protected_glob_reports_system_file(tmp_path):
+    script = write_script(tmp_path, "rm -rf /usr/local/share/*\n")
+    report = reset_and_run_main(script, solver=True)
+    system_glob_issues = [
+        issue
+        for issue in report.issues
+        if isinstance(issue, reporter.DeleteSystemFile)
+    ]
+    assert len(system_glob_issues) == 1
+    assert system_glob_issues[0].message == "May delete system file '/usr/local/share/*'"
+    assert system_glob_issues[0].line == 1
+
 
 def test_delete_system_file_with_escaped_cmd_name(tmp_path):
     script = write_script(

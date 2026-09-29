@@ -1774,6 +1774,15 @@ def handle_rm(expanded_args: tuple[Field, ...], trace: Trace, node: AST.CommandN
             case _:
                 return True
 
+    def is_immediate_children_of(field: Field, base: Field) -> bool:
+        if util.field_core_key(field) != util.field_core_key(base):
+            return False
+        return (
+            isinstance(field.content, CompletelyArbitrary)
+            and field.content.suffix is not None
+            and field.content.suffix.try_to_str() == "/*"
+        )
+
     at_pwd_init = pwdval is not None and start_pwdval is not None and same_location(pwdval.as_field(), start_pwdval.as_field())
     home_level = home_depth(pwdval.as_field(), homeval.as_field()) if (pwdval is not None and homeval is not None) else None
     at_home_top_level = home_level is not None and home_level <= 1
@@ -1794,7 +1803,7 @@ def handle_rm(expanded_args: tuple[Field, ...], trace: Trace, node: AST.CommandN
                                                         node.pretty(),
                                                         context_line, priority=11, include_fs=False))
 
-    protected_paths = PROTECTED_PATHS
+    protected_paths = util.protected_path_variants()
     if protected_paths:
         protected_checks = tuple(
             (
@@ -1834,6 +1843,8 @@ def handle_rm(expanded_args: tuple[Field, ...], trace: Trace, node: AST.CommandN
                 Reporter.add_issue(reporter.DeleteSystemFile(path, context_line), config)
             if util.is_user_directory(path):
                 Reporter.add_issue(reporter.DeleteUserDirectory(path, context_line), config)
+        elif homeval is not None and is_immediate_children_of(arg_field, homeval.as_field()):
+            Reporter.add_issue(reporter.DeleteUserDirectory("HOME/*", context_line), config)
 
         def maybe_report_protected_split(content: CompletelyArbitrary, max_words: int | float) -> None:
             if content.maybe_empty and content.quoted and not definitely_non_empty:
