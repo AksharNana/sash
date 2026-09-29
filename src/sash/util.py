@@ -181,6 +181,7 @@ def protected_path_variants() -> tuple[str, ...]:
             continue
         variants.append(path + "/" if path != "/" else "/*")
         variants.append(path + "/*" if path != "/" else "/*")
+        variants.append(path + ".")
     return tuple(dict.fromkeys(variants))
 
 def is_protected(path):
