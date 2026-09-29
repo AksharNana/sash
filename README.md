@@ -1,20 +1,96 @@
 # SaSh: Ahead-of-time Analysis of Shell Program Effects
 
-## Description
-
 [![Tests Passing](https://github.com/atlas-brown/sash/actions/workflows/test.yml/badge.svg)](https://github.com/atlas-brown/sash/actions/workflows/test.yml)
 
-Quick jump: [Examples](#examples) | [Installation](#installation) | [Contributing](#contributing) | [Citation](#citation) | [Contact](#contact)
+Quick jump: [Installation](#installation) | [Examples](#examples) | [Contributing](#contributing) | [Citation](#citation) | [Contact](#contact)
 
 SaSh is a static analysis tool for the Unix shell, using symbolic execution to find bugs in shell programs.
 It currently supports the set of features and syntax defined by the POSIX standard.
 
+[![SaSh demo](docs/assets/demo.gif)](https://asciinema.org/a/cciSiVvtNxD3cD9I)
+
+## Installation
+
+SaSh can be installed natively on Linux and MacOS, or used through Docker.
+
+All dependencies of SaSh are listed in the [Dockerfile](Dockerfile) and [pyproject.toml](pyproject.toml).
+The following installation instructions make use of these configurations as appropriate.
+
+
+
+### Manual
+
+Make sure you have the following installed:
+* `git`
+* `make`
+* `automake`
+* `autoconf`
+* `libtool`
+* `g++-13` or `clang-17` (or newer)
+* `uv` (recommended) or `pipx`
+
+You already have `g++-13` or `clang-17` if you are on Debian 13, Ubuntu 23, or newer.
+On MacOS, `clang-17` is part of the [`xcode` command line tools](https://developer.apple.com/documentation/xcode/command-line-tools).
+
+Then, run:
 ```bash
-asash program.sh
-> ...
-> Line 359 (error): Word splitting or empty variable could lead to deletion of system file /*
-> ...
+CFLAGS="-std=gnu17" uv tool install git+https://github.com/atlas-brown/sash.git
+uv tool update-shell  # If PATH needs to be updated
 ```
+
+Or:
+
+```bash
+CFLAGS="-std=gnu17" pipx install git+https://github.com/atlas-brown/sash.git
+pipx ensurepath  # If PATH needs to be updated
+```
+
+### MacOS (using brew)
+
+```sh
+brew tap atlas-brown/tap
+brew install sash
+```
+
+Requires [Docker](https://docs.docker.com/get-docker/).
+
+
+### Docker
+
+If you want to avoid installing these dependencies, you can use SaSh through Docker.
+
+To install:
+
+```bash
+git clone https://github.com/atlas-brown/sash.git
+cd ./sash
+docker build -t sash .
+docker run --rm sash --help  # Should output a help message
+# Install the wrapper script (see below) onto your PATH, then clean up:
+mkdir -p ~/.local/bin
+install -m 0755 ./scripts/asash-docker.sh ~/.local/bin/asash
+cd ..
+rm -rf ./sash
+```
+
+> [!IMPORTANT]
+> The `sash` image reads files from the host, so the file to be analyzed
+> must be mounted into the container. The `asash-docker.sh` wrapper installed above
+> handles this for you: it mounts each file argument (read-only) into the
+> container at its own absolute path and passes everything else through to SaSh,
+> so you can just run `asash file.sh` from anywhere. It runs under either Docker or
+> Podman, auto-detecting whichever is installed (override with `ASASH_RUNTIME`).
+>
+> ```bash
+> # To pass extra `docker run` flags (e.g. '--privileged' for pausing/resuming
+> # execution via CRIU), set ASASH_DOCKER_ARGS:
+> ASASH_DOCKER_ARGS=--privileged asash file.sh
+> # To run a differently-tagged image, set ASASH_IMAGE (default: sash).
+>
+> # Without the wrapper, you can mount manually, but then SaSh can only see files
+> # under the mounted directory:
+> docker run --rm -v "$(pwd)":/ws -w /ws sash file.sh
+> ```
 
 ## Examples
 
@@ -63,88 +139,6 @@ $ asash organize.sh
     but only if unknown paths are assumed to be files
 ```
 
-## Installation
-
-SaSh can be installed natively on Linux and MacOS, or used through Docker.
-
-All dependencies of SaSh are listed in the [Dockerfile](Dockerfile) and [pyproject.toml](pyproject.toml).
-The following installation instructions make use of these configurations as appropriate.
-
-
-### brew
-
-```sh
-brew tap atlas-brown/tap
-brew install sash
-```
-
-Requires [Docker](https://docs.docker.com/get-docker/).
-
-
-### Manual Installation
-
-Make sure you have the following installed:
-* `git`
-* `make`
-* `automake`
-* `autoconf`
-* `libtool`
-* `g++-13` or `clang-17` (or newer)
-* `uv` (recommended) or `pipx`
-
-You already have `g++-13` or `clang-17` if you are on Debian 13, Ubuntu 23, or newer.
-On MacOS, `clang-17` is part of the [`xcode` command line tools](https://developer.apple.com/documentation/xcode/command-line-tools).
-
-Then, run:
-```bash
-CFLAGS="-std=gnu17" uv tool install git+https://github.com/atlas-brown/sash.git
-uv tool update-shell  # If PATH needs to be updated
-```
-
-Or:
-
-```bash
-CFLAGS="-std=gnu17" pipx install git+https://github.com/atlas-brown/sash.git
-pipx ensurepath  # If PATH needs to be updated
-```
-
-
-### Docker Installation
-
-If you want to avoid installing a bunch of dependencies, you can use SaSh through Docker.
-
-To install:
-
-```bash
-git clone https://github.com/atlas-brown/sash.git
-cd ./sash
-docker build -t sash .
-docker run --rm sash --help  # Should output a help message
-# Install the wrapper script (see below) onto your PATH, then clean up:
-mkdir -p ~/.local/bin
-install -m 0755 ./scripts/asash-docker.sh ~/.local/bin/asash
-cd ..
-rm -rf ./sash
-```
-
-> [!IMPORTANT]
-> The `sash` image reads files from the host, so the file to be analyzed
-> must be mounted into the container. The `asash-docker.sh` wrapper installed above
-> handles this for you: it mounts each file argument (read-only) into the
-> container at its own absolute path and passes everything else through to SaSh,
-> so you can just run `asash file.sh` from anywhere. It runs under either Docker or
-> Podman, auto-detecting whichever is installed (override with `ASASH_RUNTIME`).
->
-> ```bash
-> # To pass extra `docker run` flags (e.g. '--privileged' for pausing/resuming
-> # execution via CRIU), set ASASH_DOCKER_ARGS:
-> ASASH_DOCKER_ARGS=--privileged asash file.sh
-> # To run a differently-tagged image, set ASASH_IMAGE (default: sash).
->
-> # Without the wrapper, you can mount manually, but then SaSh can only see files
-> # under the mounted directory:
-> docker run --rm -v "$(pwd)":/ws -w /ws sash file.sh
-> ```
 
 
 ## Contributing
