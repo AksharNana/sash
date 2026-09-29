@@ -56,7 +56,7 @@ Requires [Docker](https://docs.docker.com/get-docker/).
 ### Nix / NixOS
 
 ```sh
-nix profile add github:atlas-brown/rt
+nix profile add github:atlas-brown/sash
 ```
 
 ### Docker
