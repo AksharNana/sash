@@ -665,6 +665,30 @@ esac
     expected_error = reporter.DeleteSystemFile("/usr", 0)
     assert_expected_report(report, [expected_error])
 
+def test_case_without_catchall_has_unmatched_path(tmp_path):
+    script = write_script(tmp_path, """
+case "$1" in
+    prod) T=/srv/prod ;;
+    staging) T=/srv/staging ;;
+esac
+rm -rf "$T"/*
+""")
+    report = reset_and_run_main(script, solver=True, enable_dfs=True)
+    expected_error1 = reporter.UnboundID("T", 0)
+    expected_error2 = reporter.WordSplitCouldDeleteSystemFile("/*", 0)
+    expected_error3 = reporter.DeleteSystemFile("/*", 0)
+    assert_expected_report(report, [expected_error1, expected_error2, expected_error3])
+
+    script = write_script(tmp_path, """
+case "$1" in
+    prod) T=/srv/prod ;;
+    *) T=/srv/default ;;
+esac
+rm -rf "$T"/*
+""")
+    report = reset_and_run_main(script, solver=True, enable_dfs=True)
+    assert_expected_report(report, [])
+
 def test_and_or(tmp_path):
     # A case statement should handle all branches correctly
     script = write_script(tmp_path, """

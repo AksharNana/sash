@@ -2504,6 +2504,9 @@ def handle_eval(traces: Traces,
 def handle_case(traces: Traces, node: AST.CaseNode, config: InterpConfig) -> Traces:
     t1, case_arg_fields = expand_args_dumb(traces, [node.argument], config)
 
+    def is_catchall_pattern(pattern: list[AST.ArgChar]) -> bool:
+        return "".join(argchar.pretty() for argchar in pattern) == "*"
+
     cases_to_run = list(node.cases)
     # if config.branch_policy_pre is not None:
     #     selection = config.branch_policy_pre(node)
@@ -2524,6 +2527,8 @@ def handle_case(traces: Traces, node: AST.CaseNode, config: InterpConfig) -> Tra
         res.extend(guarded_interp_node(trace_map(t1, lambda s: s.add_pathcond(Description(f"case_L{context_line}_pattern_{case['cpattern']}:matched"))),
                                         case["cbody"],
                                         config))
+    if not any(is_catchall_pattern(pattern) for case in cases_to_run for pattern in case["cpattern"]):
+        res.extend(trace_map(t1, lambda s: s.add_pathcond(Description(f"case_L{context_line}_no_pattern_matched"))))
     return res
 
 
