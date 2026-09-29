@@ -4,6 +4,7 @@
   inputs = {
 
     # Python 3.10 EOL in NixOS 26.05
+    # Pin the release to nixos-25.11
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
     pyproject-nix = {
