@@ -124,7 +124,7 @@
   in {
     packages = forAllSystems (system: {
       default = sashPackages.${system};
-      sash = sashPackages.${system};
+      asash = sashPackages.${system};
     });
 
     apps = forAllSystems (system: {
@@ -161,7 +161,7 @@
     );
 
     checks = forAllSystems (system: {
-      sash = sashPackages.${system};
+      asash = sashPackages.${system};
     });
 
     formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
