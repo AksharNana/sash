@@ -17,7 +17,6 @@ All dependencies of SaSh are listed in the [Dockerfile](Dockerfile) and [pyproje
 The following installation instructions make use of these configurations as appropriate.
 
 
-
 ### Manual
 
 Make sure you have the following installed:
@@ -54,6 +53,11 @@ brew install sash
 
 Requires [Docker](https://docs.docker.com/get-docker/).
 
+### Nix / NixOS
+
+```sh
+nix profile add github:atlas-brown/sash
+```
 
 ### Docker
 
