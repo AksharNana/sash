@@ -224,6 +224,20 @@ def test_delete_system_file(tmp_path):
     report = reset_and_run_main(script)
     assert_expected_report(report, [])
 
+    script = write_script(tmp_path, "cd /\nrm -rf *\n")
+    report = reset_and_run_main(script)
+    expected_error = reporter.DeleteSystemFile("/", 0)
+    assert_expected_report(report, [expected_error])
+
+    script = write_script(tmp_path, "cd /usr\nrm -rf *\n")
+    report = reset_and_run_main(script)
+    expected_error = reporter.DeleteSystemFile("/usr", 0)
+    assert_expected_report(report, [expected_error])
+
+    script = write_script(tmp_path, "cd /tmp\nrm -rf *\n")
+    report = reset_and_run_main(script)
+    assert_expected_report(report, [])
+
     script = write_script(tmp_path, 'cd dir\nrm -rf "$PWD"\n')
     report = reset_and_run_main(script, solver=True)
     assert_expected_report(report, [])

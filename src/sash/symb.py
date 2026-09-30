@@ -1786,9 +1786,11 @@ def handle_rm(expanded_args: tuple[Field, ...], trace: Trace, node: AST.CommandN
     at_pwd_init = pwdval is not None and start_pwdval is not None and same_location(pwdval.as_field(), start_pwdval.as_field())
     home_level = home_depth(pwdval.as_field(), homeval.as_field()) if (pwdval is not None and homeval is not None) else None
     at_home_top_level = home_level is not None and home_level <= 1
+    pwd_path = pwdval.try_to_str() if pwdval is not None else None
+    at_protected_pwd = pwd_path is not None and util.is_protected(pwd_path)
     # TODO: Replace this heuristic with a proper "current working directory" abstraction independent of env-field shape.
     if (
-        (at_pwd_init or at_home_top_level)
+        (at_pwd_init or at_home_top_level or at_protected_pwd)
         and any(arg.try_to_str() == "*" for arg in non_flag_args)
     ):
         Reporter.add_issue(reporter.DeleteSystemFile(pwdval.try_to_str() or "PWD", context_line), config)
