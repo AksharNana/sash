@@ -48,7 +48,8 @@ pipx ensurepath  # If PATH needs to be updated
 
 ```sh
 brew tap atlas-brown/tap
-brew install sash
+brew trust atlas-brown/tap
+brew install asash
 ```
 
 Requires [Docker](https://docs.docker.com/get-docker/).
