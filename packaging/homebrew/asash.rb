@@ -1,4 +1,4 @@
-class Sash < Formula
+class Asash < Formula
   desc "Static analysis for the Unix shell (runs via Docker)"
   homepage "https://github.com/atlas-brown/sash"
   url "https://github.com/atlas-brown/sash/archive/refs/tags/v0.1.1.tar.gz"
