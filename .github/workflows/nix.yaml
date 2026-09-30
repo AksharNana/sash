@@ -35,7 +35,7 @@ jobs:
         uses: nixbuild/nix-quick-install-action@9f63be77f412a248c9d9a65a4c82cf066cdf8f0c # v35
 
       - name: Build
-        run: nix build -L .#asash
+        run: nix build -L .#sash
 
       - name: Smoke test
-        run: ./result/bin/asash --help
+        run: ./result/bin/sash --help
