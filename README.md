@@ -7,7 +7,7 @@ Quick jump: [Installation](#installation) | [Examples](#examples) | [Contributin
 SaSh is a static analysis tool for the Unix shell, using symbolic execution to find bugs in shell programs.
 It currently supports the set of features and syntax defined by the POSIX standard.
 
-[![SaSh demo](docs/assets/demo.gif)](https://asciinema.org/a/cciSiVvtNxD3cD9I)
+[![SaSh demo](assets/demo.gif)](https://asciinema.org/a/cciSiVvtNxD3cD9I)
 
 ## Installation
 
